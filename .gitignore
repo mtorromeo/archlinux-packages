@@ -1,5 +1,8 @@
 *.zip
 *.tar
 *.tar.*
+*.tgz
+*.tbz2
 /*/src
 /*/pkg
+*.kate-swp
