@@ -1,0 +1,366 @@
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgbase=php52
+pkgname=('php52'
+         'php52-cgi'
+         'php52-apache'
+         'php52-fpm'
+         'php52-embed'
+         'php52-pear'
+         'php52-curl'
+         'php52-gd'
+         'php52-gmp'
+         'php52-ldap'
+         'php52-mcrypt'
+         'php52-odbc'
+         'php52-pgsql'
+         'php52-pspell'
+         'php52-snmp'
+         'php52-sqlite'
+         'php52-tidy'
+         'php52-xsl')
+
+pkgname=php52
+pkgver=5.2.17
+pkgrel=1
+_suhosinver=5.2.16-0.9.7
+_fpmversion=0.5.14
+pkgdesc='A high-level scripting language with FastCGI Process Manager'
+arch=('i686' 'x86_64')
+license=('PHP')
+url='http://php-fpm.org/'
+makedepends=('apache' 'imap' 'postgresql-libs' 'libmysqlclient'
+             'libldap' 'postfix' 'libpng' 'libjpeg' 'sqlite3' 'unixodbc'
+             'net-snmp' 'mhash' 'gmp' 'libmcrypt' 'tidyhtml' 'aspell' 'libtool'
+             'freetype2' 'curl' 'libxslt' 'pam' 'openssl' 'bzip2' 'gdbm' 'db')
+provides=("php=$pkgver" "php52=$pkgver")
+conflicts=('php' 'php52')
+source=("http://www.php.net/distributions/php-${pkgver}.tar.bz2"
+        "http://download.suhosin.org/suhosin-patch-${_suhosinver}.patch.gz"
+        "http://php-fpm.org/downloads/php-${pkgver}-fpm-${_fpmversion}.diff.gz"
+        'php.ini.patch'
+        'rc.d.php-fpm'
+        'apache.conf'
+        'libpng14.patch'
+        'php-fpm.conf.in.patch'
+        'logrotate.d.php-fpm')
+md5sums=('b27947f3045220faf16e4d9158cbfe13'
+         'd815fc99a0c25c21f5df28551fcbb001'
+         '5339a2a9c6a0b015b7ce5fcb8d90de84'
+         '18c1fb8f6db4d298ff0e21a759acaa12'
+         '4e811ea12bb9169350a9238c0b3c1337'
+         '96ca078be6729b665be8a865535a97bf'
+         '77ea0756996df0932fce472ff3ec2693'
+         '3540260689459ec69f13524790f90e03'
+         '07c4e412909ac65a44ec90e7a2c4bade')
+
+build() {
+	phpconfig="--srcdir=../php-${pkgver} \
+	--prefix=/usr \
+	--sysconfdir=/etc/php \
+	--localstatedir=/var \
+	--with-layout=GNU \
+	--with-config-file-path=/etc/php \
+	--with-config-file-scan-dir=/etc/php/conf.d \
+	--enable-inline-optimization \
+	--disable-debug \
+	--disable-rpath \
+	--disable-static \
+	--enable-shared \
+	--mandir=/usr/share/man \
+	--without-pear \
+	--libdir=/usr/lib --with-libdir=lib \
+	"
+
+	phpextensions="--enable-bcmath=shared \
+	--enable-calendar=shared \
+	--enable-dbase=shared \
+	--enable-dba=shared \
+	--enable-exif=shared \
+	--enable-ftp=shared \
+	--enable-gd-native-ttf \
+	--enable-json=shared \
+	--enable-mbregex \
+	--enable-mbstring=all \
+	--enable-mbstring=shared \
+	--enable-pdo=shared \
+	--enable-posix=shared \
+	--enable-session=shared \
+	--enable-shmop=shared \
+	--enable-soap=shared \
+	--enable-sockets=shared \
+	--enable-sqlite-utf8 \
+	--enable-sysvmsg=shared \
+	--enable-sysvsem=shared \
+	--enable-sysvshm=shared \
+	--enable-xml \
+	--enable-zip=shared \
+	--with-bz2=shared \
+	--with-curl=shared \
+	--with-freetype-dir=shared,/usr \
+	--with-gdbm=shared \
+	--with-gd=shared \
+	--with-gettext=shared \
+	--with-gmp=shared \
+	--with-iconv=shared \
+	--with-imap=shared \
+	--with-imap-ssl=shared \
+	--with-jpeg-dir=shared,/usr \
+	--with-ldap=shared \
+	--with-mcrypt=shared \
+	--with-mhash=shared \
+	--with-mime-magic=shared \
+	--with-mysqli=shared \
+	--with-mysql=shared \
+	--with-mysql=shared \
+	--with-mysql-sock=/var/run/mysqld/mysqld.sock \
+	--with-ncurses=shared \
+	--with-openssl=shared \
+	--with-pcre-regex=/usr \
+	--with-pdo-mysql=shared \
+	--with-pdo-odbc=shared,unixODBC,/usr \
+	--with-pdo-pgsql=shared \
+	--with-pdo-sqlite=shared,/usr \
+	--with-pgsql=shared \
+	--with-png-dir=shared,/usr \
+	--with-pspell=shared \
+	--with-regex=php \
+	--with-snmp=shared \
+	--with-sqlite=shared \
+	--with-tidy=shared \
+	--with-ttf=shared \
+	--with-unixODBC=shared,/usr \
+	--with-xmlrpc=shared \
+	--with-xsl=shared \
+	--with-zlib=shared \
+	--without-db2 \
+	--without-db3 \
+	--without-db4 \
+	"
+
+	export EXTENSION_DIR=/usr/lib/php/modules
+	export PEAR_INSTALLDIR=/usr/share/pear
+
+	cd "${srcdir}/php-${pkgver}"
+
+	# libpng 1.4 fix
+	patch -p3 -i "${srcdir}/libpng14.patch"
+
+	# gmp 5.0 fix
+	sed -i 's/__GMP_BITS_PER_MP_LIMB/GMP_LIMB_BITS/g' ext/gmp/gmp.c
+
+	# apply suhosin patch
+	patch -p1 -i "${srcdir}/suhosin-patch-${_suhosinver}.patch"
+
+	# apply fpm patch
+	patch -p1 -i "${srcdir}/php-${pkgver}-fpm-${_fpmversion}.diff"
+
+	# adjust paths
+	patch -p0 -i "${srcdir}/php.ini.patch"
+
+	# php
+	[ -d "${srcdir}/build-php" ] || mkdir "${srcdir}/build-php"
+	cd "${srcdir}/build-php"
+	[ -f configure ] || ln -s "../php-${pkgver}/configure"
+	./configure ${phpconfig} \
+		--disable-cgi \
+		--with-readline \
+		--enable-pcntl \
+		${phpextensions}
+	make
+
+	# cgi, fcgi and fpm
+	# reuse the previous run; this will save us a lot of time
+	[ -d "${srcdir}/build-cgi" ] && rm -rf "${srcdir}/build-cgi"
+	cp -a "${srcdir}/build-php" "${srcdir}/build-cgi"
+	cd "${srcdir}/build-cgi"
+	./configure ${phpconfig} \
+		--disable-cli \
+		--enable-cgi \
+		--enable-fastcgi \
+		--enable-fpm \
+		--with-fpm-user=http \
+		--with-fpm-group=http \
+		${phpextensions}
+	make
+
+	cd sapi/cgi/fpm
+	patch -p0 -i "$srcdir/php-fpm.conf.in.patch"
+
+	# apache
+	[ -d "${srcdir}/build-apache" ] && rm -rf "${srcdir}/build-apache"
+	cp -a "${srcdir}/build-php" "${srcdir}/build-apache"
+	cd "${srcdir}/build-apache"
+	./configure ${phpconfig} \
+		--disable-cli \
+		--with-apxs2 \
+		${phpextensions}
+	make
+
+	# embed
+	[ -d "${srcdir}/build-embed" ] && rm -rf "${srcdir}/build-embed"
+	cp -a "${srcdir}/build-php" "${srcdir}/build-embed"
+	cd "${srcdir}/build-embed"
+	./configure ${phpconfig} \
+		--disable-cli \
+		--enable-embed=shared \
+		${phpextensions}
+	make
+
+	# pear
+	[ -d "${srcdir}/build-pear" ] && rm -rf "${srcdir}/build-pear"
+	cp -a "${srcdir}/build-php" "${srcdir}/build-pear"
+	cd "${srcdir}/build-pear"
+	./configure ${phpconfig} \
+		--disable-cgi \
+		--with-readline \
+		--enable-pcntl \
+		--with-pear \
+		${phpextensions}
+	make
+}
+
+
+package_php52() {
+	pkgdesc='An HTML-embedded scripting language'
+	depends=('pcre' 'libxml2' 'bzip2' 'openssl')
+	replaces=('php' 'php-fileinfo' 'php52-fileinfo')
+	provides=('php' 'php-fileinfo' 'php52-fileinfo')
+	conflicts=('php' 'php-fileinfo' 'php52-fileinfo')
+	backup=('etc/php/php.ini')
+
+	cd "${srcdir}/build-php"
+	make -j1 INSTALL_ROOT="${pkgdir}" install
+	install -d -m755 "${pkgdir}/usr/share/pear"
+	# install php.ini
+	install -D -m644 "${srcdir}/php-${pkgver}/php.ini-recommended" "${pkgdir}/etc/php/php.ini"
+	install -d -m755 "${pkgdir}/etc/php/conf.d/"
+
+	# remove static modules
+	rm -f "${pkgdir}/usr/lib/php/modules/"*.a
+	# remove modules provided by sub packages
+	rm -f "${pkgdir}/usr/lib/php/modules/"{curl,gd,gmp,ldap,mcrypt,odbc,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite,pdo_sqlite,tidy,xsl}.so
+}
+
+package_php52-cgi() {
+	pkgdesc='CGI and FCGI SAPI for PHP'
+	depends=('php52' 'pcre' 'libxml2')
+
+	install -D -m755 "${srcdir}/build-cgi/sapi/cgi/php-cgi" "${pkgdir}/usr/bin/php-cgi"
+}
+
+package_php52-apache() {
+	pkgdesc='Apache SAPI for PHP'
+	depends=('php52' 'apache' 'pcre' 'libxml2')
+	backup=('etc/httpd/conf/extra/php5_module.conf')
+
+	install -D -m755 "${srcdir}/build-apache/libs/libphp5.so" "${pkgdir}/usr/lib/httpd/modules/libphp5.so"
+	install -D -m644 "${srcdir}/apache.conf" "${pkgdir}/etc/httpd/conf/extra/php5_module.conf"
+}
+
+package_php52-fpm() {
+	pkgdesc='FastCGI Process Manager for PHP'
+	depends=('php52')
+	backup=('etc/php/php-fpm.conf')
+
+	install -D -m644 "${srcdir}/build-cgi/sapi/cgi/fpm/php-fpm.conf" "${pkgdir}/etc/php/php-fpm.conf"
+	install -D -m755 "${srcdir}/rc.d.php-fpm" "${pkgdir}/etc/rc.d/php-fpm"
+	install -D -m644 "${srcdir}/logrotate.d.php-fpm" "${pkgdir}/etc/logrotate.d/php-fpm"
+	install -d -m755 "${pkgdir}/etc/php/fpm.d"
+}
+
+package_php52-embed() {
+	pkgdesc='Embed SAPI for PHP'
+	depends=('php52' 'pcre' 'libxml2')
+
+	install -D -m755 "${srcdir}/build-embed/libs/libphp5.so" "${pkgdir}/usr/lib/libphp5.so"
+	install -D -m644 "${srcdir}/php-${pkgver}/sapi/embed/php_embed.h" "${pkgdir}/usr/include/php/sapi/embed/php_embed.h"
+}
+
+package_php52-pear() {
+	pkgdesc='PHP Extension and Application Repository'
+	depends=('php52' 'bash')
+	backup=('etc/php/pear.conf')
+
+	cd "${srcdir}/build-pear"
+	make -j1 install-pear INSTALL_ROOT="${pkgdir}"
+	local i
+	while read i; do
+		[ ! -e "$i" ] || rm -rf "$i"
+	done < <(find "${pkgdir}" -name '.*')
+}
+
+package_php52-curl() {
+	depends=('php52' 'curl')
+	pkgdesc='curl module for PHP'
+	install -D -m755 "${srcdir}/build-php/modules/curl.so" "${pkgdir}/usr/lib/php/modules/curl.so"
+}
+
+package_php52-gd() {
+	depends=('php52' 'libpng' 'libjpeg' 'freetype2')
+	pkgdesc='gd module for PHP'
+	install -D -m755 "${srcdir}/build-php/modules/gd.so" "${pkgdir}/usr/lib/php/modules/gd.so"
+}
+
+package_php52-gmp() {
+	depends=('php52' 'gmp')
+	pkgdesc='gmp module for PHP'
+	install -D -m755 "${srcdir}/build-php/modules/gmp.so" "${pkgdir}/usr/lib/php/modules/gmp.so"
+}
+
+package_php52-ldap() {
+	depends=('php52' 'libldap')
+	pkgdesc='ldap module for PHP'
+	install -D -m755 "${srcdir}/build-php/modules/ldap.so" "${pkgdir}/usr/lib/php/modules/ldap.so"
+}
+
+package_php52-mcrypt() {
+	depends=('php52' 'libmcrypt' 'libtool')
+	pkgdesc='mcrypt module for PHP'
+	install -D -m755 "${srcdir}/build-php/modules/mcrypt.so" "${pkgdir}/usr/lib/php/modules/mcrypt.so"
+}
+
+package_php52-odbc() {
+	depends=('php52' 'unixodbc')
+	pkgdesc='ODBC modules for PHP'
+	install -D -m755 "${srcdir}/build-php/modules/odbc.so" "${pkgdir}/usr/lib/php/modules/odbc.so"
+	install -D -m755 "${srcdir}/build-php/modules/pdo_odbc.so" "${pkgdir}/usr/lib/php/modules/pdo_odbc.so"
+}
+
+package_php52-pgsql() {
+	depends=('php52' 'postgresql-libs')
+	pkgdesc='PostgreSQL modules for PHP'
+	install -D -m755 "${srcdir}/build-php/modules/pgsql.so" "${pkgdir}/usr/lib/php/modules/pgsql.so"
+	install -D -m755 "${srcdir}/build-php/modules/pdo_pgsql.so" "${pkgdir}/usr/lib/php/modules/pdo_pgsql.so"
+}
+
+package_php52-pspell() {
+	depends=('php52' 'aspell')
+	pkgdesc='pspell module for PHP'
+	install -D -m755 "${srcdir}/build-php/modules/pspell.so" "${pkgdir}/usr/lib/php/modules/pspell.so"
+}
+
+package_php52-snmp() {
+	depends=('php52' 'net-snmp')
+	pkgdesc='snmp module for PHP'
+	install -D -m755 "${srcdir}/build-php/modules/snmp.so" "${pkgdir}/usr/lib/php/modules/snmp.so"
+}
+
+package_php52-sqlite() {
+	depends=('php52' 'sqlite3')
+	pkgdesc='sqlite3 module for PHP'
+	install -D -m755 "${srcdir}/build-php/modules/sqlite.so" "${pkgdir}/usr/lib/php/modules/sqlite.so"
+	install -D -m755 "${srcdir}/build-php/modules/pdo_sqlite.so" "${pkgdir}/usr/lib/php/modules/pdo_sqlite.so"
+}
+
+package_php52-tidy() {
+	depends=('php52' 'tidyhtml')
+	pkgdesc='tidy module for PHP'
+	install -D -m755 "${srcdir}/build-php/modules/tidy.so" "${pkgdir}/usr/lib/php/modules/tidy.so"
+}
+
+package_php52-xsl() {
+	depends=('php52' 'libxslt')
+	pkgdesc='xsl module for PHP'
+	install -D -m755 "${srcdir}/build-php/modules/xsl.so" "${pkgdir}/usr/lib/php/modules/xsl.so"
+}

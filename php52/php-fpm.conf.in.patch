@@ -1,0 +1,39 @@
+--- php-fpm.conf.orig	2011-05-30 15:37:35.602498664 +0200
++++ php-fpm.conf	2011-05-30 15:41:41.426300264 +0200
+@@ -6,10 +6,10 @@
+ 	<section name="global_options">
+ 
+ 		Pid file
+-		<value name="pid_file">/usr/logs/php-fpm.pid</value>
++		<value name="pid_file">/var/run/php-fpm.pid</value>
+ 
+ 		Error log file
+-		<value name="error_log">/usr/logs/php-fpm.log</value>
++		<value name="error_log">/var/log/php-fpm.log</value>
+ 
+ 		Log level
+ 		<value name="log_level">notice</value>
+@@ -48,8 +48,8 @@
+ 				Set permissions for unix socket, if one used.
+ 				In Linux read/write permissions must be set in order to allow connections from web server.
+ 				Many BSD-derrived systems allow connections regardless of permissions.
+-				<value name="owner"></value>
+-				<value name="group"></value>
++				<value name="owner">http</value>
++				<value name="group">http</value>
+ 				<value name="mode">0666</value>
+ 			</value>
+ 
+@@ -60,10 +60,10 @@
+ 			</value>
+ 
+ 			Unix user of processes
+-		<!--	<value name="user">nobody</value>				-->
++			<value name="user">http</value>
+ 
+ 			Unix group of processes
+-		<!--	<value name="group">nobody</value>		-->
++			<value name="group">http</value>
+ 
+ 			Process manager settings
+ 			<value name="pm">
