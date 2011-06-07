@@ -1,0 +1,44 @@
+post_install() {
+  echo '
+    ==> PHP modules
+
+    PHP has been built with optional modules. To enable these modules,
+    uncomment the modules from php.ini
+
+    There is no mod_php and pdo support in this package!
+
+    Some of them require extra packages to be installed:
+
+        * bz2                : bzip2
+        * curl               : curl
+        * dba                : gdbm
+        * gd                 : libpng, libjpeg, freetype2
+        * imap               : pam
+        * ldap               : libldap
+        * mcrypt             : mcrypt, libtool
+        * mysql/mysqli       : libmysqlclient
+        * odbc               : unixodbc
+        * openssl            : openssl
+        * pgsql              : postgresql-libs
+        * pspell             : aspell
+        * snmp               : net-snmp
+        * sqlite             : sqlite3
+        * tidy               : tidyhtml
+        * xsl                : libxslt
+
+    ==> PHP-CGI and FCGI
+
+    There are several cgi relevant settings in your php.ini. Make sure to
+    adjust them according to your needs. At least you should activate the
+    cgi.fix_pathinfo directive in php.ini by uncommenting it.
+    
+    For php-fpm settings see file php-fpm.conf.
+    For starting work with php-fpm you need start it:
+     /etc/rc.d/php-fpm start
+    '
+}
+
+op=$1
+shift
+[ "$(type -t "$op")" = "function" ] && $op "$@"
+
