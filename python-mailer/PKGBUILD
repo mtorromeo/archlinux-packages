@@ -14,7 +14,7 @@ options=(!emptydirs)
 
 build() {
 	cd "$srcdir/mailer-$pkgver"
-	2to3 -w .
+	2to3 -nw .
 	python setup.py install --root="$pkgdir" --optimize=1
 }
 
