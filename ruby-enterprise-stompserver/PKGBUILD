@@ -1,7 +1,7 @@
 # Contributor: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 pkgname=ruby-enterprise-stompserver
 pkgver=0.9.9
-pkgrel=2
+pkgrel=3
 pkgdesc="Stomp messaging server with file/dbm/memory/activerecord based FIFO queues, queue monitoring, and basic authentication."
 arch=(any)
 url="http://rubyforge.org/projects/stompserver/"
