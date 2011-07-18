@@ -6,6 +6,7 @@
 *.bz2
 *.xz
 *.gem
+*.run
 /*/src
 /*/pkg
 *.kate-swp
