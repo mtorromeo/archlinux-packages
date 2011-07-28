@@ -10,7 +10,7 @@ depends=('mysql-clients')
 conflicts=('mysql')
 provides=('mysql')
 optdepends=('perl-dbi' 'perl-dbd-mysql')
-makedepends=('cmake' 'openssl' 'tcp_wrappers' 'zlib')
+makedepends=('cmake' 'openssl' 'zlib')
 
 license=('GPL')
 url="http://www.percona.com/software/percona-server/"
