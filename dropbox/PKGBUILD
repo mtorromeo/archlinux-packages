@@ -3,7 +3,7 @@
 
 pkgname=dropbox
 pkgver=1.1.40
-pkgrel=1
+pkgrel=2
 pkgdesc="Secure backup, sync and sharing made easy."
 arch=("i686" "x86_64")
 url="http://www.dropbox.com"
@@ -29,7 +29,7 @@ build() {
 	find "$pkgdir/opt/dropbox/" -type d -exec chmod 755 {} \;
 	chmod 755 "$pkgdir/opt/dropbox/dropboxd"
 	chmod 755 "$pkgdir/opt/dropbox/dropbox"
-	chown -R root.root "$pkgdir/opt/dropbox"
+	chown -R root:root "$pkgdir/opt/dropbox"
 
 	install -d "$pkgdir/usr/bin"
 	ln -s "/opt/dropbox/dropboxd" "$pkgdir/usr/bin/dropboxd"
