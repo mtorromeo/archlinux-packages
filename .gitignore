@@ -7,6 +7,8 @@
 *.xz
 *.gem
 *.run
+*.deb
+*.rpm
 /*/src
 /*/pkg
 *.kate-swp
