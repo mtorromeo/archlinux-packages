@@ -22,7 +22,7 @@ pkgname=('php52'
 
 pkgname=php52
 pkgver=5.2.17
-pkgrel=1
+pkgrel=3
 _suhosinver=5.2.16-0.9.7
 _fpmversion=0.5.14
 pkgdesc='A high-level scripting language with FastCGI Process Manager'
@@ -33,8 +33,6 @@ makedepends=('apache' 'imap' 'postgresql-libs' 'libmysqlclient'
              'libldap' 'postfix' 'libpng' 'libjpeg' 'sqlite3' 'unixodbc'
              'net-snmp' 'mhash' 'gmp' 'libmcrypt' 'tidyhtml' 'aspell' 'libtool'
              'freetype2' 'curl' 'libxslt' 'pam' 'openssl' 'bzip2' 'gdbm' 'db')
-provides=("php=$pkgver" "php52=$pkgver")
-conflicts=('php' 'php52')
 source=("http://www.php.net/distributions/php-${pkgver}.tar.bz2"
         "http://download.suhosin.org/suhosin-patch-${_suhosinver}.patch.gz"
         "http://php-fpm.org/downloads/php-${pkgver}-fpm-${_fpmversion}.diff.gz"
@@ -260,7 +258,7 @@ package_php52-apache() {
 
 package_php52-fpm() {
 	pkgdesc='FastCGI Process Manager for PHP'
-	depends=('php52')
+	depends=('php52-cgi')
 	backup=('etc/php/php-fpm.conf')
 
 	install -D -m644 "${srcdir}/build-cgi/sapi/cgi/fpm/php-fpm.conf" "${pkgdir}/etc/php/php-fpm.conf"
