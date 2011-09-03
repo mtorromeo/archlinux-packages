@@ -4,7 +4,7 @@
 pkgname=dropbox
 pkgver=1.1.43
 pkgrel=1
-pkgdesc="Secure backup, sync and sharing made easy."
+pkgdesc="A free service that lets you bring your photos, docs, and videos anywhere and share them easily."
 arch=("i686" "x86_64")
 url="http://www.dropbox.com"
 license=(custom)
@@ -15,7 +15,7 @@ options=('!strip')
 _source_arch="x86"
 [ "$CARCH" = "x86_64" ] && _source_arch="x86_64"
 
-md5sums=('1d303b067c09ab6ca305fb527036aeab' '9ec50da2ce59ed8c17606394b9c5e1c0' 'b34263a03e5ebfb3ec6615b35273a78f' '619b5a2e49b48f564423a850c94312d7')
+md5sums=('1d303b067c09ab6ca305fb527036aeab' '9ec50da2ce59ed8c17606394b9c5e1c0' 'a9dbde2f71bde14730a5ff9e3bd13ff8' '619b5a2e49b48f564423a850c94312d7')
 [ "$CARCH" = "x86_64" ] && md5sums[0]='a29190fa4420cbd2fe45807b1ac6b7f3'
 
 source=("https://dl-web.dropbox.com/u/17/${pkgname}-lnx.${_source_arch}-${pkgver}.tar.gz" "dropbox.png" "dropbox.desktop" "terms.html")
