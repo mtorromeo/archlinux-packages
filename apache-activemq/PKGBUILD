@@ -1,12 +1,12 @@
 # Contributor: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 pkgname=apache-activemq
 pkgver=5.5.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Popular and powerful open source messaging and Integration Patterns provider"
 arch=(any)
 url="http://activemq.apache.org"
 license=('Apache 2.0')
-depends=('jdk')
+depends=('java-runtime')
 backup=(etc/default/activemq)
 source=("http://apache.fastbull.org/activemq/$pkgname/$pkgver/$pkgname-$pkgver-bin.tar.gz" activemq.rc.d activemq.defaults connectors-conf.patch)
 options=(!strip)
