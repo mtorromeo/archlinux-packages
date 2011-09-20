@@ -2,7 +2,7 @@
 
 pkgname=percona-server
 pkgver=5.5.15_rel21.0
-pkgrel=1
+pkgrel=2
 pkgdesc="A backwards-compatible drop-in replacement for MySQL that provides improved performance, diagnostics and instrumentation, and manageability of the server"
 arch=('i686' 'x86_64')
 
