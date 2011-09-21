@@ -1,0 +1,81 @@
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+# Original mariadb: Brad Arrington <bradla8@yahoo.com>
+
+pkgname=mariadb-mysql-replacement
+_pkgname=mariadb
+pkgver=5.3.1
+pkgrel=1
+arch=('i686' 'x86_64')
+license=('GPL')
+url="http://www.mariadb.org/"
+pkgdesc="A fast SQL database server branch of MySQL - MariaDB"
+
+depends=('mysql-clients' 'net-tools')
+conflicts=('mysql')
+provides=('mysql')
+
+optdepends=('perl-dbi' 'perl-dbd-mysql')
+makedepends=('zlib' 'perl' 'openssl')
+
+options=('!libtool' 'emptydirs')
+backup=('etc/mysql/my.cnf')
+install=mariadb.install
+#source=("http://downloads.askmonty.org/f/${_pkgname}-${pkgver}-beta/kvm-tarbake-jaunty-x86/${_pkgname}-${pkgver}-beta.tar.gz"
+source=("http://mirror.layerjet.com/mariadb/${_pkgname}-${pkgver}-beta/kvm-tarbake-jaunty-x86/${_pkgname}-${pkgver}-beta.tar.gz"
+        'my.cnf'
+        'mysqld.rc-d')
+
+md5sums=('5b3a94de1c1fcaa193edbbc8d7f8ffe4'
+         '1c949c0dbea5206af0db14942d9927b6'
+         'e81e09c4d1c41c34ddafd2bfd9cfdd40')
+
+build() {
+	cd "${srcdir}/${_pkgname}-${pkgver}-beta"
+
+	# CFLAGS/CXXFLAGS as suggested upstream
+	CFLAGS="-fPIC ${CFLAGS} -fno-strict-aliasing" \
+	CXXFLAGS="-fPIC ${CXXFLAGS} -fno-strict-aliasing -felide-constructors -fno-rtti" \
+
+	mkdir -p "${pkgdir}/etc/mysql"
+	./configure --prefix=/usr \
+		--datadir=/var/lib/mysql \
+		--sysconfdir=/etc/mysql \
+		--without-docs \
+		--without-readline \
+		--with-ssl \
+		--with-charset=utf8 \
+		--with-collation=utf8_unicode_ci \
+		--with-extra-charsets=complex \
+		--localstatedir=/var \
+		--with-unix-socket-path=/var/run/mysqld/mysqld.sock \
+		--with-plugins=partition,pbxt,ibmdb2i,aria
+
+	make
+}
+
+package(){
+	cd "${srcdir}/${_pkgname}-${pkgver}-beta"
+	mkdir -p "${pkgdir}/usr/bin/"
+	make DESTDIR="${pkgdir}" install
+
+	cp -Rd "${pkgdir}/var/lib/mysql/"*  "${pkgdir}/usr/share/"
+	install -Dm644 "${srcdir}/my.cnf" "${pkgdir}/etc/mysql/my.cnf"
+	install -Dm755 "${srcdir}/mysqld.rc-d" "${pkgdir}/etc/rc.d/mysqld"
+
+	mv "${pkgdir}/usr/lib/mysql/"* "${pkgdir}/usr/lib"
+
+	# provided by libmysqlclient
+	rm "${pkgdir}/usr/bin/mysql_config"
+	rm "${pkgdir}/usr/lib/libmysql"*
+	rm -r "${pkgdir}/usr/include/"
+	rm "${pkgdir}/usr/share/man/man1/mysql_config.1"
+
+	# provided by mysql-clients
+	rm "${pkgdir}/usr/bin/"{mysql,mysqladmin,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}
+	rm "${pkgdir}/usr/share/man/man1/"{mysql,mysqladmin,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}.1
+
+	# not needed
+	rm "${pkgdir}/usr/share/man/man1/mysql-test-run.pl.1"
+
+	install -dm700 "${pkgdir}/var/lib/mysql"
+}
