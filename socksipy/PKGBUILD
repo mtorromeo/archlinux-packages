@@ -2,7 +2,7 @@
 
 pkgname=socksipy
 pkgver=1.00
-pkgrel=1
+pkgrel=4
 pkgdesc="Provides a socket-like interface that supports connections to any TCP service through the use of a SOCKS4, SOCKS5 or HTTP proxy. "
 arch=('any')
 license=('BSD')
