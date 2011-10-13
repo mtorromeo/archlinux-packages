@@ -6,7 +6,7 @@ pkgname=pymunk
 pkgver=2.0.0
 pkgrel=2
 pkgdesc="A wrapper around the 2d physics library Chipmunk"
-arch=(i686 x86_64)
+arch=(any)
 url=http://code.google.com/p/pymunk/
 license=MIT
 depends=(python2 chipmunk)
@@ -25,9 +25,6 @@ package() {
 	cd $pkgname-$pkgver
 	python2 setup.py install --root="$pkgdir"
 	_site_packages=$(python2 -sSc 'import site; print site.getsitepackages()[0]')
-	if [ $CARCH = "x86_64" ]; then
-		ln -s "/usr/lib/libchipmunk.so" "$pkgdir$_site_packages/$pkgname/libchipmunk64.so"
-	else
-		ln -s "/usr/lib/libchipmunk.so" "$pkgdir$_site_packages/$pkgname/"
-	fi
+	ln -s "/usr/lib/libchipmunk.so" "$pkgdir$_site_packages/$pkgname/libchipmunk64.so"
+	ln -s "/usr/lib/libchipmunk.so" "$pkgdir$_site_packages/$pkgname/libchipmunk.so"
 }
