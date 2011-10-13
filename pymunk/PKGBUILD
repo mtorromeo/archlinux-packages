@@ -1,4 +1,5 @@
-# Maintainer: Dan Serban
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+# Contributor: Dan Serban
 # Contributor: Fabio Volpe
 
 pkgname=pymunk
