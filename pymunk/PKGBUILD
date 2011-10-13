@@ -10,7 +10,6 @@ arch=(any)
 url=http://code.google.com/p/pymunk/
 license=MIT
 depends=(python2 chipmunk)
-makedepends=(gcc)
 source=("http://pymunk.googlecode.com/files/$pkgname-$pkgver.zip")
 md5sums=('850615bae6990d5c39d530f45d1eed29')
 
