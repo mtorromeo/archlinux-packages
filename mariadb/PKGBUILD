@@ -1,14 +1,12 @@
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
-# Original mariadb: Brad Arrington <bradla8@yahoo.com>
 
-pkgname=mariadb-mysql-replacement
-_pkgname=mariadb
-pkgver=5.3.1
+pkgname=mariadb
+pkgver=5.3.2
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('GPL')
 url="http://www.mariadb.org/"
-pkgdesc="A fast SQL database server branch of MySQL - MariaDB"
+pkgdesc="A fast SQL database server. Drop-in replacement for MySQL."
 
 depends=('mysql-clients' 'net-tools')
 conflicts=('mysql')
@@ -19,46 +17,65 @@ makedepends=('zlib' 'perl' 'openssl')
 
 options=('!libtool' 'emptydirs')
 backup=('etc/mysql/my.cnf')
-install=mariadb.install
-#source=("http://downloads.askmonty.org/f/${_pkgname}-${pkgver}-beta/kvm-tarbake-jaunty-x86/${_pkgname}-${pkgver}-beta.tar.gz"
-source=("http://mirror.layerjet.com/mariadb/${_pkgname}-${pkgver}-beta/kvm-tarbake-jaunty-x86/${_pkgname}-${pkgver}-beta.tar.gz"
+install=$pkgname.install
+source=("http://mirror.switch.ch/mirror/$pkgname/$pkgname-$pkgver-beta/kvm-tarbake-jaunty-x86/$pkgname-$pkgver-beta.tar.gz"
         'my.cnf'
         'mysqld.rc-d')
 
-md5sums=('5b3a94de1c1fcaa193edbbc8d7f8ffe4'
+md5sums=('d8199454059ab2c98313aaad0c1bc318'
          '1c949c0dbea5206af0db14942d9927b6'
          'e81e09c4d1c41c34ddafd2bfd9cfdd40')
 
 build() {
-	cd "${srcdir}/${_pkgname}-${pkgver}-beta"
+	cd "$srcdir/$pkgname-$pkgver-beta"
 
 	# CFLAGS/CXXFLAGS as suggested upstream
 	CFLAGS="-fPIC ${CFLAGS} -fno-strict-aliasing" \
 	CXXFLAGS="-fPIC ${CXXFLAGS} -fno-strict-aliasing -felide-constructors -fno-rtti" \
 
+	[ "$CARCH" = "i686" ] && I686OPTS="--with-big-tables"
+
 	mkdir -p "${pkgdir}/etc/mysql"
-	./configure --prefix=/usr \
+	./configure --prefix=/usr $I686OPTS \
+		--libexecdir=/usr/bin \
 		--datadir=/var/lib/mysql \
 		--sysconfdir=/etc/mysql \
 		--without-docs \
 		--without-readline \
+		--without-libedit \
 		--with-ssl \
+		--localstatedir=/var \
+		--with-zlib-dir=/usr \
+		--with-libevent=yes \
 		--with-charset=utf8 \
 		--with-collation=utf8_unicode_ci \
 		--with-extra-charsets=complex \
-		--localstatedir=/var \
+		--enable-assembler \
+		--with-embedded-server \
+		--enable-local-infile \
 		--with-unix-socket-path=/var/run/mysqld/mysqld.sock \
-		--with-plugins=partition,pbxt,ibmdb2i,aria
+		--with-plugin-aria --with-aria-tmp-tables \
+		--with-plugin-archive \
+		--with-plugin-blackhole \
+		--with-plugin-sphinx \
+		--with-plugin-xtradb \
+		--with-plugin-partition \
+		--without-plugin-federated \
+		--without-plugin-innodb_plugin \
+		--without-plugin-oqgraph \
+		--without-plugin-pbxt \
+		--without-plugin-example --without-plugin-daemon_example --without-plugin-ftexample \
+ 		--without-plugin-ndbcluster
 
 	make
 }
 
 package(){
-	cd "${srcdir}/${_pkgname}-${pkgver}-beta"
+	cd "$srcdir/$pkgname-$pkgver-beta"
 	mkdir -p "${pkgdir}/usr/bin/"
 	make DESTDIR="${pkgdir}" install
 
-	cp -Rd "${pkgdir}/var/lib/mysql/"*  "${pkgdir}/usr/share/"
+	mv "${pkgdir}/var/lib/mysql" "${pkgdir}/usr/share/"
 	install -Dm644 "${srcdir}/my.cnf" "${pkgdir}/etc/mysql/my.cnf"
 	install -Dm755 "${srcdir}/mysqld.rc-d" "${pkgdir}/etc/rc.d/mysqld"
 
@@ -74,8 +91,13 @@ package(){
 	rm "${pkgdir}/usr/bin/"{mysql,mysqladmin,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}
 	rm "${pkgdir}/usr/share/man/man1/"{mysql,mysqladmin,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}.1
 
+	# provided by mytop
+	rm "$pkgdir/usr/bin/mytop"
+
 	# not needed
 	rm "${pkgdir}/usr/share/man/man1/mysql-test-run.pl.1"
+	rm -rf "$pkgdir/usr/mysql-test"
+	rm -rf "$pkgdir/usr/sql-bench"
 
 	install -dm700 "${pkgdir}/var/lib/mysql"
 }
