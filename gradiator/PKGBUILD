@@ -7,7 +7,7 @@ pkgdesc="CSS3 gradient generator"
 arch=(any)
 url="http://gradient.inatorapp.com/"
 license=('GPL')
-depends=("python2" "pywebkitgtk")
+depends=("pywebkitgtk")
 makedepends=("python-distutils-extra")
 source=(http://ppa.launchpad.net/cooperjona/gradiator/ubuntu/pool/main/g/gradiator/gradiator_$pkgver.tar.gz)
 
