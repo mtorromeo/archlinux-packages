@@ -9,6 +9,7 @@
 *.run
 *.deb
 *.rpm
+*.sig
 /*/src
 /*/pkg
 *.kate-swp
