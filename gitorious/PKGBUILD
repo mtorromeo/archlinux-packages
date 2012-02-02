@@ -1,4 +1,5 @@
-# Contributor: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
 pkgname=gitorious
 pkgver=2.1.1
 pkgrel=1
@@ -8,8 +9,8 @@ url="http://gitorious.org/gitorious"
 license=('AGPLv3')
 
 depends=('sphinx' 'mysql' 'ruby-enterprise' 'ruby-enterprise-raspell' 'ruby-enterprise-bundler' 'ruby-enterprise-stompserver' 'imagemagick' 'nodejs-buster' 'libxslt')
-optdepends=('memcached: High performance cache')
 makedepends=('git')
+optdepends=('memcached: High performance cache')
 
 install=gitorious.install
 backup=(etc/webapps/gitorious/broker.yml etc/webapps/gitorious/database.yml etc/webapps/gitorious/gitorious.yml)
@@ -31,9 +32,9 @@ build() {
 
 	msg "GIT checkout done or server timeout"
 
-	rm -rf $srcdir/$pkgname-build
-	cp -r $srcdir/$pkgname-$pkgver $srcdir/$pkgname-build
-	cd $srcdir/$pkgname-build/
+	rm -rf "$srcdir/$pkgname-build"
+	cp -r "$srcdir/$pkgname-$pkgver" "$srcdir/$pkgname-build"
+	cd "$srcdir/$pkgname-build/"
 	rm -rf .git .gitmodules
 	find . -type f -name .gitignore -delete
 
