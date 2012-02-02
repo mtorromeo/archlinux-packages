@@ -12,7 +12,8 @@ depends=('python2-pyro')
 makedepends=('python2-distribute')
 optdepends=('nagios-plugins: various monitoring checks'
             'nagcon: a simple yet great curses interface over nagios style status.dat file'
-            'python-pysqlite python-simplejson: for the livestatus module')
+            'python-pysqlite: for the livestatus module'
+            'python-simplejson: for the livestatus module')
 install='shinken.install'
 source=("http://shinken-monitoring.org/pub/$pkgname-$pkgver.tar.gz" 'shinken.install' 'shinken.setup_parameters')
 
@@ -39,5 +40,5 @@ package() {
 }
 
 md5sums=('cfee62aedc82e095dab9bc676c4cf7b6'
-         '564726b4d34f9522ba31e152fe2c228e'
+         '069d026262e4077089e5526e6e672f9c'
          '85d8cb4b28662f83df26a3da05e2f4ff')
