@@ -22,7 +22,7 @@ pkgname=('php52'
 
 pkgname=php52
 pkgver=5.2.17
-pkgrel=3
+pkgrel=5
 _suhosinver=5.2.16-0.9.7
 _fpmversion=0.5.14
 pkgdesc='A high-level scripting language with FastCGI Process Manager'
@@ -155,6 +155,9 @@ build() {
 
 	# adjust paths
 	patch -p0 -i "${srcdir}/php.ini.patch"
+
+	# pcre fix
+	patch -p0 -i "${srcdir}/php-pcre.patch"
 
 	# php
 	[ -d "${srcdir}/build-php" ] || mkdir "${srcdir}/build-php"
