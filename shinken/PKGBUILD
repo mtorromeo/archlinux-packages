@@ -21,8 +21,8 @@ build() {
 	cp -f shinken.setup_parameters "$srcdir/$pkgname-$pkgver/setup_parameters"
 	cd "$srcdir/$pkgname-$pkgver"
 
-	find ./ -name '*.py' -exec sed -i 's|^#!/usr/bin/env python2.6$|#!/usr/bin/env python2.7|' {} \;
-	find ./ -type f -exec sed -i 's|/etc/init.d|/etc/rc.d|' {} \;
+	find -name '*.py' -exec sed -i 's|^#!/usr/bin/env python2.6$|#!/usr/bin/env python2.7|' {} \;
+	find -type f -exec sed -i 's|/etc/init.d|/etc/rc.d|' {} \;
 }
 
 package() {
