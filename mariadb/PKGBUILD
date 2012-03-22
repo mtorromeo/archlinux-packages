@@ -1,103 +1,97 @@
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 
 pkgname=mariadb
-pkgver=5.3.2
+pkgver=5.5.21
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('GPL')
 url="http://www.mariadb.org/"
 pkgdesc="A fast SQL database server. Drop-in replacement for MySQL."
 
-depends=('mysql-clients' 'net-tools')
+depends=('mysql-clients' 'net-tools' 'libaio')
 conflicts=('mysql')
 provides=('mysql')
 
 optdepends=('perl-dbi' 'perl-dbd-mysql')
-makedepends=('zlib' 'perl' 'openssl')
+makedepends=('zlib' 'perl' 'openssl' 'cmake' 'boost' 'libevent')
 
-options=('!libtool' 'emptydirs')
+options=('!libtool' '!emptydirs')
 backup=('etc/mysql/my.cnf')
 install=$pkgname.install
-source=("http://mirror.switch.ch/mirror/$pkgname/$pkgname-$pkgver-beta/kvm-tarbake-jaunty-x86/$pkgname-$pkgver-beta.tar.gz"
+source=("http://mirror.switch.ch/mirror/$pkgname/$pkgname-$pkgver/kvm-tarbake-jaunty-x86/$pkgname-$pkgver.tar.gz"
         'my.cnf'
-        'mysqld.rc-d')
+        'mysqld')
 
-md5sums=('d8199454059ab2c98313aaad0c1bc318'
+md5sums=('79249a7d98ace89d9758a1f194b9ed07'
          '1c949c0dbea5206af0db14942d9927b6'
          'e81e09c4d1c41c34ddafd2bfd9cfdd40')
 
 build() {
-	cd "$srcdir/$pkgname-$pkgver-beta"
+	cd "$srcdir/$pkgname-$pkgver"
 
 	# CFLAGS/CXXFLAGS as suggested upstream
 	CFLAGS="-fPIC ${CFLAGS} -fno-strict-aliasing" \
 	CXXFLAGS="-fPIC ${CXXFLAGS} -fno-strict-aliasing -felide-constructors -fno-rtti" \
 
-	[ "$CARCH" = "i686" ] && I686OPTS="--with-big-tables"
-
-	mkdir -p "${pkgdir}/etc/mysql"
-	./configure --prefix=/usr $I686OPTS \
-		--libexecdir=/usr/bin \
-		--datadir=/var/lib/mysql \
-		--sysconfdir=/etc/mysql \
-		--without-docs \
-		--without-readline \
-		--without-libedit \
-		--with-ssl \
-		--localstatedir=/var \
-		--with-zlib-dir=/usr \
-		--with-libevent=yes \
-		--with-charset=utf8 \
-		--with-collation=utf8_unicode_ci \
-		--with-extra-charsets=complex \
-		--enable-assembler \
-		--with-embedded-server \
-		--enable-local-infile \
-		--with-unix-socket-path=/var/run/mysqld/mysqld.sock \
-		--with-plugin-aria --with-aria-tmp-tables \
-		--with-plugin-archive \
-		--with-plugin-blackhole \
-		--with-plugin-sphinx \
-		--with-plugin-xtradb \
-		--with-plugin-partition \
-		--without-plugin-federated \
-		--without-plugin-innodb_plugin \
-		--without-plugin-oqgraph \
-		--without-plugin-pbxt \
-		--without-plugin-example --without-plugin-daemon_example --without-plugin-ftexample \
- 		--without-plugin-ndbcluster
+	cmake . \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DSYSCONFDIR=/etc/mysql \
+		-DMYSQL_DATADIR=/var/lib/mysql \
+		-DMYSQL_UNIX_ADDR=/var/run/mysqld/mysqld.sock \
+		-DDEFAULT_CHARSET=utf8 \
+		-DDEFAULT_COLLATION=utf8_general_ci \
+		-DENABLED_LOCAL_INFILE=ON \
+		-DINSTALL_INFODIR=share/mysql/docs \
+		-DINSTALL_MANDIR=share/man \
+		-DINSTALL_PLUGINDIR=/usr/lib/mysql/plugin \
+		-DINSTALL_SCRIPTDIR=bin \
+		-DINSTALL_INCLUDEDIR=include/mysql \
+		-DINSTALL_DOCREADMEDIR=share/mysql \
+		-DINSTALL_SUPPORTFILESDIR=share/mysql \
+		-DINSTALL_MYSQLSHAREDIR=share/mysql \
+		-DINSTALL_DOCDIR=share/mysql/docs \
+		-DINSTALL_SHAREDIR=share/mysql \
+		-DWITH_READLINE=OFF \
+		-DWITH_ZLIB=system \
+		-DWITH_SSL=system \
+		-DWITH_LIBWRAP=OFF \
+		-DWITH_UNIT_TESTS=ON \
+		-DWITH_MYSQLD_LDFLAGS="$LDFLAGS" \
+		-DWITH_EXTRA_CHARSETS=complex \
+		-DWITH_EMBEDDED_SERVER=ON \
+		-DWITH_ARCHIVE_STORAGE_ENGINE=ON \
+		-DWITH_ARIA_STORAGE_ENGINE=ON \
+		-DWITH_BLACKHOLE_STORAGE_ENGINE=OFF \
+		-DWITH_FEDERATEDX_STORAGE_ENGINE=OFF \
+		-DWITH_PARTITION_STORAGE_ENGINE=ON \
+		-DWITH_PERFSCHEMA_STORAGE_ENGINE=ON \
+		-DWITH_SPHINX_STORAGE_ENGINE=ON \
+		-DWITH_XTRADB_STORAGE_ENGINE=ON
 
 	make
 }
 
 package(){
-	cd "$srcdir/$pkgname-$pkgver-beta"
-	mkdir -p "${pkgdir}/usr/bin/"
-	make DESTDIR="${pkgdir}" install
+	cd "$srcdir/$pkgname-$pkgver"
+	make DESTDIR="$pkgdir" install
 
-	mv "${pkgdir}/var/lib/mysql" "${pkgdir}/usr/share/"
-	install -Dm644 "${srcdir}/my.cnf" "${pkgdir}/etc/mysql/my.cnf"
-	install -Dm755 "${srcdir}/mysqld.rc-d" "${pkgdir}/etc/rc.d/mysqld"
-
-	mv "${pkgdir}/usr/lib/mysql/"* "${pkgdir}/usr/lib"
+	install -Dm644 "$srcdir/my.cnf" "$pkgdir/etc/mysql/my.cnf"
+	install -Dm755 "$srcdir/mysqld" "$pkgdir/etc/rc.d/mysqld"
 
 	# provided by libmysqlclient
-	rm "${pkgdir}/usr/bin/mysql_config"
-	rm "${pkgdir}/usr/lib/libmysql"*
-	rm -r "${pkgdir}/usr/include/"
-	rm "${pkgdir}/usr/share/man/man1/mysql_config.1"
+	rm "$pkgdir/usr/bin/mysql_config"
+	rm "$pkgdir/usr/lib/libmysql"*
+	rm -r "$pkgdir/usr/include/"
+	rm "$pkgdir/usr/share/man/man1/"{mysql_config,mysql_client_test_embedded,mysqltest_embedded}.1
 
 	# provided by mysql-clients
-	rm "${pkgdir}/usr/bin/"{mysql,mysqladmin,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}
-	rm "${pkgdir}/usr/share/man/man1/"{mysql,mysqladmin,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}.1
-
-	# provided by mytop
-	rm "$pkgdir/usr/bin/mytop"
+	rm "$pkgdir/usr/bin/"{mysql,mysqladmin,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}
+	rm "$pkgdir/usr/share/man/man1/"{mysql,mysqladmin,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}.1
 
 	# not needed
-	rm "${pkgdir}/usr/share/man/man1/mysql-test-run.pl.1"
-	rm -rf "$pkgdir/usr/mysql-test"
-	rm -rf "$pkgdir/usr/sql-bench"
+	rm -r "$pkgdir/usr/"{data,mysql-test,sql-bench,lib/mysql/plugin/debug}
+	rm "$pkgdir/usr/share/man/man1/mysql-test-run.pl.1"
 
-	install -dm700 "${pkgdir}/var/lib/mysql"
+	install -dm700 "$pkgdir/var/lib/mysql"
 }
