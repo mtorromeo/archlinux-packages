@@ -6,12 +6,12 @@ pkgname=('munin' 'munin-node')
 pkgbase=munin
 pkgver=2.0
 _realver=2.0-rc4
-pkgrel=1
+pkgrel=2
 pkgdesc="A distributed monitoring/graphing tool"
 arch=('any')
 url="http://munin-monitoring.org/"
 license=("GPL")
-depends=('rrdtool' 'perl' 'perl-log-log4perl' 'perl-html-template' 'perl-date-manip')
+depends=('rrdtool' 'perl' 'perl-log-log4perl' 'perl-html-template' 'perl-date-manip' 'perl-io-socket-inet6')
 source=(http://downloads.sourceforge.net/sourceforge/munin/munin-$_realver.tar.gz
         Makefile.config
        keep-defaults.patch
