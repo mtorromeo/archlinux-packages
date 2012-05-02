@@ -14,6 +14,7 @@ production:
   terms_of_use: false
   locale: en
   use_ssl: false
+  #enable_private_repositories: true
 
   # Stuff that's in the html <head>. custom stats javascript code etc
   #extra_html_head_data:
