@@ -39,7 +39,6 @@ build() {
 	find . -type f -name .gitignore -delete
 
 	msg "Fetching bundled gems..."
-	export INSTALL=/usr/bin/install
 	/opt/ruby-enterprise/bin/bundle install --deployment --binstubs
 	rm -rf vendor/bundle/ruby/*/cache
 
@@ -86,5 +85,5 @@ md5sums=('9d3a4476db211d0dd3a47368d21ea63a'
          'a5dca286ee2023fbd63ffda5c327bd85'
          'd6a94e85d1efe41b4b3aba9b8263702e'
          '6a6efd4a0c9deaaefe841c57176a1bee'
-         'cb5640f82f428c8186cb437e4a568404'
+         'bd6987bada8e7067a2a7f3727e93dd61'
          'f46e84a467b492a6d5de936e1595e028')
