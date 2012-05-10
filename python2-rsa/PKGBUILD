@@ -9,6 +9,7 @@ arch=(any)
 url="http://stuvel.eu/rsa"
 license=('BSD')
 depends=(python2-pyasn1)
+makedepends=(python2-distribute)
 source=(http://pypi.python.org/packages/source/r/$_libname/$_libname-$pkgver.zip)
 md5sums=(605b0346d7b7bf33a8d231ab4d07da45)
 
