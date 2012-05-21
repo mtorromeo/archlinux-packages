@@ -1,4 +1,5 @@
-# Maintainer: Jan Stępień <jstepien@users.sourceforge.net>
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+# Contributor: Jan Stępień <jstepien@users.sourceforge.net>
 
 pkgname=csync
 pkgver=0.44.0
