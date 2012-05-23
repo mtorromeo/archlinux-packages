@@ -19,6 +19,9 @@ build() {
 
 	# fix net command
 	sed -i 's|\$samba_bindir/netx|$samba_bindir/net|' smbldap_tools.pm
+
+	# fix smbldap-useradd command
+	sed -i 's|\$RealBin/smbldap-passwd.cmd|$RealBin/smbldap-passwd|' smbldap-useradd.cmd
 }
 
 package() {
