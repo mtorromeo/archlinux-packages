@@ -16,6 +16,9 @@ build() {
 	cd "$srcdir/$pkgname-$pkgver"
 	./configure --prefix=/usr --sysconfdir=/etc
 	make
+
+	# fix net command
+	sed -i 's|\$samba_bindir/netx|$samba_bindir/net|' smbldap_tools.pm
 }
 
 package() {
