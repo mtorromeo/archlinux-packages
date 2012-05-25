@@ -5,8 +5,8 @@
 pkgname=('munin' 'munin-node')
 pkgbase=munin
 pkgver=2.0
-_realver=2.0-rc5
-pkgrel=4
+_realver=2.0-rc7
+pkgrel=5
 pkgdesc="A distributed monitoring/graphing tool"
 arch=('any')
 url="http://munin-monitoring.org/"
@@ -64,7 +64,7 @@ package_munin-node() {
 	rm -rf "$pkgdir/var/run/"
 }
 
-md5sums=('ce5d46a7cf9a38502d63b7e55ec226f5'
+md5sums=('1fee34272ad6984bec462bfa08bb6570'
          'f7a26c9a91f16b28cb7b72fc5af4e107'
          'bc61da7d976cd59dd9140228a02d5fa9'
          '23c76b9c3e5a9c2982ffd10cf87af463'
