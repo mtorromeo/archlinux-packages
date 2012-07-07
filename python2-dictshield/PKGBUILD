@@ -2,7 +2,7 @@
 
 pkgname=python2-dictshield
 pkgver=0.4.4
-pkgrel=1
+pkgrel=2
 _libname=${pkgname/python2-/}
 pkgdesc="A typed dictionary for Python... sorta."
 url="https://github.com/j2labs/dictshield"
@@ -24,4 +24,4 @@ package() {
 }
 
 md5sums=('2445d8bf27e59e756aa1ff4e9bf43a76'
-         'a418ea3cd3527bdf69145967b4659e5d')
+         '4abd6651a68abe252919d0fbb0f1268c')
