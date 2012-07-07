@@ -9,8 +9,7 @@ url="https://github.com/j2labs/dictshield"
 makedepends=('python2-distribute')
 license=('BSD')
 arch=('any')
-source=(http://pypi.python.org/packages/source/${_libname:0:1}/$_libname/$_libname-$pkgver.tar.gz
-	https://github.com/j2labs/dictshield/blob/9fd7087a51044daac9aad1e653ae4185607486f3/docs/LICENSE.md)
+source=(http://pypi.python.org/packages/source/${_libname:0:1}/$_libname/$_libname-$pkgver.tar.gz LICENSE.md)
 
 build() {
 	cd "$srcdir/$_libname-$pkgver"
