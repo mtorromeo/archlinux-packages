@@ -9,7 +9,8 @@ url="https://github.com/esnme/ultrajson"
 makedepends=('python2-distribute')
 license=('BSD')
 arch=('i686' 'x86_64')
-source=(http://pypi.python.org/packages/source/${_libname:0:1}/$_libname/$_libname-$pkgver.zip https://github.com/esnme/ultrajson/blob/a6af1d09c637a0d488815ab25fe3bcacfcb8e653/LICENSE.txt)
+source=(http://pypi.python.org/packages/source/${_libname:0:1}/$_libname/$_libname-$pkgver.zip
+	https://github.com/esnme/ultrajson/blob/a6af1d09c637a0d488815ab25fe3bcacfcb8e653/LICENSE.txt)
 
 build() {
 	cd "$srcdir/$_libname-$pkgver"

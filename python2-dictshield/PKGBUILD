@@ -9,7 +9,8 @@ url="https://github.com/j2labs/dictshield"
 makedepends=('python2-distribute')
 license=('BSD')
 arch=('any')
-source=(http://pypi.python.org/packages/source/${_libname:0:1}/$_libname/$_libname-$pkgver.tar.gz https://github.com/j2labs/dictshield/blob/9fd7087a51044daac9aad1e653ae4185607486f3/docs/LICENSE.md)
+source=(http://pypi.python.org/packages/source/${_libname:0:1}/$_libname/$_libname-$pkgver.tar.gz
+	https://github.com/j2labs/dictshield/blob/9fd7087a51044daac9aad1e653ae4185607486f3/docs/LICENSE.md)
 
 build() {
 	cd "$srcdir/$_libname-$pkgver"
@@ -22,7 +23,5 @@ package() {
 	install -m0644 -D "$srcdir/LICENSE.md" "$pkgdir/usr/share/licenses/$pkgname/LICENSE.md"
 }
 
-md5sums=('2445d8bf27e59e756aa1ff4e9bf43a76'
-         'a418ea3cd3527bdf69145967b4659e5d')
 md5sums=('2445d8bf27e59e756aa1ff4e9bf43a76'
          'a418ea3cd3527bdf69145967b4659e5d')
