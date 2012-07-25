@@ -15,8 +15,8 @@ case "$1" in
       fi
       ;;
     stop)
-      stat_busy "Stoping PHP-FPM Daemon"
-      kill -TERM `cat /var/run/php-fpm.pid` &>/dev/null
+      stat_busy "Stopping PHP-FPM Daemon"
+      kill -TERM `cat /run/php-fpm/php-fpm.pid` &>/dev/null
       if [ $? -gt 0 ]; then
           stat_fail
       else
@@ -26,7 +26,7 @@ case "$1" in
       ;;
     quit)
       stat_busy "Gracefully shutting down PHP-FPM Daemon"
-      kill -QUIT `cat /var/run/php-fpm.pid` &>/dev/null
+      kill -QUIT `cat /run/php-fpm/php-fpm.pid` &>/dev/null
       if [ $? -gt 0 ]; then
           stat_fail
       else
@@ -40,13 +40,13 @@ case "$1" in
       $0 start
       ;;
     reload)
-      if [ -f /var/run/php-fpm.pid ]; then
-          status "Reloading PHP-FPM configuration" kill -USR2 `cat /var/run/php-fpm.pid`
+      if [ -f /run/php-fpm/php-fpm.pid ]; then
+          status "Reloading PHP-FPM configuration" kill -USR2 `cat /run/php-fpm/php-fpm.pid`
       fi
       ;;
     logrotate)
-      if [ -f /var/run/php-fpm.pid ]; then
-          status "Reopening PHP-FPM log file" kill -USR1 `cat /var/run/php-fpm.pid`
+      if [ -f /run/php-fpm/php-fpm.pid ]; then
+          status "Reopening PHP-FPM log file" kill -USR1 `cat /run/php-fpm/php-fpm.pid`
       fi
       ;;
     *)

@@ -22,7 +22,7 @@ pkgname=('php52'
 
 pkgname=php52
 pkgver=5.2.17
-pkgrel=5
+pkgrel=7
 _suhosinver=5.2.16-0.9.7
 _fpmversion=0.5.14
 pkgdesc='A high-level scripting language with FastCGI Process Manager'
@@ -37,15 +37,18 @@ source=("http://www.php.net/distributions/php-${pkgver}.tar.bz2"
         "http://download.suhosin.org/suhosin-patch-${_suhosinver}.patch.gz"
         "http://php-fpm.org/downloads/php-${pkgver}-fpm-${_fpmversion}.diff.gz"
         'php.ini.patch'
+        'php-pcre.patch'
         'rc.d.php-fpm'
         'apache.conf'
         'libpng14.patch'
         'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm')
+
 md5sums=('b27947f3045220faf16e4d9158cbfe13'
          'd815fc99a0c25c21f5df28551fcbb001'
          '5339a2a9c6a0b015b7ce5fcb8d90de84'
          '18c1fb8f6db4d298ff0e21a759acaa12'
+         '144539b73a233b84fe3682e9853cda25'
          '4e811ea12bb9169350a9238c0b3c1337'
          '96ca078be6729b665be8a865535a97bf'
          '77ea0756996df0932fce472ff3ec2693'
