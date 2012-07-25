@@ -1,6 +1,6 @@
-diff -rub ./common/lib/Munin/Common/Defaults.pm ../munin-2.0-rc4.patch/common/lib/Munin/Common/Defaults.pm
---- ./common/lib/Munin/Common/Defaults.pm	2012-03-24 13:52:42.000000000 +0100
-+++ ../munin-2.0-rc4.patch/common/lib/Munin/Common/Defaults.pm	2012-03-29 19:06:22.601872964 +0200
+diff -rub munin-2.0.3/common/lib/Munin/Common/Defaults.pm munin-2.0.3-patch/common/lib/Munin/Common/Defaults.pm
+--- munin-2.0.3/common/lib/Munin/Common/Defaults.pm	2012-07-24 12:45:57.000000000 +0200
++++ munin-2.0.3-patch/common/lib/Munin/Common/Defaults.pm	2012-07-25 12:06:58.597678339 +0200
 @@ -32,6 +32,7 @@
  our $MUNIN_MANDIR     = '';
  our $MUNIN_LOGDIR     = "$COMPONENT_ROOT/log/";
@@ -9,28 +9,20 @@ diff -rub ./common/lib/Munin/Common/Defaults.pm ../munin-2.0-rc4.patch/common/li
  our $MUNIN_USER       = getpwuid $UID;
  our $MUNIN_GROUP      = getgrgid $GID;
  our $MUNIN_PLUGINUSER = getpwuid $UID;
-diff -rub ./Makefile ../munin-2.0-rc4.patch/Makefile
---- ./Makefile	2012-03-29 19:07:00.425784921 +0200
-+++ ../munin-2.0-rc4.patch/Makefile	2012-03-29 19:06:22.601872964 +0200
-@@ -214,6 +214,7 @@
+diff -rub munin-2.0.3/Makefile munin-2.0.3-patch/Makefile
+--- munin-2.0.3/Makefile	2012-07-25 12:05:30.054337554 +0200
++++ munin-2.0.3-patch/Makefile	2012-07-25 12:07:53.007681264 +0200
+@@ -228,6 +228,7 @@
               -e 's|@@HTMLDIR@@|$(HTMLDIR)|g'                    \
               -e 's|@@DBDIR@@|$(DBDIR)|g'                        \
               -e 's|@@STATEDIR@@|$(STATEDIR)|g'                  \
-+             -e 's|@@LOCKDIR@@|$(LOCKDIR)|g'                  \
++             -e 's|@@LOCKDIR@@|$(LOCKDIR)|g'                    \
  	     -e 's|@@SPOOLDIR@@|$(SPOOLDIR)|g'                  \
               -e 's|@@PERL@@|$(PERL)|g'                          \
               -e 's|@@PERLLIB@@|$(PERLLIB)|g'                    \
-@@ -254,6 +255,7 @@
-                   s{(HTMLDIR	\s+=\s).*}{\1q{$(HTMLDIR)};}x;     \
-                   s{(DBDIR	\s+=\s).*}{\1q{$(DBDIR)};}x;       \
-                   s{(STATEDIR	\s+=\s).*}{\1q{$(STATEDIR)};}x;    \
-+                  s{(LOCKDIR	\s+=\s).*}{\1q{$(LOCKDIR)};}x;    \
- 		  s{(SPOOLDIR	\s+=\s).*}{\1q{$(SPOOLDIR)};}x;    \
-                   s{(PERL	\s+=\s).*}{\1q{$(PERL)};}x;        \
-                   s{(PERLLIB	\s+=\s).*}{\1q{$(PERLLIB)};}x;     \
-diff -rub ./Makefile.config ../munin-2.0-rc4.patch/Makefile.config
---- ./Makefile.config	2012-03-24 13:52:43.000000000 +0100
-+++ ../munin-2.0-rc4.patch/Makefile.config	2012-03-29 19:06:22.601872964 +0200
+diff -rub munin-2.0.3/Makefile.config munin-2.0.3-patch/Makefile.config
+--- munin-2.0.3/Makefile.config	2012-07-24 12:45:57.000000000 +0200
++++ munin-2.0.3-patch/Makefile.config	2012-07-25 12:06:58.601011422 +0200
 @@ -55,10 +55,13 @@
  # Where Munin should place its logs.
  LOGDIR     = $(PREFIX)/log/munin
@@ -47,10 +39,9 @@ diff -rub ./Makefile.config ../munin-2.0-rc4.patch/Makefile.config
  # The perl interpreter to use
  PERL       := $(shell which perl)
  
-Solo in .: Makefile.orig
-diff -rub ./master/lib/Munin/Master/Config.pm ../munin-2.0-rc4.patch/master/lib/Munin/Master/Config.pm
---- ./master/lib/Munin/Master/Config.pm	2012-03-24 13:52:43.000000000 +0100
-+++ ../munin-2.0-rc4.patch/master/lib/Munin/Master/Config.pm	2012-03-29 19:06:22.601872964 +0200
+diff -rub munin-2.0.3/master/lib/Munin/Master/Config.pm munin-2.0.3-patch/master/lib/Munin/Master/Config.pm
+--- munin-2.0.3/master/lib/Munin/Master/Config.pm	2012-07-24 12:45:57.000000000 +0200
++++ munin-2.0.3-patch/master/lib/Munin/Master/Config.pm	2012-07-25 12:06:58.604344613 +0200
 @@ -149,7 +149,7 @@
  		local_address    => 0,
  		logdir           => $Munin::Common::Defaults::MUNIN_LOGDIR,
@@ -60,9 +51,9 @@ diff -rub ./master/lib/Munin/Master/Config.pm ../munin-2.0-rc4.patch/master/lib/
  		timeout          => 180,
  		tls              => 'disabled',
  		tls_ca_certificate => "$Munin::Common::Defaults::MUNIN_CONFDIR/cacert.pem",
-diff -rub ./master/lib/Munin/Master/Utils.pm ../munin-2.0-rc4.patch/master/lib/Munin/Master/Utils.pm
---- ./master/lib/Munin/Master/Utils.pm	2012-03-24 13:52:43.000000000 +0100
-+++ ../munin-2.0-rc4.patch/master/lib/Munin/Master/Utils.pm	2012-03-29 19:06:22.601872964 +0200
+diff -rub munin-2.0.3/master/lib/Munin/Master/Utils.pm munin-2.0.3-patch/master/lib/Munin/Master/Utils.pm
+--- munin-2.0.3/master/lib/Munin/Master/Utils.pm	2012-07-24 12:45:57.000000000 +0200
++++ munin-2.0.3-patch/master/lib/Munin/Master/Utils.pm	2012-07-25 12:06:58.604344613 +0200
 @@ -338,7 +338,7 @@
  
      # Some important defaults before we return...
@@ -72,9 +63,9 @@ diff -rub ./master/lib/Munin/Master/Utils.pm ../munin-2.0-rc4.patch/master/lib/M
      $config->{'dbdir'}         ||= $Munin::Common::Defaults::MUNIN_DBDIR;
      $config->{'logdir'}        ||= $Munin::Common::Defaults::MUNIN_LOGDIR;
      $config->{'tmpldir'}       ||= "$Munin::Common::Defaults::MUNIN_CONFDIR/templates/";
-diff -rub ./master/munin.conf.in ../munin-2.0-rc4.patch/master/munin.conf.in
---- ./master/munin.conf.in	2012-03-24 13:52:43.000000000 +0100
-+++ ../munin-2.0-rc4.patch/master/munin.conf.in	2012-03-29 19:06:22.601872964 +0200
+diff -rub munin-2.0.3/master/munin.conf.in munin-2.0.3-patch/master/munin.conf.in
+--- munin-2.0.3/master/munin.conf.in	2012-07-24 12:45:57.000000000 +0200
++++ munin-2.0.3-patch/master/munin.conf.in	2012-07-25 12:06:58.604344613 +0200
 @@ -8,7 +8,7 @@
  # dbdir	@@DBDIR@@
  # htmldir @@HTMLDIR@@
@@ -84,9 +75,9 @@ diff -rub ./master/munin.conf.in ../munin-2.0-rc4.patch/master/munin.conf.in
  #
  # Where to look for the HTML templates
  # tmpldir	@@CONFDIR@@/templates
-diff -rub ./plugins/node.d.linux/ip_.in ../munin-2.0-rc4.patch/plugins/node.d.linux/ip_.in
---- ./plugins/node.d.linux/ip_.in	2012-03-24 13:52:42.000000000 +0100
-+++ ../munin-2.0-rc4.patch/plugins/node.d.linux/ip_.in	2012-03-29 19:06:22.601872964 +0200
+diff -rub munin-2.0.3/plugins/node.d.linux/ip_.in munin-2.0.3-patch/plugins/node.d.linux/ip_.in
+--- munin-2.0.3/plugins/node.d.linux/ip_.in	2012-07-24 12:45:57.000000000 +0200
++++ munin-2.0.3-patch/plugins/node.d.linux/ip_.in	2012-07-25 12:06:58.604344613 +0200
 @@ -149,7 +149,7 @@
  
  if [[ "$1" == "suggest" ]]; then
