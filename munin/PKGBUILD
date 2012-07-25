@@ -13,7 +13,6 @@ license=("GPL")
 depends=('rrdtool' 'perl' 'perl-log-log4perl' 'perl-html-template' 'perl-date-manip' 'perl-io-socket-inet6' 'perl-file-copy-recursive')
 source=(http://downloads.sourceforge.net/sourceforge/munin/munin-$pkgver.tar.gz
         Makefile.config
-        keep-defaults.patch
         munin-lock-location.patch
         munin-cron-entry
         munin-node.init
@@ -23,8 +22,6 @@ source=(http://downloads.sourceforge.net/sourceforge/munin/munin-$pkgver.tar.gz
 
 build() {
 	cd "$srcdir/munin-$pkgver"
-	# This build is beyond fucked, also need to report this upstream
-	patch -Np0 < ../keep-defaults.patch
 	patch -Np1 < ../munin-lock-location.patch
 
 	sed -i -e 's#/sbin/ip6tables#/usr/sbin/ip6tables#' plugins/node.d.linux/ip_.in
@@ -62,8 +59,7 @@ package_munin-node() {
 }
 
 md5sums=('6b3d40c53baed5ead148f4e1a331e450'
-         'f7a26c9a91f16b28cb7b72fc5af4e107'
-         'ee8a2b61f01d8829546479e3f952ae7e'
+         '46c844cb4e0590cb449f87c10dd60417'
          'd1a53ad3f541c92e35c39a609db2013b'
          'dc9c83aa2a278466fb475364462f4119'
          '683627bd0f0c0d1e146dde7d246b6b3c'
