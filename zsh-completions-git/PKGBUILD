@@ -2,15 +2,15 @@
 
 pkgname=zsh-completions-git
 pkgver=20120808
-pkgrel=1
+pkgrel=2
 pkgdesc="Additional completion definitions for Zsh"
-arch=('any')
+arch=(any)
 url="https://github.com/zsh-users/zsh-completions"
-license=('GPL')
-depends=('zsh')
-makedepends=('git')
-provides=('zsh-virtualbox' 'zsh-packagekit' 'zsh-yaourt')
-conflicts=('zsh-virtualbox' 'zsh-packagekit' 'zsh-yaourt')
+license=(GPL)
+depends=(zsh)
+makedepends=(git)
+provides=(zsh-completions zsh-virtualbox zsh-packagekit zsh-yaourt zsh-bumblebee)
+conflicts=(zsh-completions zsh-virtualbox zsh-packagekit zsh-yaourt zsh-bumblebee)
 
 _gitroot="git://github.com/zsh-users/zsh-completions.git"
 _gitname="zsh-completions"
