@@ -1,7 +1,7 @@
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 
 pkgname=gitorious-git
-pkgver=20120202
+pkgver=20120809
 pkgrel=1
 pkgdesc="Gitorious aims to provide a great way of doing distributed opensource code collaboration (git version)"
 arch=(i686 x86_64)
@@ -25,6 +25,13 @@ _gitname="gitorious"
 
 build() {
 	cd "$srcdir"
+
+	# trick systemtimer build system into thinking we have gcc-4.6
+	rm -rf gcc46-pathfix
+	mkdir gcc46-pathfix
+	ln -s /usr/bin/gcc gcc46-pathfix/gcc-4.6
+	export PATH="$PATH:$srcdir/gcc46-pathfix"
+
 	msg "Connecting to GIT server...."
 
 	if [ -d "$srcdir/$_gitname" ]; then
