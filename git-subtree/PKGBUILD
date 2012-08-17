@@ -4,7 +4,7 @@
 pkgname=git-subtree
 pkgver=1.7.11.5
 pkgrel=1
-pkgdesc="the fast distributed version control system"
+pkgdesc="Merges and splits subtrees from your git project into subprojects and back"
 arch=(i686 x86_64)
 url="http://git-scm.com/"
 license=('GPL2')
