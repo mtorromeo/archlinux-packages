@@ -14,7 +14,9 @@ options=('!strip')
 source=(http://git.eclipse.org/c/jetty/org.eclipse.jetty.project.git/snapshot/jetty-$pkgver.$_addver.tar.bz2
         rc.jetty
         jetty.conf.d
-        jetty.default)
+        jetty.default
+        jetty.logrotate
+        jetty.service)
 install=$pkgname.install
 
 build() {
@@ -61,6 +63,9 @@ package() {
 	install -Dm755 "$srcdir/jetty.default" "$pkgdir/etc/default/jetty"
 	install -Dm644 "$srcdir/jetty.conf.d" "$pkgdir/etc/conf.d/jetty"
 
+	install -Dm644 "$srcdir/jetty.logrotate" "$pkgdir/etc/logrotate.d/jetty"
+	install -Dm644 "$srcdir/jetty.service" "$pkgdir/usr/lib/systemd/system/jetty.service"
+
 	find "$pkgdir" -type f -name .donotdelete -delete
 
 	sed -i 's|./logs|/var/log/jetty|' "$pkgdir/etc/jetty/"*.xml
@@ -70,4 +75,6 @@ package() {
 sha256sums=('e0d0294e96efd8022ff878b5fa0046485b9218d84d60e6c1b5a5c274aa16657d'
             'ea81ec6274789b629a90f7a292ab98d36ff26762bb3df5339c95fda8aa685cd6'
             '270099885684e1731da581395c40e000d292d4e631d1093742b198cbc2077346'
-            'd7b13539dcef9d4b2cc4138069bae2bfa351cca67fdef93208164ed9f115cc1f')
+            '6a105620c5009b99818559bacb585a4a4e06c8b650433d372aa8249f16ea6d0f'
+            'da0402440e0a3b66e55387700b2c178c294dc65cc4a7bd079c622343845adecb'
+            '515466663565b5e3abf76834f7ea89041bad379a04496f1d496e9a830d3b765a')
