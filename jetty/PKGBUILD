@@ -1,0 +1,73 @@
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgname=jetty
+pkgver=8.1.7
+_addver=v20120910
+pkgrel=1
+pkgdesc="A full-fledged production-grade lightweight Java Servlet Container"
+arch=('i686' 'x86_64')
+url="http://jetty.codehaus.org/jetty/"
+license=('Apache' 'EPL')
+depends=('java-runtime')
+makedepends=('maven')
+options=('!strip')
+source=(http://git.eclipse.org/c/jetty/org.eclipse.jetty.project.git/snapshot/jetty-$pkgver.$_addver.tar.bz2
+        rc.jetty
+        jetty.conf.d
+        jetty.default)
+install=$pkgname.install
+
+build() {
+	cd "$srcdir/$pkgname-$pkgver.$_addver"
+	find . -name "*.?ar" -o -name "*.class" -delete
+
+	# disable modules
+# 		-e '/<module>jetty-distribution<\/module>/d' \
+	sed -i pom.xml \
+		-e '/<module>test.*<\/module>/d'
+	sed -i jetty-distribution/src/main/assembly/jetty-assembly.xml \
+		-e '/<format>.*>/d'
+
+	cat << EOF > "$srcdir/maven.xml"
+<settings>
+	<localRepository>$srcdir/mvn-repo</localRepository>
+</settings>
+EOF
+
+	MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=128m" \
+	mvn -s "$srcdir/maven.xml" \
+		-Dmaven.test.skip=true \
+		install javadoc:aggregate
+}
+
+package() {
+	cd "$srcdir/$pkgname-$pkgver.$_addver"
+
+	install -dm755 "$pkgdir/etc/jetty"
+	install -dm755 "$pkgdir/usr/bin"
+	install -dm755 "$pkgdir/usr/share/doc/jetty"
+	install -dm755 "$pkgdir/var/log/jetty"
+
+	cp -R jetty-distribution/target/distribution/etc/* "$pkgdir/etc/jetty"
+	install -Dm755 jetty-distribution/target/distribution/bin/jetty-xinetd.sh "$pkgdir/usr/share/jetty/bin/jetty-xinetd.sh"
+	install -Dm755 jetty-distribution/target/distribution/bin/jetty.sh "$pkgdir/usr/share/jetty/bin/jetty.sh"
+	cp -R jetty-distribution/target/distribution/{webapps,contexts,overlays,resources,lib,start.jar,start.ini} "$pkgdir/usr/share/jetty/"
+	cp -R jetty-distribution/target/distribution/contexts-available "$pkgdir/usr/share/doc/jetty/contexts"
+
+	ln -s /usr/share/jetty/bin/jetty.sh "$pkgdir/usr/bin/jetty"
+	ln -s /etc/jetty "$pkgdir/usr/share/jetty/etc"
+
+	install -Dm755 "$srcdir/rc.jetty" "$pkgdir/etc/rc.d/jetty"
+	install -Dm755 "$srcdir/jetty.default" "$pkgdir/etc/default/jetty"
+	install -Dm644 "$srcdir/jetty.conf.d" "$pkgdir/etc/conf.d/jetty"
+
+	find "$pkgdir" -type f -name .donotdelete -delete
+
+	sed -i 's|./logs|/var/log/jetty|' "$pkgdir/etc/jetty/"*.xml
+	sed -i 's|su - |su -s /bin/sh - |' "$pkgdir/usr/share/jetty/bin/jetty.sh"
+}
+
+sha256sums=('e0d0294e96efd8022ff878b5fa0046485b9218d84d60e6c1b5a5c274aa16657d'
+            'ea81ec6274789b629a90f7a292ab98d36ff26762bb3df5339c95fda8aa685cd6'
+            '270099885684e1731da581395c40e000d292d4e631d1093742b198cbc2077346'
+            'd7b13539dcef9d4b2cc4138069bae2bfa351cca67fdef93208164ed9f115cc1f')
