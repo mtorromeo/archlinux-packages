@@ -1,8 +1,8 @@
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 
 pkgname=gitorious
-pkgver=2.2.1
-pkgrel=2
+pkgver=2.3.0
+pkgrel=1
 pkgdesc="Gitorious aims to provide a great way of doing distributed opensource code collaboration."
 arch=(i686 x86_64)
 url="http://gitorious.org/gitorious"
@@ -89,10 +89,10 @@ package() {
 	install -D -m0755 "$srcdir/gitorious-ultrasphinx.rc.d" "$pkgdir/etc/rc.d/gitorious-ultrasphinx"
 }
 
-md5sums=('9d3a4476db211d0dd3a47368d21ea63a'
-         'a5dca286ee2023fbd63ffda5c327bd85'
-         '9e759e6b3e34bbd0410c7d976bc1bc02'
-         '7693608913eb9d5f9cdec5459f528fd9'
-         '6a6efd4a0c9deaaefe841c57176a1bee'
-         'bd6987bada8e7067a2a7f3727e93dd61'
-         'f46e84a467b492a6d5de936e1595e028')
+sha256sums=('040fdf9c9f9e39f5b0a8483befce74ed47750d813be421dd653393205f20b5c8'
+            '7173bc21ed108831e95ced57e61edc3f7826ef4ea5f83cc4e192cda0f5e07046'
+            '9a40370825620a6daa394b020cd745b6faafbe29d11c4722acb889ff097b9619'
+            '0b48f79cbd64bf01bd6bad02c30ef51391040114479e24b772dceef91a60c19c'
+            'd4cdb96e3d42ca7a9e143188dbf40751bd2bf7cdf29265c25bb18b4359ca470d'
+            'cc31ad3f249b4150370f287ecc6829944a2e433eda6e4b0091fb75da15e347e4'
+            '77c431819e99cfd606dd4bfac80adb950dcacd35e6322052b3fc5e5c8df4c456')

@@ -1,8 +1,6 @@
-diff --git a/vendor/plugins/ultrasphinx/tasks/ultrasphinx.rake b/vendor/plugins/ultrasphinx/tasks/ultrasphinx.rake
-index 9181802..ac5bc19 100644
---- a/vendor/plugins/ultrasphinx/tasks/ultrasphinx.rake
-+++ b/vendor/plugins/ultrasphinx/tasks/ultrasphinx.rake
-@@ -48,7 +48,7 @@ namespace :ultrasphinx do
+--- gitorious-2.3.0/vendor/plugins/ultrasphinx/tasks/ultrasphinx.rake	2012-09-20 18:02:43.670429280 +0200
++++ gitorious-build/vendor/plugins/ultrasphinx/tasks/ultrasphinx.rake	2012-09-20 18:07:51.590451448 +0200
+@@ -52,7 +52,7 @@
      task :start => [:_environment] do
        FileUtils.mkdir_p File.dirname(Ultrasphinx::DAEMON_SETTINGS["log"]) rescue nil
        raise Ultrasphinx::DaemonError, "Already running" if ultrasphinx_daemon_running?
@@ -11,7 +9,7 @@ index 9181802..ac5bc19 100644
        sleep(4) # give daemon a chance to write the pid file
        if ultrasphinx_daemon_running?
          say "started successfully"
-@@ -152,7 +152,7 @@ def ultrasphinx_index(index)
+@@ -156,7 +156,7 @@
    rotate = ultrasphinx_daemon_running?
    ultrasphinx_create_index_path
    
@@ -20,7 +18,7 @@ index 9181802..ac5bc19 100644
    cmd << " #{ENV['OPTS']} " if ENV['OPTS']
    cmd << " --rotate" if rotate
    cmd << " #{index}"
-@@ -171,7 +171,7 @@ def ultrasphinx_merge
+@@ -175,7 +175,7 @@
      raise "#{index} index is missing" unless File.exist? "#{Ultrasphinx::INDEX_SETTINGS['path']}/sphinx_index_#{index}.spa"
    end
    
@@ -29,7 +27,7 @@ index 9181802..ac5bc19 100644
    cmd << " #{ENV['OPTS']} " if ENV['OPTS']
    cmd << " --rotate" if rotate
    cmd << " --merge #{indexes.join(' ')}"
-@@ -187,7 +187,7 @@ def ultrasphinx_check_rotate
+@@ -191,7 +191,7 @@
    failed = Dir[Ultrasphinx::INDEX_SETTINGS['path'] + "/*.new.*"]
    if failed.any?
      say "warning; index failed to rotate! Deleting new indexes"
@@ -38,18 +36,9 @@ index 9181802..ac5bc19 100644
      failed.each {|f| File.delete f }
    else
      say "index rotated ok"
-@@ -203,4 +203,4 @@ end
- def say msg
-   Ultrasphinx.say msg
- end
--  
-\ No newline at end of file
-+  
-diff --git a/vendor/plugins/ultrasphinx/vendor/riddle/spec/sphinx_helper.rb b/vendor/plugins/ultrasphinx/vendor/riddle/spec/sphinx_helper.rb
-index 7d476a5..327d91b 100644
---- a/vendor/plugins/ultrasphinx/vendor/riddle/spec/sphinx_helper.rb
-+++ b/vendor/plugins/ultrasphinx/vendor/riddle/spec/sphinx_helper.rb
-@@ -55,7 +55,7 @@ class SphinxHelper
+--- gitorious-2.3.0/vendor/plugins/ultrasphinx/vendor/riddle/spec/sphinx_helper.rb	2012-09-20 18:02:43.747095952 +0200
++++ gitorious-build/vendor/plugins/ultrasphinx/vendor/riddle/spec/sphinx_helper.rb	2012-09-20 18:07:51.590451448 +0200
+@@ -55,7 +55,7 @@
    end
    
    def index
@@ -58,7 +47,7 @@ index 7d476a5..327d91b 100644
      cmd << " --rotate" if running?
      `#{cmd}`
    end
-@@ -63,7 +63,7 @@ class SphinxHelper
+@@ -63,7 +63,7 @@
    def start
      return if running?
  
@@ -67,10 +56,3 @@ index 7d476a5..327d91b 100644
      `#{cmd}`
  
      sleep(1)
-@@ -89,4 +89,4 @@ class SphinxHelper
-   def running?
-     pid && `ps #{pid} | wc -l`.to_i > 1
-   end
--end
-\ No newline at end of file
-+end
