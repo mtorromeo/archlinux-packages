@@ -1,16 +1,22 @@
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 
 pkgname=gitorious
-pkgver=2.3.0
+pkgver=2.3.1
 pkgrel=1
 pkgdesc="Gitorious aims to provide a great way of doing distributed opensource code collaboration."
 arch=(i686 x86_64)
 url="http://gitorious.org/gitorious"
 license=('AGPLv3')
 
-depends=('sphinx' 'mysql' 'ruby-enterprise' 'ruby-enterprise-raspell' 'ruby-enterprise-bundler' 'ruby-enterprise-stompserver' 'imagemagick' 'nodejs-buster' 'libxslt')
+depends=('sphinx' 'mysql' 'ruby-enterprise' 'ruby-enterprise-raspell' 'ruby-enterprise-bundler' 'imagemagick' 'nodejs-buster' 'libxslt')
 makedepends=('git')
-optdepends=('memcached: High performance cache')
+optdepends=(
+	'memcached: High performance cache'
+	'redis: message queue'
+	'apollo: message queue'
+	'apache-activemq: message queue'
+	'ruby-enterprise-stompserver: message queue'
+)
 options=('!strip')
 
 install=gitorious.install
@@ -87,6 +93,11 @@ package() {
 	install -D -m0755 "$srcdir/gitorious-poller.rc.d" "$pkgdir/etc/rc.d/gitorious-poller"
 	install -D -m0755 "$srcdir/gitorious-resque-worker.rc.d" "$pkgdir/etc/rc.d/gitorious-resque-worker"
 	install -D -m0755 "$srcdir/gitorious-ultrasphinx.rc.d" "$pkgdir/etc/rc.d/gitorious-ultrasphinx"
+
+	# git data directories
+	install -dm0750 "$pkgdir/var/git/repositories"
+	install -dm0750 "$pkgdir/var/git/tarballs"
+	install -dm0750 "$pkgdir/var/git/tarballs-work"
 }
 
 sha256sums=('040fdf9c9f9e39f5b0a8483befce74ed47750d813be421dd653393205f20b5c8'
@@ -94,5 +105,5 @@ sha256sums=('040fdf9c9f9e39f5b0a8483befce74ed47750d813be421dd653393205f20b5c8'
             '9a40370825620a6daa394b020cd745b6faafbe29d11c4722acb889ff097b9619'
             '0b48f79cbd64bf01bd6bad02c30ef51391040114479e24b772dceef91a60c19c'
             'd4cdb96e3d42ca7a9e143188dbf40751bd2bf7cdf29265c25bb18b4359ca470d'
-            'cc31ad3f249b4150370f287ecc6829944a2e433eda6e4b0091fb75da15e347e4'
+            '5b899452fd992e8d8c622bc24ecccb948ec15e6f65556d0efa96c7a1f385f87a'
             '77c431819e99cfd606dd4bfac80adb950dcacd35e6322052b3fc5e5c8df4c456')
