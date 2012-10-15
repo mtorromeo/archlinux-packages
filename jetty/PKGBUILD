@@ -36,7 +36,7 @@ build() {
 </settings>
 EOF
 
-	MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=128m" \
+	MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=256m" \
 	mvn -s "$srcdir/maven.xml" \
 		-Dmaven.test.skip=true \
 		install javadoc:aggregate
