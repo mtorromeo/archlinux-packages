@@ -1,0 +1,46 @@
+# Contributor: Andreas Schrafl <aschrafl@gmail.com>
+# Contributor: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgname=mod_pagespeed
+pkgver=1.0.22.7
+pkgrel=1
+pkgdesc="mod_pagespeed is an open-source Apache module that automatically optimizes web pages and resources on them. It does this by rewriting the resources using filters that implement web performance best practices. Webmasters and web developers can use mod_pagespeed to improve the performance of their web pages when serving content with the Apache HTTP Server."
+arch=(i686 x86_64)
+url="http://code.google.com/speed/page-speed/docs/module.html"
+license=('Apache 2.0 Open Source License')
+depends=('apache')
+makedepends=('depot_tools-svn' 'subversion' 'git' 'python2' 'gperf')
+backup=('etc/httpd/conf/extra/pagespeed.conf')
+
+build() {
+	cd "$srcdir"
+
+	if [ ! -d envfix ]; then
+		mkdir envfix
+		ln -s /usr/bin/python2 envfix/python
+	fi
+	export PATH="$srcdir/envfix:$PATH"
+
+	gclient config "http://modpagespeed.googlecode.com/svn/tags/$pkgver/src"
+	gclient sync --force --jobs=1
+
+	cd src
+	make BUILDTYPE=Release
+}
+
+package() {
+	_tmp="/srv/http/mod_pagespeed"
+
+	install -dm755 -o http -g http "$pkgdir$_tmp/"{cache,files}
+	install -dm755 "$pkgdir/etc/httpd/conf/extra"
+
+	cat "$srcdir/src/out/Release/install/common/pagespeed.load.template" "$srcdir/src/out/Release/install/common/pagespeed.conf.template" > "$pkgdir/etc/httpd/conf/extra/pagespeed.conf"
+
+	sed -i \
+		-e "s|@@MODPAGESPEED_CACHE_ROOT@@|$_tmp|" \
+		-e 's|@@APACHE_MODULEDIR@@|modules|' \
+		"$pkgdir/etc/httpd/conf/extra/pagespeed.conf"
+
+	install -Dm755 "$srcdir/src/out/Release/libmod_pagespeed.so" "$pkgdir/usr/lib/httpd/modules/mod_pagespeed.so"
+	install -Dm755 "$srcdir/src/out/Release/libmod_pagespeed_ap24.so" "$pkgdir/usr/lib/httpd/modules/mod_pagespeed_ap24.so"
+}
