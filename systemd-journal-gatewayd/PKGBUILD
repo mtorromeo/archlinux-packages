@@ -1,0 +1,47 @@
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+# Contributor: Dave Reisner <dreisner@archlinux.org>
+# Contributor: Tom Gundersen <teg@jklm.no>
+
+pkgname=systemd-journal-gatewayd
+pkgver=194
+pkgrel=4
+arch=('i686' 'x86_64')
+url="http://www.freedesktop.org/wiki/Software/systemd"
+license=('GPL2' 'LGPL2.1' 'MIT')
+depends=('systemd' 'libmicrohttpd')
+makedepends=('acl' 'cryptsetup' 'dbus-core' 'docbook-xsl' 'gperf'
+             'intltool' 'kmod' 'libcap' 'libgcrypt' 'libxslt' 'linux-api-headers'
+             'pam' 'python' 'quota-tools' 'xz')
+options=('!libtool')
+source=("http://www.freedesktop.org/software/systemd/systemd-$pkgver.tar.xz")
+md5sums=('0ebb73aea444693b9b86f7a76f5df23c')
+
+build() {
+  cd "systemd-$pkgver"
+
+  ./configure \
+      --libexecdir=/usr/lib \
+      --localstatedir=/var \
+      --sysconfdir=/etc \
+      --disable-audit \
+      --disable-ima \
+      --with-distro=arch \
+      --with-usb-ids-path=/usr/share/hwdata/usb.ids \
+      --with-pci-ids-path=/usr/share/hwdata/pci.ids
+
+  make
+}
+
+check() {
+  make -C "systemd-$pkgver" check
+}
+
+package() {
+  cd "systemd-$pkgver"
+  install -Dm644 src/journal/browse.html "$pkgdir/usr/share/systemd/gatewayd/browse.html"
+  install -Dm644 units/systemd-journal-gatewayd.service "$pkgdir/usr/lib/systemd/system/systemd-journal-gatewayd.service"
+  install -Dm644 units/systemd-journal-gatewayd.socket "$pkgdir/usr/lib/systemd/system/systemd-journal-gatewayd.socket"
+  install -Dm755 systemd-journal-gatewayd "$pkgdir/usr/lib/systemd/systemd-journal-gatewayd"
+}
+
+# vim: ft=sh syn=sh et
