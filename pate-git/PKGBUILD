@@ -20,7 +20,7 @@ build() {
 		cd $_gitname && git pull origin
 		msg "The local files are updated."
 	else
-		git clone --depth=1 $_gitroot
+		git clone $_gitroot
 		cd $_gitname
 	fi
 	git checkout KDE/4.9
