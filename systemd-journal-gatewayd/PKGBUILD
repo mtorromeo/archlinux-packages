@@ -3,8 +3,9 @@
 # Contributor: Tom Gundersen <teg@jklm.no>
 
 pkgname=systemd-journal-gatewayd
-pkgver=194
-pkgrel=4
+pkgver=195
+pkgrel=2
+pkgdesc='systemd http journal gateway'
 arch=('i686' 'x86_64')
 url="http://www.freedesktop.org/wiki/Software/systemd"
 license=('GPL2' 'LGPL2.1' 'MIT')
@@ -14,7 +15,7 @@ makedepends=('acl' 'cryptsetup' 'dbus-core' 'docbook-xsl' 'gperf'
              'pam' 'python' 'xz')
 options=('!libtool')
 source=("http://www.freedesktop.org/software/systemd/systemd-$pkgver.tar.xz")
-md5sums=('0ebb73aea444693b9b86f7a76f5df23c')
+md5sums=('38e8c8144e7e6e5bc3ce32eb4260e680')
 
 build() {
   cd "systemd-$pkgver"
