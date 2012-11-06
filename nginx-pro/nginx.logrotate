@@ -1,4 +1,4 @@
-/var/log/nginx/*.log {
+/var/log/nginx/*.log /var/log/nginx/*.err {
 	missingok
 	sharedscripts
 	compress
