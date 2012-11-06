@@ -1,0 +1,145 @@
+_cfgdir=/etc/nginx
+_tmpdir=/var/lib/nginx
+
+pkgname=nginx-pro
+pkgver=1.3.8
+pkgrel=1
+_spdyver=52
+_naxsiver=0.47
+pkgdesc="Lightweight HTTP server and IMAP/POP3 proxy server with some additional modules"
+arch=('i686' 'x86_64')
+depends=('pcre' 'zlib' 'openssl')
+makedepends=('git' 'passenger')
+optdepends=('passenger')
+url="http://nginx.org"
+license=('custom')
+install=nginx.install
+conflicts=('nginx')
+provides=('nginx')
+
+backup=(${_cfgdir:1}/fastcgi.conf
+        ${_cfgdir:1}/fastcgi_params
+        ${_cfgdir:1}/koi-win
+        ${_cfgdir:1}/koi-utf
+        ${_cfgdir:1}/mime.types
+        ${_cfgdir:1}/nginx.conf
+        ${_cfgdir:1}/scgi_params
+        ${_cfgdir:1}/uwsgi_params
+        ${_cfgdir:1}/win-utf
+        ${_cfgdir:1}/naxsi_core.rules
+        ${_cfgdir:1}/naxsi.conf
+        etc/logrotate.d/nginx)
+
+source=(http://nginx.org/download/nginx-$pkgver.tar.gz
+        http://nginx.org/patches/spdy/patch.spdy-$_spdyver.txt
+        http://naxsi.googlecode.com/files/naxsi-$_naxsiver.tgz
+        rc.d
+        service
+        nginx.logrotate)
+
+build() {
+	local _modules=(--add-module=/usr/lib/passenger/ext/nginx --add-module=../naxsi-$_naxsiver/naxsi_src)
+
+	msg "Fetching nginx-push-stream-module"
+	_modules=(${_modules[@]} --add-module=../nginx-push-stream-module)
+	if [ -d nginx-push-stream-module ]; then
+		pushd nginx-push-stream-module
+		git pull
+		popd
+	else
+		git clone --depth=0 https://github.com/wandenberg/nginx-push-stream-module.git
+	fi
+
+	msg "Fetching nginx-dav-ext-module"
+	_modules=(${_modules[@]} --add-module=../nginx-dav-ext-module)
+	if [ -d nginx-dav-ext-module ]; then
+		pushd nginx-dav-ext-module
+		git pull
+		popd
+	else
+		git clone --depth=0 https://github.com/arut/nginx-dav-ext-module.git
+	fi
+
+	cd "$srcdir/nginx-$pkgver"
+
+	msg "Applying SPDY patch"
+	patch -Np0 -i "$srcdir/patch.spdy-$_spdyver.txt"
+
+	msg "Building nginx"
+
+	./configure \
+        --prefix=$_cfgdir \
+        --conf-path=$_cfgdir/nginx.conf \
+        --sbin-path=/usr/sbin/nginx \
+        --pid-path=/var/run/nginx.pid \
+        --lock-path=/var/lock/nginx.lock \
+        --user=http --group=http \
+        --http-log-path=/var/log/nginx/access.log \
+        --error-log-path=/var/log/nginx/error.log \
+        --http-client-body-temp-path=$_tmpdir/client-body \
+        --http-proxy-temp-path=$_tmpdir/proxy \
+        --http-fastcgi-temp-path=$_tmpdir/fastcgi \
+        --http-scgi-temp-path=$_tmpdir/scgi \
+        --http-uwsgi-temp-path=$_tmpdir/uwsgi \
+        --with-imap --with-imap_ssl_module \
+        --with-ipv6 --with-pcre-jit \
+        --with-file-aio \
+        --with-http_dav_module \
+        --with-http_gzip_static_module \
+        --with-http_realip_module \
+        --with-http_ssl_module \
+        --with-http_stub_status_module \
+        --without-mail_pop3_module --without-mail_imap_module --without-mail_smtp_module \
+        ${_modules[@]} \
+        #--with-http_mp4_module \
+        #--with-http_addition_module \
+        #--with-http_xslt_module \
+        #--with-http_image_filter_module \
+        #--with-http_geoip_module \
+        #--with-http_sub_module \
+        #--with-http_flv_module \
+        #--with-http_random_index_module \
+        #--with-http_secure_link_module \
+        #--with-http_degradation_module \
+        #--with-http_perl_module \
+
+	make
+}
+
+package() {
+	cd "$srcdir"/nginx-$pkgver
+	make DESTDIR="$pkgdir" install
+
+	install -d "$pkgdir"/etc/logrotate.d
+	install -m644 "$srcdir"/nginx.logrotate "$pkgdir"/etc/logrotate.d/nginx
+
+	sed -e 's|\<user\s\+\w\+;|user html;|g' \
+	    -e '2s|worker_processes  1|worker_processes auto|' \
+	    -e '44s|html|/usr/share/nginx/html|' \
+	    -e '54s|html|/usr/share/nginx/html|' \
+	    -i "$pkgdir"$_cfgdir/nginx.conf
+	rm "$pkgdir"/etc/nginx/*.default
+
+	install -d "$pkgdir"/$_tmpdir
+
+	install -d "$pkgdir"/usr/share/nginx
+	mv "$pkgdir"/etc/nginx/html/ "$pkgdir"/usr/share/nginx
+
+	install -Dm644 "$srcdir"/naxsi-$_naxsiver/naxsi_config/default_location_config.example "$pkgdir$_cfgdir/naxsi.conf"
+	install -Dm644 "$srcdir"/naxsi-$_naxsiver/naxsi_config/naxsi_core.rules "$pkgdir$_cfgdir/naxsi_core.rules"
+
+	install -dm755 "$pkgdir"/usr/share/naxsi-ui/
+	cp -R "$srcdir"/naxsi-$_naxsiver/naxsi-ui/* "$pkgdir"/usr/share/naxsi-ui/
+
+	install -D -m755 "$srcdir"/rc.d "$pkgdir"/etc/rc.d/nginx
+	install -Dm644 "$srcdir"/service "$pkgdir"/usr/lib/systemd/system/nginx.service
+	install -D -m644 LICENSE "$pkgdir"/usr/share/licenses/nginx/LICENSE
+	rm -rf "$pkgdir"/var/run
+}
+
+sha256sums=('8d68f9224f4616c987208bcb3a0bf1ae03740c5ec313b220f995ba50d826fe1c'
+            '64715a608bbb7ad8d99359ebdc57d4bc7d6103778e8e8bf171b7b283c858ec08'
+            '24749e07701402d21141f8909891b68e9e94a791acc297104f09f4e4debfe74c'
+            '4f6bd31d684956ca143f7dc68dbd3caa67e835fb84dc44d1a94217b9214c6cfd'
+            '77da8ce4d8378048606a25e09270ee187d6b226ee750b6cb4313af5549f5156a'
+            '613b0ed3fe4b5ee505ddb5122ee41604f464a5049be81c97601ee93970763a23')
