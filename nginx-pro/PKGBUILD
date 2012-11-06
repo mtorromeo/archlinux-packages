@@ -13,7 +13,6 @@ makedepends=('git' 'passenger')
 optdepends=('passenger')
 url="http://nginx.org"
 license=('custom')
-install=nginx.install
 conflicts=('nginx')
 provides=('nginx')
 
