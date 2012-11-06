@@ -1,10 +1,11 @@
 [Unit]
-Description=A high performance web server and a reverse proxy server
-After=syslog.target network.target
+Description=The nginx HTTP and reverse proxy server
+After=syslog.target network.target remote-fs.target nss-lookup.target
 
 [Service]
 Type=forking
 PIDFile=/run/nginx.pid
+PrivateTmp=true
 ExecStartPre=/usr/sbin/nginx -t -q -g 'pid /run/nginx.pid; daemon on; master_process on;'
 ExecStart=/usr/sbin/nginx -g 'pid /run/nginx.pid; daemon on; master_process on;'
 ExecReload=/usr/sbin/nginx -g 'pid /run/nginx.pid; daemon on; master_process on;' -s reload
