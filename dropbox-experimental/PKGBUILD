@@ -3,7 +3,7 @@
 
 pkgname=dropbox-experimental
 _pkgname=dropbox
-pkgver=1.5.44
+pkgver=1.5.46
 pkgrel=1
 pkgdesc="A free service that lets you bring your photos, docs, and videos anywhere and share them easily. (Experimental build)"
 arch=("i686" "x86_64")
@@ -17,11 +17,11 @@ options=('!strip' '!upx')
 _source_arch="x86"
 [ "$CARCH" = "x86_64" ] && _source_arch="x86_64"
 
-sha256sums=('beec3d5c32160345bd9970270abc9a181b48881a4bc18f63d105364d0a60afff'
+sha256sums=('7ccc00c2e0eade9b8b53edc95884b86023927c3020bba3a00c1848647e6d082e'
             '8b8af2d6a5786d7fa259660a34c47fa0a7534cd112e70d71ee53b1f786baf530'
             'dd8fdb362c0bba8d789010594f021671ff00e535fc75e13da855f43bc7a4b3aa'
             'b9e020c378c318e72857bb6cd859c74e8da1300f34cee5bfec89c4f7a89770a9')
-[ "$CARCH" = "x86_64" ] && sha256sums[0]='c3be5bb68934396ad23ba18e1db6f022b0008f232285a963487681be5405196a'
+[ "$CARCH" = "x86_64" ] && sha256sums[0]='7f1e52609b5f1bd8f3ff27e149251d559f745efb0eceafa835ffae37929376ae'
 
 source=("https://dl-web.dropbox.com/u/17/${_pkgname}-lnx.${_source_arch}-${pkgver}.tar.gz" "dropbox.png" "dropbox.desktop" "terms.txt")
 
