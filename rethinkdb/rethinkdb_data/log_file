@@ -1,0 +1,11 @@
+2012-11-16T10:56:42.108971916 0.014234s info: Creating directory rethinkdb_data
+2012-11-16T10:56:42.109164419 0.014426s info: Creating a default database for your convenience. (This is because you ran 'rethinkdb' without 'create', 'serve', or '--join', and the directory 'rethinkdb_data' did not already exist.)
+2012-11-16T10:56:42.261008074 0.166270s info: Listening for intracluster connections on port 29015.
+2012-11-16T10:56:42.262332488 0.167594s info: Listening for client driver connections on port 28015.
+2012-11-16T10:56:42.262346673 0.167608s info: Listening for administrative HTTP connections on port 8080.
+2012-11-16T10:56:42.262347011 0.167609s info: Server ready
+2012-11-16T11:07:06.936538124 624.841800s info: Server got SIGINT; shutting down...
+2012-11-16T11:07:06.936679693 624.841942s info: Shutting down client connections...
+2012-11-16T11:07:06.936969881 624.842232s info: All client connections closed.
+2012-11-16T11:07:06.936978508 624.842240s info: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2012-11-16T11:07:06.936979193 624.842241s info: Storage engine shut down.
