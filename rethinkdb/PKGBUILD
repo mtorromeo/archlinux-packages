@@ -42,8 +42,13 @@ package() {
 	cd "$srcdir/$pkgname-$pkgver"
 	make prefix=/usr DESTDIR="$pkgdir" FORCEVERSION=1 PVERSION=$pkgver DEBUG=0 NO_TCMALLOC=1 BUILD_DRIVERS=0 install
 
-	rm -rf "$pkgdir/etc"
-	rm -rf "$pkgdir/var"
+	cd "$pkgdir"
+	rm -rf etc var
+
+	cd usr/share/rethinkdb
+	install -Dm644 etc/bash_completion.d/rethinkdb.bash "$pkgdir/usr/share/bash-completion/completions/rethinkdb"
+	install -Dm755 scripts/rdb_migrate "$pkgdir/usr/bin/rdb_migrate"
+	rm -rf etc scripts
 
 	install -Dm644 "$srcdir/rethinkdb-tmpfile.conf" "$pkgdir/usr/lib/tmpfiles.d/rethinkdb.conf"
 	install -Dm644 "$srcdir/rethinkdb.service" "$pkgdir/usr/lib/systemd/system/rethinkdb.service"
