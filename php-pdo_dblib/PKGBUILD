@@ -3,7 +3,7 @@ _pecl=PDO_DBLIB
 _ext=pdo_dblib
 pkgname="php-$_ext"
 pkgver=1.0
-pkgrel=2
+pkgrel=3
 pkgdesc="pdo_dblib extension for PHP"
 arch=('i686' 'x86_64')
 url="http://pecl.php.net/package/$_pecl"
@@ -33,6 +33,6 @@ package() {
 	install -Dm644 "$_ext.ini" "$pkgdir/etc/php/conf.d/$_ext.ini"
 }
 
-md5sums=('017135f92597e02dcacf1c37319f3b2a'
-         '77d3243e4a137bd199ac403caf12a002'
-         '75b34f46f3c964904e6a54cf3614cee4')
+sha256sums=('604f0197a5c7b278a780fa1f7486bd04737e331ac0e8ebad183090fcba83d192'
+            '24a3ee373ee7bdd516a39c5184512dfd01e62ac0116f456421660dfdb8b9067e'
+            '5952b126577529b852d4376608af9ececcbb57aa8d80c02553a782ac11fbe9c5')
