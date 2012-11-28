@@ -25,9 +25,8 @@ true && pkgname=('php53'
          'php53-sqlite'
          'php53-tidy'
          'php53-xsl')
-pkgver=5.3.17
-_suhosinver=5.3.9-0.9.10
-pkgrel=3
+pkgver=5.3.19
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -36,9 +35,8 @@ makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix'
              'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
              'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'freetype2')
 source=("http://www.php.net/distributions/${pkgbase%53}-${pkgver}.tar.bz2"
-        "http://download.suhosin.org/suhosin-patch-${_suhosinver}.patch.gz"
         'php.ini.patch' 'apache.conf' 'rc.d.php-fpm' 'php-fpm.conf.in.patch'
-        'logrotate.d.php-fpm' 'suhosin.patch' 'php-fpm.service' 'php-fpm.tmpfiles')
+        'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
 
 build() {
 	phpconfig="--srcdir=../${pkgbase%53}-${pkgver} \
@@ -129,13 +127,7 @@ build() {
 	PEAR_INSTALLDIR=/usr/share/pear
 	export PEAR_INSTALLDIR
 
-	# fix the suhosin patch
-	patch -l -i ${srcdir}/suhosin.patch
-
 	cd ${srcdir}/${pkgbase%53}-${pkgver}
-
-	# apply suhosin patch
-	patch -F3 -p1 -i ${srcdir}/suhosin-patch-${_suhosinver}.patch
 
 	# adjust paths
 	patch -p0 -i ${srcdir}/php.ini.patch
@@ -419,13 +411,11 @@ package_php53-xsl() {
 	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/usr/lib/php/modules/xsl.so
 }
 
-sha256sums=('ad85e857d404b9e74f1e003deb574e94e3bb939f686e4e9a871d3a6b3f957509'
-            '4438caeab0a10c6c94aee9f7eaa703f5799f97d4e0579f43a947bb7314e38317'
+sha256sums=('814ce55b950158c4ddadbcd0b2d7d8cb4b570de4a29b9db021020594e2469fd6'
             '6cd0bc90bd7a307154aaba596dbe23bcfa9977c989bc49ff0f926e10868ef6fd'
             '8b5b15f1c348d8897d837ea9894157d9630dc542bbb0dbc7ad93c5dc0235d1d5'
             '4676f3296ef5fb94a1a6297983faaa8b4ec003fdf4de58b17a1e76a1f52a8196'
             '686d3612779d97d294c23036c5e289833049623680e14125d4c4196e3318ef4e'
             '9a4fd21f5491484ccad1e923ff3c4ce4ced514fe5d9bd8978a55dc4d8c2b0fd8'
-            '8e2b2dfb41f552b3e8b9489aa98d6d5dac9d63a7c65e7492a70906e0989fb41e'
             'aa4836da95f8678856704c385693465c39d02f86a0edcdbe42a49033c729bbd8'
             '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5')
