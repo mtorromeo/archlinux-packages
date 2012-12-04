@@ -28,12 +28,12 @@ package() {
 	install -dm755 "$pkgdir/usr/share/solr/webapps/solr"
 	install -dm755 "$pkgdir/usr/lib/solr"
 	install -dm755 "$pkgdir/var/lib/solr"
-	install -Dm0644 start.jar lib/*.jar "$pkgdir/usr/lib/solr/"
+	install -Dm644 start.jar lib/*.jar "$pkgdir/usr/lib/solr/"
 	install -Dm644 "$srcdir/solr.service" "$pkgdir/usr/lib/systemd/system/solr.service"
+	install -Dm644 "$srcdir/jetty-solr.xml" "$pkgdir/usr/share/solr/contexts/jetty-solr.xml"
 
 	unzip webapps/solr.war -d "$pkgdir/usr/share/solr/webapps/solr/"
 	rm -rf "$pkgdir/usr/share/solr/webapps/solr/META-INF"
-	cp -R contexts "$pkgdir/usr/share/solr/"
 
 	sed -e 's|<dataDir>.*|<dataDir>/var/lib/solr/core0</dataDir>|' \
 	    -i multicore/core0/conf/solrconfig.xml
@@ -50,8 +50,6 @@ package() {
 
 	ln -s /etc/solr "$pkgdir/usr/share/solr/conf"
 	ln -s /usr/lib/solr "$pkgdir/usr/share/solr/lib"
-
-	install -m0644 "$srcdir/jetty-solr.xml" "$pkgdir/usr/share/solr/contexts/jetty-solr.xml"
 }
 
 sha256sums=('4b7ac4fdc1f1610f2d13e8dddf310e9d61620c00c463ba24e0f385a4c5c6f3ec'
