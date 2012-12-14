@@ -97,7 +97,7 @@ build() {
 		--with-mcrypt=shared \
 		--with-mhash \
 		--with-mssql=shared \
-		--with-mysql-sock=/var/run/mysqld/mysqld.sock \
+		--with-mysql-sock=/run/mysqld/mysqld.sock \
 		--with-mysql=shared,mysqlnd \
 		--with-mysqli=shared,mysqlnd \
 		--with-openssl=shared \
