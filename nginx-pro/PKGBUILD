@@ -2,10 +2,12 @@ _cfgdir=/etc/nginx
 _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
-pkgver=1.3.8
+pkgver=1.3.9
 pkgrel=1
-_spdyver=52
+_spdyver=54
 _naxsiver=0.47
+_uploadver=2.2.0
+_uploadprogver=0.9.0
 pkgdesc="Lightweight HTTP server and IMAP/POP3 proxy server with some additional modules"
 arch=('i686' 'x86_64')
 depends=('pcre' 'zlib' 'openssl')
@@ -32,12 +34,19 @@ backup=(${_cfgdir:1}/fastcgi.conf
 source=(http://nginx.org/download/nginx-$pkgver.tar.gz
         http://nginx.org/patches/spdy/patch.spdy-$_spdyver.txt
         http://naxsi.googlecode.com/files/naxsi-$_naxsiver.tgz
+        http://www.grid.net.ru/nginx/download/nginx_upload_module-$_uploadver.tar.gz
+        nginx-upload-progress-$_uploadprogver.tgz::https://github.com/masterzen/nginx-upload-progress-module/tarball/v$_uploadprogver
         rc.d
         service
         nginx.logrotate)
 
 build() {
-	local _modules=(--add-module=/usr/lib/passenger/ext/nginx --add-module=../naxsi-$_naxsiver/naxsi_src)
+	local _modules=(
+		--add-module=/usr/lib/passenger/ext/nginx
+		--add-module=../naxsi-$_naxsiver/naxsi_src
+		--add-module=../nginx_upload_module-$_uploadver
+		--add-module=../masterzen-nginx-upload-progress-module-a788dea/
+	)
 
 	msg "Fetching nginx-push-stream-module"
 	_modules=(${_modules[@]} --add-module=../nginx-push-stream-module)
@@ -136,9 +145,11 @@ package() {
 	rm -rf "$pkgdir"/var/run
 }
 
-sha256sums=('8d68f9224f4616c987208bcb3a0bf1ae03740c5ec313b220f995ba50d826fe1c'
-            '64715a608bbb7ad8d99359ebdc57d4bc7d6103778e8e8bf171b7b283c858ec08'
+sha256sums=('30463a867614bed304f6c02f6a35ff697ec70c227d87af0772a417ee05f548df'
+            '0b2f1933a07cc720ef5e6621c09e6253f601d32ac10184bca4f2dca176c9e904'
             '24749e07701402d21141f8909891b68e9e94a791acc297104f09f4e4debfe74c'
+            'b1c26abe0427180602e257627b4ed21848c93cc20cefc33af084983767d65805'
+            '3fb903dab595cf6656fa0fc5743a48daffbba2f6b5c554836be630800eaad4e2'
             '4f6bd31d684956ca143f7dc68dbd3caa67e835fb84dc44d1a94217b9214c6cfd'
             '2dd9d8edd9106ef677d50c6f87db3ae5e26e02d72c900fd772d0c003ed2ae2de'
             '8109454b1d20a54f2f83bc4d9b1864f020d013df0e7b2caa9af1ca355e0b4cc7')
