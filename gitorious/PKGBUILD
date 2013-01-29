@@ -1,7 +1,7 @@
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 
 pkgname=gitorious
-pkgver=2.3.1
+pkgver=2.4.6
 pkgrel=1
 pkgdesc="Gitorious aims to provide a great way of doing distributed opensource code collaboration."
 arch=(i686 x86_64)
@@ -48,7 +48,7 @@ build() {
 	rm -rf "$srcdir/$pkgname-build"
 	cp -r "$srcdir/$pkgname-$pkgver" "$srcdir/$pkgname-build"
 	cd "$srcdir/$pkgname-build/"
-	rm -rf .git .gitmodules
+	rm -rf .git
 	find . -type f -name .gitignore -delete
 
 	msg "Fetching bundled gems..."
@@ -77,7 +77,6 @@ package() {
 	install -D -m0644 "$srcdir/database.yml" "$_etc/database.yml"
 	install -D -m0644 "$srcdir/gitorious.yml" "$_etc/gitorious.yml"
 	install -D -m0644 "${pkgdir}${_gitorious}/config/broker.yml.example" "$_etc/broker.yml"
-	install -D -m0644 "${pkgdir}${_gitorious}/vendor/plugins/ultrasphinx/examples/ap.multi" "$pkgdir/usr/lib/aspell/ap.multi"
 
 	ln -s "/etc/webapps/gitorious/database.yml" "${pkgdir}${_gitorious}/config/"
 	ln -s "/etc/webapps/gitorious/gitorious.yml" "${pkgdir}${_gitorious}/config/"
@@ -106,4 +105,4 @@ sha256sums=('040fdf9c9f9e39f5b0a8483befce74ed47750d813be421dd653393205f20b5c8'
             '0b48f79cbd64bf01bd6bad02c30ef51391040114479e24b772dceef91a60c19c'
             'd4cdb96e3d42ca7a9e143188dbf40751bd2bf7cdf29265c25bb18b4359ca470d'
             '5b899452fd992e8d8c622bc24ecccb948ec15e6f65556d0efa96c7a1f385f87a'
-            '77c431819e99cfd606dd4bfac80adb950dcacd35e6322052b3fc5e5c8df4c456')
+            '65be83bccf7d18ebe87efb2ab318cea3e9e79ac36fa16e3217b5ae2b92963f7e')

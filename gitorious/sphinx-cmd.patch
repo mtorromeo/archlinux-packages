@@ -1,58 +1,13 @@
---- gitorious-2.3.0/vendor/plugins/ultrasphinx/tasks/ultrasphinx.rake	2012-09-20 18:02:43.670429280 +0200
-+++ gitorious-build/vendor/plugins/ultrasphinx/tasks/ultrasphinx.rake	2012-09-20 18:07:51.590451448 +0200
-@@ -52,7 +52,7 @@
-     task :start => [:_environment] do
-       FileUtils.mkdir_p File.dirname(Ultrasphinx::DAEMON_SETTINGS["log"]) rescue nil
-       raise Ultrasphinx::DaemonError, "Already running" if ultrasphinx_daemon_running?
--      system "searchd --config '#{Ultrasphinx::CONF_PATH}'"
-+      system "sphinx-searchd --config '#{Ultrasphinx::CONF_PATH}'"
-       sleep(4) # give daemon a chance to write the pid file
-       if ultrasphinx_daemon_running?
-         say "started successfully"
-@@ -156,7 +156,7 @@
-   rotate = ultrasphinx_daemon_running?
-   ultrasphinx_create_index_path
-   
--  cmd = "indexer --config '#{Ultrasphinx::CONF_PATH}'"
-+  cmd = "sphinx-indexer --config '#{Ultrasphinx::CONF_PATH}'"
-   cmd << " #{ENV['OPTS']} " if ENV['OPTS']
-   cmd << " --rotate" if rotate
-   cmd << " #{index}"
-@@ -175,7 +175,7 @@
-     raise "#{index} index is missing" unless File.exist? "#{Ultrasphinx::INDEX_SETTINGS['path']}/sphinx_index_#{index}.spa"
-   end
-   
--  cmd = "indexer --config '#{Ultrasphinx::CONF_PATH}'"
-+  cmd = "sphinx-indexer --config '#{Ultrasphinx::CONF_PATH}'"
-   cmd << " #{ENV['OPTS']} " if ENV['OPTS']
-   cmd << " --rotate" if rotate
-   cmd << " --merge #{indexes.join(' ')}"
-@@ -191,7 +191,7 @@
-   failed = Dir[Ultrasphinx::INDEX_SETTINGS['path'] + "/*.new.*"]
-   if failed.any?
-     say "warning; index failed to rotate! Deleting new indexes"
--    say "try 'killall searchd' and then 'rake ultrasphinx:daemon:start'"
-+    say "try 'killall sphinx-searchd' and then 'rake ultrasphinx:daemon:start'"
-     failed.each {|f| File.delete f }
-   else
-     say "index rotated ok"
---- gitorious-2.3.0/vendor/plugins/ultrasphinx/vendor/riddle/spec/sphinx_helper.rb	2012-09-20 18:02:43.747095952 +0200
-+++ gitorious-build/vendor/plugins/ultrasphinx/vendor/riddle/spec/sphinx_helper.rb	2012-09-20 18:07:51.590451448 +0200
-@@ -55,7 +55,7 @@
-   end
-   
-   def index
--    cmd = "indexer --config #{@path}/fixtures/sphinx/spec.conf --all"
-+    cmd = "sphinx-indexer --config #{@path}/fixtures/sphinx/spec.conf --all"
-     cmd << " --rotate" if running?
-     `#{cmd}`
-   end
-@@ -63,7 +63,7 @@
-   def start
-     return if running?
+diff --git a/lib/gitorious/diagnostics.rb b/lib/gitorious/diagnostics.rb
+index d847dc5..78b7e4a 100644
+--- a/lib/gitorious/diagnostics.rb
++++ b/lib/gitorious/diagnostics.rb
+@@ -182,7 +182,7 @@ module Gitorious
+     end
  
--    cmd = "searchd --config #{@path}/fixtures/sphinx/spec.conf"
-+    cmd = "sphinx-searchd --config #{@path}/fixtures/sphinx/spec.conf"
-     `#{cmd}`
- 
-     sleep(1)
+     def ultrasphinx_up?
+-      atleast_one_process_name_matching("searchd")
++      atleast_one_process_name_matching("sphinx-searchd")
+       # TODO + does it respond on configured port, expected by rails app?
+       # TODO check ps -o for pid, we got the pidfile for it
+     end
