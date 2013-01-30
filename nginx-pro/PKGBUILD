@@ -2,10 +2,10 @@ _cfgdir=/etc/nginx
 _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
-pkgver=1.3.9
+pkgver=1.3.11
 pkgrel=1
-_spdyver=54
-_naxsiver=0.47
+_spdyver=60_$pkgver
+_naxsiver=0.49
 _uploadver=2.2.0
 _uploadprogver=0.9.0
 pkgdesc="Lightweight HTTP server and IMAP/POP3 proxy server with some additional modules"
@@ -33,8 +33,9 @@ backup=(${_cfgdir:1}/fastcgi.conf
 
 source=(http://nginx.org/download/nginx-$pkgver.tar.gz
         http://nginx.org/patches/spdy/patch.spdy-$_spdyver.txt
-        http://naxsi.googlecode.com/files/naxsi-$_naxsiver.tgz
-        http://www.grid.net.ru/nginx/download/nginx_upload_module-$_uploadver.tar.gz
+        http://naxsi.googlecode.com/files/naxsi-core-$_naxsiver.tgz
+        http://naxsi.googlecode.com/files/naxsi-ui-$_naxsiver.tgz
+#         http://www.grid.net.ru/nginx/download/nginx_upload_module-$_uploadver.tar.gz
         nginx-upload-progress-$_uploadprogver.tgz::https://github.com/masterzen/nginx-upload-progress-module/tarball/v$_uploadprogver
         rc.d
         service
@@ -43,8 +44,8 @@ source=(http://nginx.org/download/nginx-$pkgver.tar.gz
 build() {
 	local _modules=(
 		--add-module=/usr/lib/passenger/ext/nginx
-		--add-module=../naxsi-$_naxsiver/naxsi_src
-		--add-module=../nginx_upload_module-$_uploadver
+		--add-module=../naxsi-core-$_naxsiver/naxsi_src
+# 		--add-module=../nginx_upload_module-$_uploadver
 		--add-module=../masterzen-nginx-upload-progress-module-a788dea/
 	)
 
@@ -71,7 +72,7 @@ build() {
 	cd "$srcdir/nginx-$pkgver"
 
 	msg "Applying SPDY patch"
-	patch -Np0 -i "$srcdir/patch.spdy-$_spdyver.txt"
+	patch -Np1 -i "$srcdir/patch.spdy-$_spdyver.txt"
 
 	msg "Building nginx"
 
@@ -129,15 +130,15 @@ package() {
 	rm "$pkgdir"/etc/nginx/*.default
 
 	install -d "$pkgdir"/$_tmpdir
+	install -dm700 "$pkgdir"/$_tmpdir/proxy
 
 	install -d "$pkgdir"/usr/share/nginx
 	mv "$pkgdir"/etc/nginx/html/ "$pkgdir"/usr/share/nginx
 
-	install -Dm644 "$srcdir"/naxsi-$_naxsiver/naxsi_config/default_location_config.example "$pkgdir$_cfgdir/naxsi.conf"
-	install -Dm644 "$srcdir"/naxsi-$_naxsiver/naxsi_config/naxsi_core.rules "$pkgdir$_cfgdir/naxsi_core.rules"
+	install -Dm644 "$srcdir"/naxsi-core-$_naxsiver/naxsi_config/default_location_config.example "$pkgdir$_cfgdir/naxsi.conf"
+	install -Dm644 "$srcdir"/naxsi-core-$_naxsiver/naxsi_config/naxsi_core.rules "$pkgdir$_cfgdir/naxsi_core.rules"
 
-	install -dm755 "$pkgdir"/usr/share/naxsi-ui/
-	cp -R "$srcdir"/naxsi-$_naxsiver/naxsi-ui/* "$pkgdir"/usr/share/naxsi-ui/
+	cp -a "$srcdir"/naxsi-ui-$_naxsiver/naxsi-ui "$pkgdir"/usr/share/
 
 	install -D -m755 "$srcdir"/rc.d "$pkgdir"/etc/rc.d/nginx
 	install -Dm644 "$srcdir"/service "$pkgdir"/usr/lib/systemd/system/nginx.service
@@ -145,10 +146,10 @@ package() {
 	rm -rf "$pkgdir"/var/run
 }
 
-sha256sums=('30463a867614bed304f6c02f6a35ff697ec70c227d87af0772a417ee05f548df'
-            '0b2f1933a07cc720ef5e6621c09e6253f601d32ac10184bca4f2dca176c9e904'
-            '24749e07701402d21141f8909891b68e9e94a791acc297104f09f4e4debfe74c'
-            'b1c26abe0427180602e257627b4ed21848c93cc20cefc33af084983767d65805'
+sha256sums=('a3e0921e0021e7049dd0fd60206aa1725c24019ffc64eba162df3e35712ce07e'
+            '12c67ddf43cb1b530d10a5a6523eab66ca3d8b709d372175e733766a8041025a'
+            'bb0b63713d5a9446401d5acd1ef0882b9c2a0fc506502bbd88bc4663d273e9c7'
+            '54289f263a915b1222030bab97e4210619a893515da9ce41a1d9e95f8b87ddbe'
             '3fb903dab595cf6656fa0fc5743a48daffbba2f6b5c554836be630800eaad4e2'
             '4f6bd31d684956ca143f7dc68dbd3caa67e835fb84dc44d1a94217b9214c6cfd'
             '2dd9d8edd9106ef677d50c6f87db3ae5e26e02d72c900fd772d0c003ed2ae2de'
