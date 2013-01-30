@@ -98,6 +98,7 @@ build() {
         --with-http_realip_module \
         --with-http_ssl_module \
         --with-http_stub_status_module \
+        --with-http_spdy_module \
         --without-mail_pop3_module --without-mail_imap_module --without-mail_smtp_module \
         ${_modules[@]} \
         #--with-http_mp4_module \
