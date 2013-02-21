@@ -2,9 +2,9 @@ _cfgdir=/etc/nginx
 _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
-pkgver=1.3.11
+pkgver=1.3.13
 pkgrel=1
-_spdyver=60_$pkgver
+_spdyver=65_$pkgver
 _naxsiver=0.49
 _uploadver=2.2.0
 _uploadprogver=0.9.0
@@ -35,7 +35,8 @@ source=(http://nginx.org/download/nginx-$pkgver.tar.gz
         http://nginx.org/patches/spdy/patch.spdy-$_spdyver.txt
         http://naxsi.googlecode.com/files/naxsi-core-$_naxsiver.tgz
         http://naxsi.googlecode.com/files/naxsi-ui-$_naxsiver.tgz
-#         http://www.grid.net.ru/nginx/download/nginx_upload_module-$_uploadver.tar.gz
+        http://www.grid.net.ru/nginx/download/nginx_upload_module-$_uploadver.tar.gz
+        http://portage.perestoroniny.ru/www-servers/nginx/files/nginx-1.3.9_upload_module.patch
         nginx-upload-progress-$_uploadprogver.tgz::https://github.com/masterzen/nginx-upload-progress-module/tarball/v$_uploadprogver
         rc.d
         service
@@ -45,9 +46,13 @@ build() {
 	local _modules=(
 		--add-module=/usr/lib/passenger/ext/nginx
 		--add-module=../naxsi-core-$_naxsiver/naxsi_src
-# 		--add-module=../nginx_upload_module-$_uploadver
+ 		--add-module=../nginx_upload_module-$_uploadver
 		--add-module=../masterzen-nginx-upload-progress-module-a788dea/
 	)
+
+	cd "$srcdir/nginx_upload_module-$_uploadver"
+	patch -p1 -i "$srcdir/nginx-1.3.9_upload_module.patch"
+	cd ..
 
 	msg "Fetching nginx-push-stream-module"
 	_modules=(${_modules[@]} --add-module=../nginx-push-stream-module)
@@ -147,10 +152,12 @@ package() {
 	rm -rf "$pkgdir"/var/run
 }
 
-sha256sums=('a3e0921e0021e7049dd0fd60206aa1725c24019ffc64eba162df3e35712ce07e'
-            '12c67ddf43cb1b530d10a5a6523eab66ca3d8b709d372175e733766a8041025a'
+sha256sums=('2136d5ffa3180632fb051ab4df12fcd93bcddb59d53814e9c60aca1d90dc62b1'
+            'e51c998e70f9033e326e859151428894c5cd8f529a7054d055445265aba93349'
             'bb0b63713d5a9446401d5acd1ef0882b9c2a0fc506502bbd88bc4663d273e9c7'
             '54289f263a915b1222030bab97e4210619a893515da9ce41a1d9e95f8b87ddbe'
+            'b1c26abe0427180602e257627b4ed21848c93cc20cefc33af084983767d65805'
+            '360dd137a5858ce32f2f8ab2294aeb188c6a06908ed0d2e44b8d970e6d481d5a'
             '3fb903dab595cf6656fa0fc5743a48daffbba2f6b5c554836be630800eaad4e2'
             '4f6bd31d684956ca143f7dc68dbd3caa67e835fb84dc44d1a94217b9214c6cfd'
             '2dd9d8edd9106ef677d50c6f87db3ae5e26e02d72c900fd772d0c003ed2ae2de'
