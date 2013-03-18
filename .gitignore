@@ -10,6 +10,7 @@
 *.deb
 *.rpm
 *.sig
+*.log
 /*/src
 /*/pkg
 *.kate-swp
