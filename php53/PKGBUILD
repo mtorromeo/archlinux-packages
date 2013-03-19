@@ -25,7 +25,7 @@ true && pkgname=('php53'
          'php53-sqlite'
          'php53-tidy'
          'php53-xsl')
-pkgver=5.3.19
+pkgver=5.3.23
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -35,7 +35,7 @@ makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix'
              'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
              'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'freetype2')
 source=("http://www.php.net/distributions/${pkgbase%53}-${pkgver}.tar.bz2"
-        'php.ini.patch' 'apache.conf' 'rc.d.php-fpm' 'php-fpm.conf.in.patch'
+        'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
 
 build() {
@@ -257,7 +257,6 @@ package_php53-fpm() {
 	install -D -m755 ${srcdir}/build-fpm/sapi/fpm/php-fpm ${pkgdir}/usr/sbin/php-fpm
 	install -D -m644 ${srcdir}/build-fpm/sapi/fpm/php-fpm.8 ${pkgdir}/usr/share/man/man8/php-fpm.8
 	install -D -m644 ${srcdir}/build-fpm/sapi/fpm/php-fpm.conf ${pkgdir}/etc/php/php-fpm.conf
-	install -D -m755 ${srcdir}/rc.d.php-fpm ${pkgdir}/etc/rc.d/php-fpm
 	install -D -m644 ${srcdir}/logrotate.d.php-fpm ${pkgdir}/etc/logrotate.d/php-fpm
 	install -d -m755 ${pkgdir}/etc/php/fpm.d
 	install -D -m644 ${srcdir}/php-fpm.tmpfiles ${pkgdir}/usr/lib/tmpfiles.d/php-fpm.conf
@@ -411,10 +410,9 @@ package_php53-xsl() {
 	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/usr/lib/php/modules/xsl.so
 }
 
-sha256sums=('814ce55b950158c4ddadbcd0b2d7d8cb4b570de4a29b9db021020594e2469fd6'
+sha256sums=('69473eae7c752987a8fc7619bae9f7121cfe7c6603a2ebf13c8e036dff6a4944'
             '6cd0bc90bd7a307154aaba596dbe23bcfa9977c989bc49ff0f926e10868ef6fd'
             '8b5b15f1c348d8897d837ea9894157d9630dc542bbb0dbc7ad93c5dc0235d1d5'
-            '4676f3296ef5fb94a1a6297983faaa8b4ec003fdf4de58b17a1e76a1f52a8196'
             '686d3612779d97d294c23036c5e289833049623680e14125d4c4196e3318ef4e'
             '9a4fd21f5491484ccad1e923ff3c4ce4ced514fe5d9bd8978a55dc4d8c2b0fd8'
             'aa4836da95f8678856704c385693465c39d02f86a0edcdbe42a49033c729bbd8'
