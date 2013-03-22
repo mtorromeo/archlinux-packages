@@ -1,0 +1,46 @@
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgname=gitlab-shell
+pkgver=1.1.0
+_commit=e8d93d0769b99aaab9e5d360345e355b3e682ddf
+pkgrel=1
+pkgdesc="Self hosted Git management software. (shell daemon)"
+arch=(any)
+url="http://gitlab.org/"
+license=('MIT')
+
+depends=('redis' 'ruby' 'git')
+options=('!strip')
+
+install=gitlab-shell.install
+backup=(etc/gitlab/shell.yml)
+source=($pkgname-$pkgver.tar.gz::https://github.com/gitlabhq/gitlab-shell/archive/$_commit.tar.gz)
+
+package() {
+	local homedir=/usr/lib/gitlab
+	local datadir=/var/lib/gitlab
+	
+	cd "$srcdir/$pkgname-$_commit"
+	install -dm755 "$pkgdir$homedir/gitlab-shell" "$pkgdir/etc/gitlab"
+	
+	sed -e 's|user: git|user: gitlab|' \
+		-e "s|/home/git/repositories|$datadir/repositories|" \
+		-e "s|/home/git|$homedir|" \
+		config.yml.example > "$pkgdir/etc/gitlab/shell.yml"
+	ln -s /etc/gitlab/shell.yml "$pkgdir$homedir/gitlab-shell/config.yml"
+	
+	cp -a VERSION bin hooks lib spec support "$pkgdir$homedir/gitlab-shell"
+	
+	install -dm700 "$pkgdir$homedir/.ssh"
+	touch "$pkgdir$homedir/.ssh/authorized_keys"
+	
+	install -dm770 "$pkgdir$datadir/"{repositories,satellites}
+	chmod g+s "$pkgdir$homedir/repositories"
+	ln -s "$datadir/repositories" "$pkgdir$homedir/repositories"
+	ln -s "$datadir/satellites" "$pkgdir$homedir/satellites"
+	
+	install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+	install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+}
+
+sha256sums=('0d1aa08c07e7bb9bae1057e56a726a5b8aa5de138c25c8043bd5a139e9371c0e')

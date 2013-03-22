@@ -1,0 +1,66 @@
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgname=gitlab
+pkgver=5.0.0
+pkgrel=1
+pkgdesc="Self hosted Git management software. (web interface)"
+arch=(i686 x86_64)
+url="http://gitlab.org/"
+license=('MIT')
+install=gitlab.install
+depends=('gitlab-shell' 'ruby-bundler' 'python2')
+optdepends=(
+	'mysql: database backend'
+	'postgresql: database backend'
+)
+options=('!strip')
+
+# install=gitlab.install
+backup=(etc/gitlab/gitlab.yml etc/gitlab/resque.yml etc/gitlab/database.yml)
+source=($pkgname-$pkgver.tar.gz::https://github.com/gitlabhq/gitlabhq/archive/v$pkgver.tar.gz)
+
+build() {
+	cd "$srcdir/gitlabhq-$pkgver"
+	
+	msg "Fetching bundled gems..."
+	bundle install --deployment --binstubs --without development test
+	rm -rf vendor/bundle/ruby/*/cache
+}
+
+package() {
+	local datadir=/var/lib/gitlab
+	local homedir=/usr/lib/gitlab
+	local wwwdir=$homedir/www
+	
+	cd "$srcdir"
+	
+	install -dm755 \
+		"$pkgdir/etc/gitlab" \
+		"$pkgdir$homedir" \
+		"$pkgdir/usr/share/doc/$pkgname" \
+		"$pkgdir/usr/share/licenses/$pkgname"
+		
+	cp -a gitlabhq-$pkgver "$pkgdir$homedir/www"
+	cd "$pkgdir$homedir/www"
+	
+	sed -e 's|# user: git|user: gitlab|' \
+		-e "s|/home/git/repositories|$datadir/repositories|" \
+		-e "s|/home/git/gitlab-satellites|$datadir/satellites|" \
+		-e "s|/home/git|$homedir|" \
+		config/gitlab.yml.example > "$pkgdir/etc/gitlab/gitlab.yml"
+	
+	install -Dm644 config/resque.yml.example "$pkgdir/etc/gitlab/resque.yml"
+	install -Dm644 config/database.yml.mysql "$pkgdir/etc/gitlab/database.yml"
+	
+	for conf in gitlab resque database; do
+		ln -s /etc/gitlab/$conf.yml config/$conf.yml
+	done
+	
+	sed 's|#{Gitlab.config.gitlab_shell.repos_path}/../gitlab-shell|"#{gitlab_shell_user_home}/gitlab-shell|' \
+		-i lib/tasks/gitlab/info.rake
+	
+	mv LICENSE "$pkgdir/usr/share/licenses/$pkgname"
+	mv README.md ROADMAP.md CONTRIBUTING.md CHANGELOG config/*.{example,mysql,postgresql} "$pkgdir/usr/share/doc/$pkgname"
+}
+
+sha256sums=('a59eed2056528429d8a7a734bdf6e8f08fe23928e9ae2c7d10b19ee5c8068fd6')
