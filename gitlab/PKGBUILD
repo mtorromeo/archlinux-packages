@@ -15,16 +15,20 @@ optdepends=(
 )
 options=('!strip')
 
-# install=gitlab.install
 backup=(etc/gitlab/gitlab.yml etc/gitlab/resque.yml etc/gitlab/database.yml)
-source=($pkgname-$pkgver.tar.gz::https://github.com/gitlabhq/gitlabhq/archive/v$pkgver.tar.gz)
+source=($pkgname-$pkgver.tar.gz::https://github.com/gitlabhq/gitlabhq/archive/v$pkgver.tar.gz
+        Gemfile.patch
+        gitlab.service
+        gitlab-sidekiq.service)
 
 build() {
 	cd "$srcdir/gitlabhq-$pkgver"
 	
+	patch -i "$srcdir/Gemfile.patch"
+	
 	msg "Fetching bundled gems..."
-	bundle install --deployment --binstubs --without development test
-	rm -rf vendor/bundle/ruby/*/cache
+	bundle install --deployment --binstubs --no-cache --without test
+# 	bundle install --no-deployment --binstubs --path=vendor/bundle --no-cache --without test
 }
 
 package() {
@@ -42,14 +46,17 @@ package() {
 		
 	cp -a gitlabhq-$pkgver "$pkgdir$homedir/www"
 	cd "$pkgdir$homedir/www"
+	rm -rf vendor/bundle/ruby/*/cache
 	
 	sed -e 's|# user: git|user: gitlab|' \
 		-e "s|/home/git/repositories|$datadir/repositories|" \
 		-e "s|/home/git/gitlab-satellites|$datadir/satellites|" \
 		-e "s|/home/git|$homedir|" \
 		config/gitlab.yml.example > "$pkgdir/etc/gitlab/gitlab.yml"
+		
+	sed -e 's|redis.example.com|localhost|' \
+		config/resque.yml.example > "$pkgdir/etc/gitlab/resque.yml"
 	
-	install -Dm644 config/resque.yml.example "$pkgdir/etc/gitlab/resque.yml"
 	install -Dm644 config/database.yml.mysql "$pkgdir/etc/gitlab/database.yml"
 	
 	for conf in gitlab resque database; do
@@ -61,6 +68,13 @@ package() {
 	
 	mv LICENSE "$pkgdir/usr/share/licenses/$pkgname"
 	mv README.md ROADMAP.md CONTRIBUTING.md CHANGELOG config/*.{example,mysql,postgresql} "$pkgdir/usr/share/doc/$pkgname"
+
+	# services
+	install -Dm0755 "$srcdir/gitlab.service" "$pkgdir/usr/lib/systemd/system/gitlab.service"
+	install -Dm0755 "$srcdir/gitlab-sidekiq.service" "$pkgdir/usr/lib/systemd/system/gitlab-sidekiq.service"
 }
 
-sha256sums=('a59eed2056528429d8a7a734bdf6e8f08fe23928e9ae2c7d10b19ee5c8068fd6')
+sha256sums=('a59eed2056528429d8a7a734bdf6e8f08fe23928e9ae2c7d10b19ee5c8068fd6'
+            'fa25ba6d5af282bac7610fe1e59cecc49ec58432dca9324e4202f349ae5e30a9'
+            '6800e28d8871897656785df4348780ace64133741f034cb10580541506b15597'
+            '1abf8e3b2ec573a438be76fbd555c2b652d466e033a861e0144be8c0768f1cfb')
