@@ -26,14 +26,15 @@ true && pkgname=('php53'
          'php53-tidy'
          'php53-xsl')
 pkgver=5.3.23
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
 makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix'
              'sqlite' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'file' 'freetds'
              'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
-             'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'freetype2')
+             'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'freetype2'
+             'pkg-config<0.28')
 source=("http://www.php.net/distributions/${pkgbase%53}-${pkgver}.tar.bz2"
         'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
@@ -134,6 +135,7 @@ build() {
 	patch -p0 -i ${srcdir}/php-fpm.conf.in.patch
 
 	# php
+	rm -rf ${srcdir}/build-php
 	mkdir ${srcdir}/build-php
 	cd ${srcdir}/build-php
 	ln -s ../${pkgbase%53}-${pkgver}/configure
