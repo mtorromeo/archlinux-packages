@@ -25,8 +25,8 @@ true && pkgname=('php53'
          'php53-sqlite'
          'php53-tidy'
          'php53-xsl')
-pkgver=5.3.23
-pkgrel=2
+pkgver=5.3.24
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -34,13 +34,24 @@ makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix'
              'sqlite' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'file' 'freetds'
              'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
              'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'freetype2'
-             'pkg-config<0.28')
+             'pkg-config')
 source=("http://www.php.net/distributions/${pkgbase%53}-${pkgver}.tar.bz2"
         'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
+        
+prepare() {
+	cd ${srcdir}/${pkgbase%53}-${pkgver}
+
+	# adjust paths
+	patch -p0 -i ${srcdir}/php.ini.patch
+	patch -p0 -i ${srcdir}/php-fpm.conf.in.patch
+	
+	# workaround for pkg-config 0.28
+	sed 's/ && test -n "$OPENSSL_INCS"//g' -i configure
+}
 
 build() {
-	phpconfig="--srcdir=../${pkgbase%53}-${pkgver} \
+	local _phpconfig="--srcdir=../${pkgbase%53}-${pkgver} \
 		--prefix=/usr \
 		--sysconfdir=/etc/php \
 		--localstatedir=/var \
@@ -56,7 +67,7 @@ build() {
 		--without-pear \
 		"
 
-	phpextensions="--enable-bcmath=shared \
+	local _phpextensions="--enable-bcmath=shared \
 		--enable-calendar=shared \
 		--enable-dba=shared \
 		--enable-exif=shared \
@@ -123,77 +134,80 @@ build() {
 		--without-db3 \
 		"
 
-	EXTENSION_DIR=/usr/lib/php/modules
-	export EXTENSION_DIR
-	PEAR_INSTALLDIR=/usr/share/pear
-	export PEAR_INSTALLDIR
+	export EXTENSION_DIR=/usr/lib/php/modules
+	export PEAR_INSTALLDIR=/usr/share/pear
+	export CPPFLAGS="$CPPFLAGS -O2"
 
-	cd ${srcdir}/${pkgbase%53}-${pkgver}
-
-	# adjust paths
-	patch -p0 -i ${srcdir}/php.ini.patch
-	patch -p0 -i ${srcdir}/php-fpm.conf.in.patch
-
-	# php
-	rm -rf ${srcdir}/build-php
-	mkdir ${srcdir}/build-php
-	cd ${srcdir}/build-php
+	msg2 "Building CLI"
+	cd "$srcdir"
+	rm -rf build-php
+	mkdir build-php
+	cd build-php
 	ln -s ../${pkgbase%53}-${pkgver}/configure
-	./configure ${phpconfig} \
+	./configure ${_phpconfig} \
 		--disable-cgi \
 		--with-readline \
 		--enable-pcntl \
-		${phpextensions}
+		${_phpextensions}
 	make
 
-	# cgi and fcgi
-	# reuse the previous run; this will save us a lot of time
-	cp -a ${srcdir}/build-php ${srcdir}/build-cgi
-	cd ${srcdir}/build-cgi
-	./configure ${phpconfig} \
+	msg2 "Building cgi/fcgi API"
+	cd "$srcdir"
+	rm -rf build-cgi
+	cp -a build-php build-cgi
+	cd build-cgi
+	./configure ${_phpconfig} \
 		--disable-cli \
 		--enable-cgi \
-		${phpextensions}
+		${_phpextensions}
 	make
 
-	# apache
-	cp -a ${srcdir}/build-php ${srcdir}/build-apache
-	cd ${srcdir}/build-apache
-	./configure ${phpconfig} \
+	msg2 "Building apache API"
+	cd "$srcdir"
+	rm -rf build-apache
+	cp -a build-php build-apache
+	cd build-apache
+	./configure ${_phpconfig} \
 		--disable-cli \
 		--with-apxs2 \
-		${phpextensions}
+		${_phpextensions}
 	make
 
-	# fpm
-	cp -a ${srcdir}/build-php ${srcdir}/build-fpm
-	cd ${srcdir}/build-fpm
-	./configure ${phpconfig} \
+	msg2 "Building FPM API"
+	cd "$srcdir"
+	rm -rf build-fpm
+	cp -a build-php build-fpm
+	cd build-fpm
+	./configure ${_phpconfig} \
 		--disable-cli \
 		--enable-fpm \
 		--with-fpm-user=http \
 		--with-fpm-group=http \
-		${phpextensions}
+		${_phpextensions}
 	make
 
-	# embed
-	cp -a ${srcdir}/build-php ${srcdir}/build-embed
-	cd ${srcdir}/build-embed
-	./configure ${phpconfig} \
+	msg2 "Building embed API"
+	cd "$srcdir"
+	rm -rf build-embed
+	cp -a build-php build-embed
+	cd build-embed
+	./configure ${_phpconfig} \
 		--disable-cli \
 		--enable-embed=shared \
-		${phpextensions}
+		${_phpextensions}
 	make
 
-	# pear
-	cp -a ${srcdir}/build-php ${srcdir}/build-pear
-	cd ${srcdir}/build-pear
-	./configure ${phpconfig} \
+	msg2 "Building PEAR"
+	cd "$srcdir"
+	rm -rf build-pear
+	cp -a build-php build-pear
+	cd build-pear
+	./configure ${_phpconfig} \
 		--disable-cgi \
 		--with-readline \
 		--enable-pcntl \
 		--with-pear \
-		${phpextensions}
+		${_phpextensions}
 	make
 }
 
@@ -249,7 +263,7 @@ package_php53-apache() {
 
 package_php53-fpm() {
 	pkgdesc='FastCGI Process Manager for PHP'
-	depends=('php53')
+	depends=('php53' 'systemd')
 	conflicts=('php-fpm')
 	replaces=('php-fpm')
 	provides=('php-fpm')
@@ -412,7 +426,7 @@ package_php53-xsl() {
 	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/usr/lib/php/modules/xsl.so
 }
 
-sha256sums=('69473eae7c752987a8fc7619bae9f7121cfe7c6603a2ebf13c8e036dff6a4944'
+sha256sums=('fc3bcadf19c35827b130acb92c90777077e10a6c6ab10535164b2ee3c3875703'
             '6cd0bc90bd7a307154aaba596dbe23bcfa9977c989bc49ff0f926e10868ef6fd'
             '8b5b15f1c348d8897d837ea9894157d9630dc542bbb0dbc7ad93c5dc0235d1d5'
             '686d3612779d97d294c23036c5e289833049623680e14125d4c4196e3318ef4e'
