@@ -35,7 +35,7 @@ package() {
 	touch "$pkgdir$homedir/.ssh/authorized_keys"
 	
 	install -dm770 "$pkgdir$datadir/"{repositories,satellites}
-	chmod g+s "$pkgdir$homedir/repositories"
+	chmod g+s "$pkgdir$datadir/repositories"
 	ln -s "$datadir/repositories" "$pkgdir$homedir/repositories"
 	ln -s "$datadir/satellites" "$pkgdir$homedir/satellites"
 	
