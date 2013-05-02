@@ -1,7 +1,7 @@
-homedir=/usr/lib/gitlab
+datadir=/var/lib/gitlab
 
 fix_perms() {
-	chown -R gitlab:gitlab $homedir/www
+	chown -R gitlab:gitlab $datadir/www
 }
 
 post_install() {
