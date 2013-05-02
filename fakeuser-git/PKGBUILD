@@ -1,0 +1,41 @@
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgname=fakeuser-git
+pkgver=4.09be1a3
+pkgrel=1
+pkgdesc="LD_PRELOAD module to create fake users"
+arch=(i686 x86_64)
+url="https://github.com/progandy/fakeuser"
+license=('GPL')
+depends=('glibc')
+provides=('fakeuser')
+conflicts=('fakeuser')
+
+source=('git://github.com/progandy/fakeuser.git')
+md5sums=('SKIP')
+
+pkgver() {
+	cd "$srcdir/fakeuser"
+	echo $(git rev-list --count master).$(git rev-parse --short master)
+}
+
+build() {
+	cd "$srcdir/fakeuser"
+	make
+}
+
+package() {
+	cd "$srcdir/fakeuser"
+	install -dm755 "$pkgdir/usr/share/doc/$pkgname"
+	install -dm755 "$pkgdir/usr/bin"
+	
+	install -Dm755 fakeadd "$pkgdir/usr/lib/fakeuser/fakeadd"
+	install -Dm755 libfakeuser.so "$pkgdir/usr/lib/fakeuser/libfakeuser.so"
+	cp example-makepkg/{README.md,PKGBUILD,INSTALL} "$pkgdir/usr/share/doc/$pkgname"
+	
+	cat <<EOF > "$pkgdir/usr/bin/fakepkg"
+BASEDIR=/usr/lib/fakeuser
+PATH="\$PATH:\$BASEDIR/" LD_PRELOAD="\$BASEDIR/libfakeuser.so" exec makepkg "\$@"
+EOF
+	chmod 755 "$pkgdir/usr/bin/fakepkg"
+}
