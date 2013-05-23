@@ -1,7 +1,7 @@
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 
 pkgname=gitlab
-pkgver=5.0.0
+pkgver=5.2.0
 pkgrel=1
 pkgdesc="Self hosted Git management software. (web interface)"
 arch=(i686 x86_64)
@@ -17,14 +17,11 @@ options=('!strip')
 
 backup=(etc/gitlab/gitlab.yml etc/gitlab/resque.yml etc/gitlab/database.yml)
 source=($pkgname-$pkgver.tar.gz::https://github.com/gitlabhq/gitlabhq/archive/v$pkgver.tar.gz
-        Gemfile.patch
         gitlab.service
         gitlab-sidekiq.service)
 
 build() {
 	cd "$srcdir/gitlabhq-$pkgver"
-	
-	patch -i "$srcdir/Gemfile.patch"
 	
 	msg "Fetching bundled gems..."
 	bundle install --deployment --binstubs --no-cache --without test
@@ -67,14 +64,13 @@ package() {
 		-i lib/tasks/gitlab/info.rake
 	
 	mv LICENSE "$pkgdir/usr/share/licenses/$pkgname"
-	mv README.md ROADMAP.md CONTRIBUTING.md CHANGELOG config/*.{example,mysql,postgresql} "$pkgdir/usr/share/doc/$pkgname"
+	mv README.md MAINTENANCE.md CONTRIBUTING.md CHANGELOG config/*.{example,mysql,postgresql} "$pkgdir/usr/share/doc/$pkgname"
 
 	# services
 	install -Dm0755 "$srcdir/gitlab.service" "$pkgdir/usr/lib/systemd/system/gitlab.service"
 	install -Dm0755 "$srcdir/gitlab-sidekiq.service" "$pkgdir/usr/lib/systemd/system/gitlab-sidekiq.service"
 }
 
-sha256sums=('a59eed2056528429d8a7a734bdf6e8f08fe23928e9ae2c7d10b19ee5c8068fd6'
-            'fa25ba6d5af282bac7610fe1e59cecc49ec58432dca9324e4202f349ae5e30a9'
+sha256sums=('a13bdd9a6810f76539dd93722dec39928f233b957fb7b125bbe57c276292dfa5'
             '6800e28d8871897656785df4348780ace64133741f034cb10580541506b15597'
             '1abf8e3b2ec573a438be76fbd555c2b652d466e033a861e0144be8c0768f1cfb')

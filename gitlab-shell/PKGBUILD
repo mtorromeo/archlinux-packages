@@ -1,8 +1,7 @@
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 
 pkgname=gitlab-shell
-pkgver=1.1.0
-_commit=e8d93d0769b99aaab9e5d360345e355b3e682ddf
+pkgver=1.4.0
 pkgrel=1
 pkgdesc="Self hosted Git management software. (shell daemon)"
 arch=(any)
@@ -14,13 +13,13 @@ options=('!strip')
 
 install=gitlab-shell.install
 backup=(etc/gitlab/shell.yml)
-source=($pkgname-$pkgver.tar.gz::https://github.com/gitlabhq/gitlab-shell/archive/$_commit.tar.gz)
+source=($pkgname-$pkgver.tar.gz::https://github.com/gitlabhq/gitlab-shell/archive/v$pkgver.tar.gz)
 
 package() {
 	local homedir=/usr/lib/gitlab
 	local datadir=/var/lib/gitlab
 	
-	cd "$srcdir/$pkgname-$_commit"
+	cd "$srcdir/$pkgname-$pkgver"
 	install -dm755 "$pkgdir$homedir/gitlab-shell" "$pkgdir/etc/gitlab"
 	
 	sed -e 's|user: git|user: gitlab|' \
@@ -43,4 +42,4 @@ package() {
 	install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
 }
 
-sha256sums=('0d1aa08c07e7bb9bae1057e56a726a5b8aa5de138c25c8043bd5a139e9371c0e')
+sha256sums=('ddb426ead6c9e0cce4f6c6243255a154e9f51a4e6bff9b178242d2cc90e1a43f')
