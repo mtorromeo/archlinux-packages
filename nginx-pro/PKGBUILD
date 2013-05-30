@@ -2,10 +2,11 @@ _cfgdir=/etc/nginx
 _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
-pkgver=1.3.15
-pkgrel=2
+pkgver=1.4.1
+pkgrel=1
 _naxsiver=0.49
 _uploadprogver=0.9.0
+_cachepurgever=2.1
 pkgdesc="Lightweight HTTP server and IMAP/POP3 proxy server with some additional modules"
 arch=('i686' 'x86_64')
 depends=('pcre' 'zlib' 'openssl')
@@ -33,6 +34,7 @@ source=(http://nginx.org/download/nginx-$pkgver.tar.gz
         http://naxsi.googlecode.com/files/naxsi-core-$_naxsiver.tgz
         http://naxsi.googlecode.com/files/naxsi-ui-$_naxsiver.tgz
         nginx-upload-progress-$_uploadprogver.tgz::https://github.com/masterzen/nginx-upload-progress-module/tarball/v$_uploadprogver
+        http://labs.frickle.com/files/ngx_cache_purge-$_cachepurgever.tar.gz
         service
         nginx.logrotate)
 
@@ -41,6 +43,7 @@ build() {
 		--add-module=/usr/lib/passenger/ext/nginx
 		--add-module=../naxsi-core-$_naxsiver/naxsi_src
 		--add-module=../masterzen-nginx-upload-progress-module-a788dea/
+		--add-module=../ngx_cache_purge-$_cachepurgever
 	)
 
 	cd "$srcdir"
@@ -72,7 +75,7 @@ build() {
 	./configure \
         --prefix=$_cfgdir \
         --conf-path=$_cfgdir/nginx.conf \
-        --sbin-path=/usr/sbin/nginx \
+        --sbin-path=/usr/bin/nginx \
         --pid-path=/var/run/nginx.pid \
         --lock-path=/var/lock/nginx.lock \
         --user=http --group=http \
@@ -87,18 +90,19 @@ build() {
         --with-ipv6 --with-pcre-jit \
         --with-file-aio \
         --with-http_dav_module \
+        --with-http_geoip_module \
+        --with-http_gunzip_module \
         --with-http_gzip_static_module \
         --with-http_realip_module \
+        --with-http_spdy_module \
         --with-http_ssl_module \
         --with-http_stub_status_module \
-        --with-http_spdy_module \
         --without-mail_pop3_module --without-mail_imap_module --without-mail_smtp_module \
         ${_modules[@]} \
         #--with-http_mp4_module \
         #--with-http_addition_module \
         #--with-http_xslt_module \
         #--with-http_image_filter_module \
-        #--with-http_geoip_module \
         #--with-http_sub_module \
         #--with-http_flv_module \
         #--with-http_random_index_module \
@@ -139,9 +143,10 @@ package() {
 	rm -rf "$pkgdir"/var/run
 }
 
-sha256sums=('3267574f007cba5d947ad04d2aebd45ffec06565d019791bc536229bbc6d3b84'
+sha256sums=('bca5d1e89751ba29406185e1736c390412603a7e6b604f5b4575281f6565d119'
             'bb0b63713d5a9446401d5acd1ef0882b9c2a0fc506502bbd88bc4663d273e9c7'
             '54289f263a915b1222030bab97e4210619a893515da9ce41a1d9e95f8b87ddbe'
             '3fb903dab595cf6656fa0fc5743a48daffbba2f6b5c554836be630800eaad4e2'
-            '2dd9d8edd9106ef677d50c6f87db3ae5e26e02d72c900fd772d0c003ed2ae2de'
-            '8109454b1d20a54f2f83bc4d9b1864f020d013df0e7b2caa9af1ca355e0b4cc7')
+            '424005af0c04e59ffa65a65e446081d4f95ee76a801a7555e001c67810bcb3b9'
+            '05fdc0c0483410944b988d7f4beabb00bec4a44a41bd13ebc9b78585da7d3f9b'
+            '9523a1fdd5eb61bf62f3049f6ee088b198e36d5edcce2d9b08bbeb2930aa5a16')
