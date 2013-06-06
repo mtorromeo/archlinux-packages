@@ -9,7 +9,7 @@ _uploadprogver=0.9.0
 _cachepurgever=2.1
 pkgdesc="Lightweight HTTP server and IMAP/POP3 proxy server with some additional modules"
 arch=('i686' 'x86_64')
-depends=('pcre' 'zlib' 'openssl' 'geoip')
+depends=('pcre' 'zlib' 'openssl')
 makedepends=('git' 'passenger')
 optdepends=('passenger')
 url="http://nginx.org"
@@ -117,9 +117,6 @@ package() {
 	cd "$srcdir"/nginx-$pkgver
 	make DESTDIR="$pkgdir" install
 
-	install -d "$pkgdir"/etc/logrotate.d
-	install -m644 "$srcdir"/nginx.logrotate "$pkgdir"/etc/logrotate.d/nginx
-
 	sed -e 's|\<user\s\+\w\+;|user html;|g' \
 	    -e '2s|worker_processes  1|worker_processes auto|' \
 	    -e '44s|html|/usr/share/nginx/html|' \
@@ -129,6 +126,9 @@ package() {
 
 	install -d "$pkgdir"/$_tmpdir
 	install -dm700 "$pkgdir"/$_tmpdir/proxy
+	
+	chmod 750 "$pkgdir"/var/log/nginx
+	chown http:log "$pkgdir"/var/log/nginx
 
 	install -d "$pkgdir"/usr/share/nginx
 	mv "$pkgdir"/etc/nginx/html/ "$pkgdir"/usr/share/nginx
@@ -138,6 +138,7 @@ package() {
 
 	cp -a "$srcdir"/naxsi-ui-$_naxsiver/naxsi-ui "$pkgdir"/usr/share/
 
+	install -Dm644 "$srcdir"/logrotate "$pkgdir"/etc/logrotate.d/nginx
 	install -Dm644 "$srcdir"/service "$pkgdir"/usr/lib/systemd/system/nginx.service
 	install -D -m644 LICENSE "$pkgdir"/usr/share/licenses/nginx/LICENSE
 	rm -rf "$pkgdir"/var/run
