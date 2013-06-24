@@ -1,7 +1,7 @@
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 
 pkgname=gitlab-shell
-pkgver=1.4.0
+pkgver=1.5.0
 pkgrel=1
 pkgdesc="Self hosted Git management software. (shell daemon)"
 arch=(any)
@@ -42,4 +42,4 @@ package() {
 	install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
 }
 
-sha256sums=('ddb426ead6c9e0cce4f6c6243255a154e9f51a4e6bff9b178242d2cc90e1a43f')
+sha256sums=('bc924bbe5ab8a94633d762000c812740148d14ff33760934b3d0bfbcc838e731')
