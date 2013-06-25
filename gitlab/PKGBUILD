@@ -1,7 +1,7 @@
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 
 pkgname=gitlab
-pkgver=5.2.0
+pkgver=5.3.0
 pkgrel=1
 pkgdesc="Self hosted Git management software. (web interface)"
 arch=(i686 x86_64)
@@ -71,6 +71,6 @@ package() {
 	install -Dm0755 "$srcdir/gitlab-sidekiq.service" "$pkgdir/usr/lib/systemd/system/gitlab-sidekiq.service"
 }
 
-sha256sums=('a13bdd9a6810f76539dd93722dec39928f233b957fb7b125bbe57c276292dfa5'
+sha256sums=('d2e553b70c27db6f4d8072d6286bc3edb64d8ce4418500650d52ee89f4e021b3'
             '6800e28d8871897656785df4348780ace64133741f034cb10580541506b15597'
             '1abf8e3b2ec573a438be76fbd555c2b652d466e033a861e0144be8c0768f1cfb')
