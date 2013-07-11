@@ -233,9 +233,6 @@ package_php52-fpm() {
 package_php52-pear() {
 	pkgdesc='PHP Extension and Application Repository'
 	depends=('php52' 'bash')
-	conflicts=('php-pear')
-	replaces=('php-pear')
-	provides=('php-pear')
 	backup=('etc/php52/pear.conf')
 
 	cd "${srcdir}/build-pear"
