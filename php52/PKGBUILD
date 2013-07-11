@@ -3,9 +3,7 @@
 pkgbase=php52
 pkgname=('php52'
          'php52-cgi'
-         'php52-apache'
          'php52-fpm'
-         'php52-embed'
          'php52-pear'
          'php52-curl'
          'php52-gd'
@@ -22,14 +20,14 @@ pkgname=('php52'
 
 pkgname=php52
 pkgver=5.2.17
-pkgrel=8
+pkgrel=9
 _suhosinver=5.2.16-0.9.7
 _fpmversion=0.5.14
 pkgdesc='A high-level scripting language with FastCGI Process Manager'
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://php-fpm.org/'
-makedepends=('apache' 'imap' 'postgresql-libs' 'libmysqlclient'
+makedepends=('postgresql-libs' 'libmysqlclient'
              'libldap' 'postfix' 'libpng' 'libjpeg' 'sqlite3' 'unixodbc'
              'net-snmp' 'mhash' 'gmp' 'libmcrypt' 'tidyhtml' 'aspell' 'libtool'
              'freetype2' 'curl' 'libxslt' 'pam' 'openssl' 'bzip2' 'gdbm' 'db')
@@ -38,30 +36,53 @@ source=("http://www.php.net/distributions/php-${pkgver}.tar.bz2"
         "http://php-fpm.org/downloads/php-${pkgver}-fpm-${_fpmversion}.diff.gz"
         'php.ini.patch'
         'php-pcre.patch'
-        'rc.d.php-fpm'
-        'apache.conf'
         'libpng14.patch'
-        'php-fpm.conf.in.patch'
-        'logrotate.d.php-fpm'
-        'php-fpm.service'
-        'php-fpm.tmpfiles')
+        'php52-libxml.patch'
+        'php-fpm.conf'
+        'logrotate.d.php52-fpm'
+        'php52-fpm.service'
+        'php52-fpm.tmpfiles')
+
+prepare() {
+	cd "${srcdir}/php-${pkgver}"
+
+	# libpng 1.4 fix
+	patch -p3 -i "${srcdir}/libpng14.patch"
+
+	# gmp 5.0 fix
+	sed -i 's/__GMP_BITS_PER_MP_LIMB/GMP_LIMB_BITS/g' ext/gmp/gmp.c
+
+	# apply suhosin patch
+	patch -p1 -i "${srcdir}/suhosin-patch-${_suhosinver}.patch"
+
+	# apply fpm patch
+	patch -p1 -i "${srcdir}/php-${pkgver}-fpm-${_fpmversion}.diff"
+
+	# adjust paths
+	patch -p0 -i "${srcdir}/php.ini.patch"
+
+	# pcre fix
+	patch -p0 -i "${srcdir}/php-pcre.patch"
+
+	# libxml2 fix
+	patch -p1 -i "${srcdir}/php52-libxml.patch"
+}
 
 build() {
 	phpconfig="--srcdir=../php-${pkgver} \
-	--prefix=/usr \
-	--sysconfdir=/etc/php \
+	--prefix=/opt/php52 \
+	--sysconfdir=/etc/php52 \
 	--localstatedir=/var \
 	--with-layout=GNU \
-	--with-config-file-path=/etc/php \
-	--with-config-file-scan-dir=/etc/php/conf.d \
+	--with-config-file-path=/etc/php52 \
+	--with-config-file-scan-dir=/etc/php52/conf.d \
 	--enable-inline-optimization \
 	--disable-debug \
 	--disable-rpath \
 	--disable-static \
 	--enable-shared \
-	--mandir=/usr/share/man \
 	--without-pear \
-	--libdir=/usr/lib --with-libdir=lib \
+	--with-libdir=lib \
 	"
 
 	phpextensions="--enable-bcmath=shared \
@@ -95,8 +116,8 @@ build() {
 	--with-gettext=shared \
 	--with-gmp=shared \
 	--with-iconv=shared \
-	--with-imap=shared \
-	--with-imap-ssl=shared \
+	--without-imap \
+	--without-imap-ssl \
 	--with-jpeg-dir=shared,/usr \
 	--with-ldap=shared \
 	--with-mcrypt=shared \
@@ -130,28 +151,9 @@ build() {
 	--without-db4 \
 	"
 
-	export EXTENSION_DIR=/usr/lib/php/modules
-	export PEAR_INSTALLDIR=/usr/share/pear
-
-	cd "${srcdir}/php-${pkgver}"
-
-	# libpng 1.4 fix
-	patch -p3 -i "${srcdir}/libpng14.patch"
-
-	# gmp 5.0 fix
-	sed -i 's/__GMP_BITS_PER_MP_LIMB/GMP_LIMB_BITS/g' ext/gmp/gmp.c
-
-	# apply suhosin patch
-	patch -p1 -i "${srcdir}/suhosin-patch-${_suhosinver}.patch"
-
-	# apply fpm patch
-	patch -p1 -i "${srcdir}/php-${pkgver}-fpm-${_fpmversion}.diff"
-
-	# adjust paths
-	patch -p0 -i "${srcdir}/php.ini.patch"
-
-	# pcre fix
-	patch -p0 -i "${srcdir}/php-pcre.patch"
+	export EXTENSION_DIR=/opt/php52/modules
+	export PEAR_INSTALLDIR=/opt/php52/pear
+	export CPPFLAGS=""
 
 	# php
 	[ -d "${srcdir}/build-php" ] || mkdir "${srcdir}/build-php"
@@ -179,29 +181,6 @@ build() {
 		${phpextensions}
 	make
 
-	cd sapi/cgi/fpm
-	patch -p0 -i "$srcdir/php-fpm.conf.in.patch"
-
-	# apache
-	[ -d "${srcdir}/build-apache" ] && rm -rf "${srcdir}/build-apache"
-	cp -a "${srcdir}/build-php" "${srcdir}/build-apache"
-	cd "${srcdir}/build-apache"
-	./configure ${phpconfig} \
-		--disable-cli \
-		--with-apxs2 \
-		${phpextensions}
-	make
-
-	# embed
-	[ -d "${srcdir}/build-embed" ] && rm -rf "${srcdir}/build-embed"
-	cp -a "${srcdir}/build-php" "${srcdir}/build-embed"
-	cd "${srcdir}/build-embed"
-	./configure ${phpconfig} \
-		--disable-cli \
-		--enable-embed=shared \
-		${phpextensions}
-	make
-
 	# pear
 	[ -d "${srcdir}/build-pear" ] && rm -rf "${srcdir}/build-pear"
 	cp -a "${srcdir}/build-php" "${srcdir}/build-pear"
@@ -219,69 +198,39 @@ build() {
 package_php52() {
 	pkgdesc='An HTML-embedded scripting language'
 	depends=('pcre' 'libxml2' 'bzip2' 'openssl')
-	replaces=('php' 'php-fileinfo' 'php52-fileinfo')
-	provides=('php' 'php-fileinfo' 'php52-fileinfo')
-	conflicts=('php' 'php-fileinfo' 'php52-fileinfo')
-	backup=('etc/php/php.ini')
+	backup=('etc/php52/php.ini')
 
 	cd "${srcdir}/build-php"
 	make -j1 INSTALL_ROOT="${pkgdir}" install
 	install -d -m755 "${pkgdir}/usr/share/pear"
 	# install php.ini
-	install -D -m644 "${srcdir}/php-${pkgver}/php.ini-recommended" "${pkgdir}/etc/php/php.ini"
-	install -d -m755 "${pkgdir}/etc/php/conf.d/"
+	install -D -m644 "${srcdir}/php-${pkgver}/php.ini-recommended" "${pkgdir}/etc/php52/php.ini"
+	install -d -m755 "${pkgdir}/etc/php52/conf.d/"
 
 	# remove static modules
-	rm -f "${pkgdir}/usr/lib/php/modules/"*.a
+	rm -f "${pkgdir}/opt/php52/modules/"*.a
 	# remove modules provided by sub packages
-	rm -f "${pkgdir}/usr/lib/php/modules/"{curl,gd,gmp,ldap,mcrypt,odbc,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite,pdo_sqlite,tidy,xsl}.so
+	rm -f "${pkgdir}/opt/php52/modules/"{curl,gd,gmp,ldap,mcrypt,odbc,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite,pdo_sqlite,tidy,xsl}.so
 }
 
 package_php52-cgi() {
 	pkgdesc='CGI and FCGI SAPI for PHP'
 	depends=('php52' 'pcre' 'libxml2')
 
-	install -D -m755 "${srcdir}/build-cgi/sapi/cgi/php-cgi" "${pkgdir}/usr/bin/php-cgi"
-}
-
-package_php52-apache() {
-	pkgdesc='Apache SAPI for PHP'
-	depends=('php52' 'apache' 'pcre' 'libxml2')
-	conflicts=('php-apache')
-	replaces=('php-apache')
-	provides=('php-apache')
-	backup=('etc/httpd/conf/extra/php5_module.conf')
-
-	install -D -m755 "${srcdir}/build-apache/libs/libphp5.so" "${pkgdir}/usr/lib/httpd/modules/libphp5.so"
-	install -D -m644 "${srcdir}/apache.conf" "${pkgdir}/etc/httpd/conf/extra/php5_module.conf"
+	install -D -m755 "${srcdir}/build-cgi/sapi/cgi/php-cgi" "${pkgdir}/opt/php52/bin/php-cgi"
 }
 
 package_php52-fpm() {
 	pkgdesc='FastCGI Process Manager for PHP'
 	depends=('php52-cgi')
-	conflicts=('php-fpm')
-	replaces=('php-fpm')
-	provides=('php-fpm')
-	backup=('etc/php/php-fpm.conf')
-	install='php-fpm.install'
+	backup=('etc/php52/php-fpm.conf')
+	install='php52-fpm.install'
 
-	install -D -m644 "${srcdir}/build-cgi/sapi/cgi/fpm/php-fpm.conf" "${pkgdir}/etc/php/php-fpm.conf"
-	install -D -m755 "${srcdir}/rc.d.php-fpm" "${pkgdir}/etc/rc.d/php-fpm"
-	install -D -m644 "${srcdir}/logrotate.d.php-fpm" "${pkgdir}/etc/logrotate.d/php-fpm"
-	install -d -m755 "${pkgdir}/etc/php/fpm.d"
-	install -D -m644 "${srcdir}/php-fpm.tmpfiles" "${pkgdir}/usr/lib/tmpfiles.d/php-fpm.conf"
-	install -D -m644 "${srcdir}/php-fpm.service" "${pkgdir}/usr/lib/systemd/system/php-fpm.service"
-}
-
-package_php52-embed() {
-	pkgdesc='Embed SAPI for PHP'
-	depends=('php52' 'pcre' 'libxml2')
-	conflicts=('php-embed')
-	replaces=('php-embed')
-	provides=('php-embed')
-
-	install -D -m755 "${srcdir}/build-embed/libs/libphp5.so" "${pkgdir}/usr/lib/libphp5.so"
-	install -D -m644 "${srcdir}/php-${pkgver}/sapi/embed/php_embed.h" "${pkgdir}/usr/include/php/sapi/embed/php_embed.h"
+	install -D -m644 "${srcdir}/php-fpm.conf" "${pkgdir}/etc/php52/php-fpm.conf"
+	install -D -m644 "${srcdir}/logrotate.d.php52-fpm" "${pkgdir}/etc/logrotate.d/php52-fpm"
+	install -d -m755 "${pkgdir}/etc/php52/fpm.d"
+	install -D -m644 "${srcdir}/php52-fpm.tmpfiles" "${pkgdir}/usr/lib/tmpfiles.d/php52-fpm.conf"
+	install -D -m644 "${srcdir}/php52-fpm.service" "${pkgdir}/usr/lib/systemd/system/php52-fpm.service"
 }
 
 package_php52-pear() {
@@ -290,7 +239,7 @@ package_php52-pear() {
 	conflicts=('php-pear')
 	replaces=('php-pear')
 	provides=('php-pear')
-	backup=('etc/php/pear.conf')
+	backup=('etc/php52/pear.conf')
 
 	cd "${srcdir}/build-pear"
 	make -j1 install-pear INSTALL_ROOT="${pkgdir}"
@@ -302,124 +251,87 @@ package_php52-pear() {
 
 package_php52-curl() {
 	depends=('php52' 'curl')
-	conflicts=('php-curl')
-	replaces=('php-curl')
-	provides=('php-curl')
 	pkgdesc='curl module for PHP'
-	install -D -m755 "${srcdir}/build-php/modules/curl.so" "${pkgdir}/usr/lib/php/modules/curl.so"
+	install -D -m755 "${srcdir}/build-php/modules/curl.so" "${pkgdir}/opt/php52/modules/curl.so"
 }
 
 package_php52-gd() {
 	depends=('php52' 'libpng' 'libjpeg' 'freetype2')
-	conflicts=('php-gd')
-	replaces=('php-gd')
-	provides=('php-gd')
 	pkgdesc='gd module for PHP'
-	install -D -m755 "${srcdir}/build-php/modules/gd.so" "${pkgdir}/usr/lib/php/modules/gd.so"
+	install -D -m755 "${srcdir}/build-php/modules/gd.so" "${pkgdir}/opt/php52/modules/gd.so"
 }
 
 package_php52-gmp() {
 	depends=('php52' 'gmp')
-	conflicts=('php-gmp')
-	replaces=('php-gmp')
-	provides=('php-gmp')
 	pkgdesc='gmp module for PHP'
-	install -D -m755 "${srcdir}/build-php/modules/gmp.so" "${pkgdir}/usr/lib/php/modules/gmp.so"
+	install -D -m755 "${srcdir}/build-php/modules/gmp.so" "${pkgdir}/opt/php52/modules/gmp.so"
 }
 
 package_php52-ldap() {
 	depends=('php52' 'libldap')
-	conflicts=('php-ldap')
-	replaces=('php-ldap')
-	provides=('php-ldap')
 	pkgdesc='ldap module for PHP'
-	install -D -m755 "${srcdir}/build-php/modules/ldap.so" "${pkgdir}/usr/lib/php/modules/ldap.so"
+	install -D -m755 "${srcdir}/build-php/modules/ldap.so" "${pkgdir}/opt/php52/modules/ldap.so"
 }
 
 package_php52-mcrypt() {
 	depends=('php52' 'libmcrypt' 'libtool')
-	conflicts=('php-mcrypt')
-	replaces=('php-mcrypt')
-	provides=('php-mcrypt')
 	pkgdesc='mcrypt module for PHP'
-	install -D -m755 "${srcdir}/build-php/modules/mcrypt.so" "${pkgdir}/usr/lib/php/modules/mcrypt.so"
+	install -D -m755 "${srcdir}/build-php/modules/mcrypt.so" "${pkgdir}/opt/php52/modules/mcrypt.so"
 }
 
 package_php52-odbc() {
 	depends=('php52' 'unixodbc')
-	conflicts=('php-odbc')
-	replaces=('php-odbc')
-	provides=('php-odbc')
 	pkgdesc='ODBC modules for PHP'
-	install -D -m755 "${srcdir}/build-php/modules/odbc.so" "${pkgdir}/usr/lib/php/modules/odbc.so"
-	install -D -m755 "${srcdir}/build-php/modules/pdo_odbc.so" "${pkgdir}/usr/lib/php/modules/pdo_odbc.so"
+	install -D -m755 "${srcdir}/build-php/modules/odbc.so" "${pkgdir}/opt/php52/modules/odbc.so"
+	install -D -m755 "${srcdir}/build-php/modules/pdo_odbc.so" "${pkgdir}/opt/php52/modules/pdo_odbc.so"
 }
 
 package_php52-pgsql() {
 	depends=('php52' 'postgresql-libs')
-	conflicts=('php-pgsql')
-	replaces=('php-pgsql')
-	provides=('php-pgsql')
 	pkgdesc='PostgreSQL modules for PHP'
-	install -D -m755 "${srcdir}/build-php/modules/pgsql.so" "${pkgdir}/usr/lib/php/modules/pgsql.so"
-	install -D -m755 "${srcdir}/build-php/modules/pdo_pgsql.so" "${pkgdir}/usr/lib/php/modules/pdo_pgsql.so"
+	install -D -m755 "${srcdir}/build-php/modules/pgsql.so" "${pkgdir}/opt/php52/modules/pgsql.so"
+	install -D -m755 "${srcdir}/build-php/modules/pdo_pgsql.so" "${pkgdir}/opt/php52/modules/pdo_pgsql.so"
 }
 
 package_php52-pspell() {
 	depends=('php52' 'aspell')
-	conflicts=('php-pspell')
-	replaces=('php-pspell')
-	provides=('php-pspell')
 	pkgdesc='pspell module for PHP'
-	install -D -m755 "${srcdir}/build-php/modules/pspell.so" "${pkgdir}/usr/lib/php/modules/pspell.so"
+	install -D -m755 "${srcdir}/build-php/modules/pspell.so" "${pkgdir}/opt/php52/modules/pspell.so"
 }
 
 package_php52-snmp() {
 	depends=('php52' 'net-snmp')
-	conflicts=('php-snmp')
-	replaces=('php-snmp')
-	provides=('php-snmp')
 	pkgdesc='snmp module for PHP'
-	install -D -m755 "${srcdir}/build-php/modules/snmp.so" "${pkgdir}/usr/lib/php/modules/snmp.so"
+	install -D -m755 "${srcdir}/build-php/modules/snmp.so" "${pkgdir}/opt/php52/modules/snmp.so"
 }
 
 package_php52-sqlite() {
 	depends=('php52' 'sqlite3')
-	conflicts=('php-sqlite')
-	replaces=('php-sqlite')
-	provides=('php-sqlite')
 	pkgdesc='sqlite3 module for PHP'
-	install -D -m755 "${srcdir}/build-php/modules/sqlite.so" "${pkgdir}/usr/lib/php/modules/sqlite.so"
-	install -D -m755 "${srcdir}/build-php/modules/pdo_sqlite.so" "${pkgdir}/usr/lib/php/modules/pdo_sqlite.so"
+	install -D -m755 "${srcdir}/build-php/modules/sqlite.so" "${pkgdir}/opt/php52/modules/sqlite.so"
+	install -D -m755 "${srcdir}/build-php/modules/pdo_sqlite.so" "${pkgdir}/opt/php52/modules/pdo_sqlite.so"
 }
 
 package_php52-tidy() {
 	depends=('php52' 'tidyhtml')
-	conflicts=('php-tidy')
-	replaces=('php-tidy')
-	provides=('php-tidy')
 	pkgdesc='tidy module for PHP'
-	install -D -m755 "${srcdir}/build-php/modules/tidy.so" "${pkgdir}/usr/lib/php/modules/tidy.so"
+	install -D -m755 "${srcdir}/build-php/modules/tidy.so" "${pkgdir}/opt/php52/modules/tidy.so"
 }
 
 package_php52-xsl() {
 	depends=('php52' 'libxslt')
-	conflicts=('php-xsl')
-	replaces=('php-xsl')
-	provides=('php-xsl')
 	pkgdesc='xsl module for PHP'
-	install -D -m755 "${srcdir}/build-php/modules/xsl.so" "${pkgdir}/usr/lib/php/modules/xsl.so"
+	install -D -m755 "${srcdir}/build-php/modules/xsl.so" "${pkgdir}/opt/php52/modules/xsl.so"
 }
 
 sha256sums=('e81beb13ec242ab700e56f366e9da52fd6cf18961d155b23304ca870e53f116c'
             'aae115a318d80b3f32cedf876e7a8e4b932febb1b0c743c0b398003ebe122f91'
             '4f3442588138705bd4f8a2b976c4240b24e9d3d2644f202d2d3ea1ee62e46eec'
-            '450280d8ae38ccfbb4fd66a2c0557f424015aae48e0b46163fde0b9c6a5c3727'
+            '85c307108bb452dff8307d6eae9aedb96270ca9c08f98e6eac8fefe1104642fc'
             '0a2c4dfc9dd481ac141809e0ddd80bb43f078056efa16933f53de5f76f3e5c6c'
-            '5b480c6fb9df0eebfc9b05f0b56bfb520af38e65379d94ac134ca7b9a8c9f6f9'
-            'bb49e6a3b221807b53846ace550e37a8917efee594a4df1e73b8a4ed5dc86a47'
             '1c468e728aa09f2856756e797cf2ab475c9c9740a77ba122993532b94c60898d'
-            '05b58dfc5784c7d39ee8d82d976a60a5e5d0536fa25d96291206723d1b48348d'
-            'ee42c4ac9ed2bbd82f417843e00ad2d2b6dfeb3a5ceca4fc5ae0f548d7759d16'
-            'aa4836da95f8678856704c385693465c39d02f86a0edcdbe42a49033c729bbd8'
-            '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5')
+            '2e5a18e8cb2cc444b6648100ee6a34d7b5ed9166242f3fdbf1835832654ba6ba'
+            '0cc929eb00dbb16fb8917ba42683f0299b0cbdcc2aa501ea90d5fe8c4f8c80aa'
+            '6c293d117667c44dbe1ffa5a2cbbef4723401801d1f763ae27b6aa1fb8bebbcf'
+            'd7848ada30878d9020aa2cb8fe07269873c6bdb4cb4547335d504c3c51433ff8'
+            '8673e8ad1296614faf95efc9edf6fcc0d7eb85664be6751f5b76a0f5eb3479e2')

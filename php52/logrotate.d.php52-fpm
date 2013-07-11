@@ -1,0 +1,6 @@
+/var/log/php-fpm.log {
+	missingok
+	postrotate
+	/usr/bin/kill -USR1 $(cat /run/php52-fpm/php-fpm.pid) >/dev/null || true
+	endscript
+}

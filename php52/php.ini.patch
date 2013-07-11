@@ -5,7 +5,7 @@
  ; or per-virtualhost web server configuration file. This directive is
  ; *NOT* affected by whether Safe Mode is turned On or Off.
 -;open_basedir =
-+open_basedir = /srv/http/:/home/:/tmp/:/usr/share/pear/
++open_basedir = /srv/http/:/home/:/tmp/:/opt/php52/pear/
  
  ; This directive allows you to disable certain functions for security reasons.
  ; It receives a comma-delimited list of function names. This directive is
@@ -14,7 +14,7 @@
  
  ; UNIX: "/path1:/path2"
 -;include_path = ".:/php/includes"
-+include_path = ".:/usr/share/pear"
++include_path = ".:/opt/php52/share/pear"
  ;
  ; Windows: "\path1;\path2"
  ;include_path = ".;c:\php\includes"
@@ -23,7 +23,7 @@
  
  ; Directory in which the loadable extensions (modules) reside.
 -extension_dir = "./"
-+extension_dir = "/usr/lib/php/modules"
++extension_dir = "/opt/php52/modules"
  
  ; Whether or not to enable the dl() function.  The dl() function does NOT work
  ; properly in multithreaded servers, such as IIS or Zeus, and is automatically

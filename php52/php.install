@@ -13,7 +13,6 @@ post_install() {
         * curl               : curl
         * dba                : gdbm
         * gd                 : libpng, libjpeg, freetype2
-        * imap               : pam
         * ldap               : libldap
         * mcrypt             : mcrypt, libtool
         * mysql/mysqli       : libmysqlclient
