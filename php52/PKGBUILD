@@ -34,7 +34,7 @@ makedepends=('postgresql-libs' 'libmysqlclient'
 source=("http://www.php.net/distributions/php-${pkgver}.tar.bz2"
         "http://download.suhosin.org/suhosin-patch-${_suhosinver}.patch.gz"
         "http://php-fpm.org/downloads/php-${pkgver}-fpm-${_fpmversion}.diff.gz"
-        'php.ini.patch'
+        'php.ini'
         'php-pcre.patch'
         'libpng14.patch'
         'php52-libxml.patch'
@@ -57,9 +57,6 @@ prepare() {
 
 	# apply fpm patch
 	patch -p1 -i "${srcdir}/php-${pkgver}-fpm-${_fpmversion}.diff"
-
-	# adjust paths
-	patch -p0 -i "${srcdir}/php.ini.patch"
 
 	# pcre fix
 	patch -p0 -i "${srcdir}/php-pcre.patch"
@@ -204,7 +201,7 @@ package_php52() {
 	make -j1 INSTALL_ROOT="${pkgdir}" install
 	install -d -m755 "${pkgdir}/usr/share/pear"
 	# install php.ini
-	install -D -m644 "${srcdir}/php-${pkgver}/php.ini-recommended" "${pkgdir}/etc/php52/php.ini"
+	install -D -m644 "${srcdir}/php.ini" "${pkgdir}/etc/php52/php.ini"
 	install -d -m755 "${pkgdir}/etc/php52/conf.d/"
 
 	# remove static modules
@@ -327,7 +324,7 @@ package_php52-xsl() {
 sha256sums=('e81beb13ec242ab700e56f366e9da52fd6cf18961d155b23304ca870e53f116c'
             'aae115a318d80b3f32cedf876e7a8e4b932febb1b0c743c0b398003ebe122f91'
             '4f3442588138705bd4f8a2b976c4240b24e9d3d2644f202d2d3ea1ee62e46eec'
-            '85c307108bb452dff8307d6eae9aedb96270ca9c08f98e6eac8fefe1104642fc'
+            '9d7336b7ac06dd38ea5b0ff7f5340aba8c946807cd7fddc3c7275ff9c8d2bab2'
             '0a2c4dfc9dd481ac141809e0ddd80bb43f078056efa16933f53de5f76f3e5c6c'
             '1c468e728aa09f2856756e797cf2ab475c9c9740a77ba122993532b94c60898d'
             '2e5a18e8cb2cc444b6648100ee6a34d7b5ed9166242f3fdbf1835832654ba6ba'

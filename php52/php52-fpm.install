@@ -1,6 +1,6 @@
 post_install() {
 	if [[ ! -d run/php52-fpm ]]; then
-		usr/bin/systemd-tmpfiles --create usr/lib/tmpfiles.d/php52-fpm.conf
+		usr/bin/systemd-tmpfiles --create php52-fpm.conf
 	fi
 }
 
