@@ -1,0 +1,35 @@
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgname=php52-xcache
+pkgver=2.0.0
+pkgrel=1
+arch=('i686' 'x86_64')
+pkgdesc='A PHP opcode cacher'
+url='http://xcache.lighttpd.net/'
+depends=('php52')
+license=('custom')
+source=("http://xcache.lighttpd.net/pub/Releases/${pkgver}/xcache-${pkgver}.tar.bz2"
+        'xcache.ini')
+backup=('etc/php52/conf.d/xcache.ini')
+
+build() {
+	cd "$srcdir/xcache-$pkgver"
+	/opt/php52/bin/phpize
+	./configure --with-php-config=/opt/php52/bin/php-config
+	make
+}
+
+package() {
+	cd "$srcdir/xcache-$pkgver"
+	make EXTENSION_DIR="$(/opt/php52/bin/php-config --extension-dir)" INSTALL_ROOT="$pkgdir" install
+
+	install -Dm644 "$srcdir/xcache.ini" "$pkgdir/etc/php52/conf.d/xcache.ini"
+
+	install -dm755 "$pkgdir/opt/php52/share/xcache/admin"
+	cp -r admin/* "$pkgdir/opt/php52/share/xcache/admin/"
+
+	install -Dm644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+}
+
+sha256sums=('ca26b0772d8b88223f281f5099a3b7d9f4b6597a87ae857301271c1fd5a3f64a'
+            'c8c843335028b1da1965ff71b73b42fc4bc45be08bf9ec3f71aff5744a428176')
