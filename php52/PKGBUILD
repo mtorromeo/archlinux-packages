@@ -199,7 +199,7 @@ package_php52() {
 
 	cd "${srcdir}/build-php"
 	make -j1 INSTALL_ROOT="${pkgdir}" install
-	install -d -m755 "${pkgdir}/usr/share/pear"
+	
 	# install php.ini
 	install -D -m644 "${srcdir}/php.ini" "${pkgdir}/etc/php52/php.ini"
 	install -d -m755 "${pkgdir}/etc/php52/conf.d/"
