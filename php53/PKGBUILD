@@ -1,16 +1,9 @@
-# $Id$
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 
-# AUR split packages no likey.
-# This will shove 'em down its throat.
-pkgname=php53
-
-true && pkgbase=php53
-true && pkgname=('php53'
+pkgbase=php53
+pkgname=('php53'
          'php53-cgi'
-         'php53-apache'
          'php53-fpm'
-         'php53-embed'
          'php53-pear'
          'php53-enchant'
          'php53-gd'
@@ -25,18 +18,18 @@ true && pkgname=('php53'
          'php53-sqlite'
          'php53-tidy'
          'php53-xsl')
-pkgver=5.3.24
+pkgver=5.3.27
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
-makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix'
+makedepends=('imap' 'postgresql-libs' 'libldap' 'postfix'
              'sqlite' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'file' 'freetds'
              'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
              'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'freetype2'
              'pkg-config')
 source=("http://www.php.net/distributions/${pkgbase%53}-${pkgver}.tar.bz2"
-        'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
+        'php.ini.patch' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
         
 prepare() {
@@ -52,12 +45,12 @@ prepare() {
 
 build() {
 	local _phpconfig="--srcdir=../${pkgbase%53}-${pkgver} \
-		--prefix=/usr \
-		--sysconfdir=/etc/php \
+		--prefix=/opt/php53 \
+		--sysconfdir=/etc/php53 \
 		--localstatedir=/var \
 		--with-layout=GNU \
-		--with-config-file-path=/etc/php \
-		--with-config-file-scan-dir=/etc/php/conf.d \
+		--with-config-file-path=/etc/php53 \
+		--with-config-file-scan-dir=/etc/php53/conf.d \
 		--enable-inline-optimization \
 		--disable-debug \
 		--disable-rpath \
@@ -134,8 +127,8 @@ build() {
 		--without-db3 \
 		"
 
-	export EXTENSION_DIR=/usr/lib/php/modules
-	export PEAR_INSTALLDIR=/usr/share/pear
+	export EXTENSION_DIR=/opt/php53/modules
+	export PEAR_INSTALLDIR=/opt/php53/pear
 	export CPPFLAGS="$CPPFLAGS -O2"
 
 	msg2 "Building CLI"
@@ -162,17 +155,6 @@ build() {
 		${_phpextensions}
 	make
 
-	msg2 "Building apache API"
-	cd "$srcdir"
-	rm -rf build-apache
-	cp -a build-php build-apache
-	cd build-apache
-	./configure ${_phpconfig} \
-		--disable-cli \
-		--with-apxs2 \
-		${_phpextensions}
-	make
-
 	msg2 "Building FPM API"
 	cd "$srcdir"
 	rm -rf build-fpm
@@ -183,17 +165,6 @@ build() {
 		--enable-fpm \
 		--with-fpm-user=http \
 		--with-fpm-group=http \
-		${_phpextensions}
-	make
-
-	msg2 "Building embed API"
-	cd "$srcdir"
-	rm -rf build-embed
-	cp -a build-php build-embed
-	cd build-embed
-	./configure ${_phpconfig} \
-		--disable-cli \
-		--enable-embed=shared \
 		${_phpextensions}
 	make
 
@@ -219,84 +190,46 @@ build() {
 package_php53() {
 	pkgdesc='An HTML-embedded scripting language'
 	depends=('pcre' 'libxml2' 'bzip2' 'curl')
-	replaces=('php' 'php-fileinfo' 'php-gmp' 'php-curl')
-	provides=('php' 'php-fileinfo' 'php-gmp' 'php-curl')
-	conflicts=('php' 'php-fileinfo' 'php-gmp' 'php-curl')
-	backup=('etc/php/php.ini')
+	backup=('etc/php53/php.ini')
 
 	cd ${srcdir}/build-php
 	make -j1 INSTALL_ROOT=${pkgdir} install
-	install -d -m755 ${pkgdir}/usr/share/pear
+
 	# install php.ini
-	install -D -m644 ${srcdir}/${pkgbase%53}-${pkgver}/php.ini-production ${pkgdir}/etc/php/php.ini
-	install -d -m755 ${pkgdir}/etc/php/conf.d/
+	install -D -m644 ${srcdir}/${pkgbase%53}-${pkgver}/php.ini-production ${pkgdir}/etc/php53/php.ini
+	install -d -m755 ${pkgdir}/etc/php53/conf.d/
 
 	# remove static modules
-	rm -f ${pkgdir}/usr/lib/php/modules/*.a
+	rm -f ${pkgdir}/opt/php53/modules/*.a
 	# remove modules provided by sub packages
-	rm -f ${pkgdir}/usr/lib/php/modules/{enchant,gd,intl,ldap,mcrypt,mssql,odbc,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite3,pdo_sqlite,tidy,xsl}.so
-	# remove empty directory
-	rmdir ${pkgdir}/usr/include/php/include
+	rm -f ${pkgdir}/opt/php53/modules/{enchant,gd,intl,ldap,mcrypt,mssql,odbc,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite3,pdo_sqlite,tidy,xsl}.so
 }
 
 package_php53-cgi() {
 	pkgdesc='CGI and FCGI SAPI for PHP'
 	depends=('php53')
-	conflicts=('php-cgi')
-	replaces=('php-cgi')
-	provides=('php-cgi')
 
-	install -D -m755 ${srcdir}/build-cgi/sapi/cgi/php-cgi ${pkgdir}/usr/bin/php-cgi
-}
-
-package_php53-apache() {
-	pkgdesc='Apache SAPI for PHP'
-	depends=('php53' 'apache')
-	conflicts=('php-apache')
-        replaces=('php-apache')
-        provides=('php-apache')
-	backup=('etc/httpd/conf/extra/php5_module.conf')
-
-	install -D -m755 ${srcdir}/build-apache/libs/libphp5.so ${pkgdir}/usr/lib/httpd/modules/libphp5.so
-	install -D -m644 ${srcdir}/apache.conf ${pkgdir}/etc/httpd/conf/extra/php5_module.conf
+	install -D -m755 ${srcdir}/build-cgi/sapi/cgi/php-cgi ${pkgdir}/opt/php53/bin/php-cgi
 }
 
 package_php53-fpm() {
 	pkgdesc='FastCGI Process Manager for PHP'
 	depends=('php53' 'systemd')
-	conflicts=('php-fpm')
-	replaces=('php-fpm')
-	provides=('php-fpm')
-	backup=('etc/php/php-fpm.conf')
+	backup=('etc/php53/php-fpm.conf')
 	install='php-fpm.install'
 
-	install -D -m755 ${srcdir}/build-fpm/sapi/fpm/php-fpm ${pkgdir}/usr/sbin/php-fpm
-	install -D -m644 ${srcdir}/build-fpm/sapi/fpm/php-fpm.8 ${pkgdir}/usr/share/man/man8/php-fpm.8
-	install -D -m644 ${srcdir}/build-fpm/sapi/fpm/php-fpm.conf ${pkgdir}/etc/php/php-fpm.conf
-	install -D -m644 ${srcdir}/logrotate.d.php-fpm ${pkgdir}/etc/logrotate.d/php-fpm
-	install -d -m755 ${pkgdir}/etc/php/fpm.d
-	install -D -m644 ${srcdir}/php-fpm.tmpfiles ${pkgdir}/usr/lib/tmpfiles.d/php-fpm.conf
-	install -D -m644 ${srcdir}/php-fpm.service ${pkgdir}/usr/lib/systemd/system/php-fpm.service
-}
-
-package_php53-embed() {
-	pkgdesc='Embed SAPI for PHP'
-	depends=('php53')
-	conflicts=('php-embed')
-        replaces=('php-embed')
-        provides=('php-embed')
-
-	install -D -m755 ${srcdir}/build-embed/libs/libphp5.so ${pkgdir}/usr/lib/libphp5.so
-	install -D -m644 ${srcdir}/${pkgbase%53}-${pkgver}/sapi/embed/php_embed.h ${pkgdir}/usr/include/php/sapi/embed/php_embed.h
+	install -D -m755 ${srcdir}/build-fpm/sapi/fpm/php-fpm ${pkgdir}/opt/php53/bin/php-fpm
+	install -D -m644 ${srcdir}/build-fpm/sapi/fpm/php-fpm.conf ${pkgdir}/etc/php53/php-fpm.conf
+	install -D -m644 ${srcdir}/logrotate.d.php-fpm ${pkgdir}/etc/logrotate.d/php53-fpm
+	install -d -m755 ${pkgdir}/etc/php53/fpm.d
+	install -D -m644 ${srcdir}/php-fpm.tmpfiles ${pkgdir}/usr/lib/tmpfiles.d/php53-fpm.conf
+	install -D -m644 ${srcdir}/php-fpm.service ${pkgdir}/usr/lib/systemd/system/php53-fpm.service
 }
 
 package_php53-pear() {
 	pkgdesc='PHP Extension and Application Repository'
 	depends=('php53')
-	conflicts=('php-pear')
-        replaces=('php-pear')
-        provides=('php-pear')
-	backup=('etc/php/pear.conf')
+	backup=('etc/php53/pear.conf')
 
 	cd ${srcdir}/build-pear
 	make -j1 install-pear INSTALL_ROOT=${pkgdir}
@@ -308,128 +241,88 @@ package_php53-pear() {
 
 package_php53-enchant() {
 	depends=('php53' 'enchant')
-	conflicts=('php-enchant')
-        replaces=('php-enchant')
-        provides=('php-enchant')
 	pkgdesc='enchant module for PHP'
-	install -D -m755 ${srcdir}/build-php/modules/enchant.so ${pkgdir}/usr/lib/php/modules/enchant.so
+	install -D -m755 ${srcdir}/build-php/modules/enchant.so ${pkgdir}/opt/php53/modules/enchant.so
 }
 
 package_php53-gd() {
 	depends=('php53' 'libpng' 'libjpeg' 'freetype2')
-	conflicts=('php-gd')
-        replaces=('php-gd')
-        provides=('php-gd')
 	pkgdesc='gd module for PHP'
-	install -D -m755 ${srcdir}/build-php/modules/gd.so ${pkgdir}/usr/lib/php/modules/gd.so
+	install -D -m755 ${srcdir}/build-php/modules/gd.so ${pkgdir}/opt/php53/modules/gd.so
 }
 
 package_php53-intl() {
 	depends=('php53' 'icu')
-	conflicts=('php-intl')
-        replaces=('php-intl')
-        provides=('php-intl')
 	pkgdesc='intl module for PHP'
-	install -D -m755 ${srcdir}/build-php/modules/intl.so ${pkgdir}/usr/lib/php/modules/intl.so
+	install -D -m755 ${srcdir}/build-php/modules/intl.so ${pkgdir}/opt/php53/modules/intl.so
 }
 
 package_php53-ldap() {
 	depends=('php53' 'libldap')
-	conflicts=('php-ldap')
-        replaces=('php-ldap')
-        provides=('php-ldap')
 	pkgdesc='ldap module for PHP'
-	install -D -m755 ${srcdir}/build-php/modules/ldap.so ${pkgdir}/usr/lib/php/modules/ldap.so
+	install -D -m755 ${srcdir}/build-php/modules/ldap.so ${pkgdir}/opt/php53/modules/ldap.so
 }
 
 package_php53-mcrypt() {
 	depends=('php53' 'libmcrypt' 'libltdl')
-	conflicts=('php-mcrypt')
-        replaces=('php-mcrypt')
-        provides=('php-mcrypt')
 	pkgdesc='mcrypt module for PHP'
-	install -D -m755 ${srcdir}/build-php/modules/mcrypt.so ${pkgdir}/usr/lib/php/modules/mcrypt.so
+	install -D -m755 ${srcdir}/build-php/modules/mcrypt.so ${pkgdir}/opt/php53/modules/mcrypt.so
 }
 
 package_php53-mssql() {
 	depends=('php53' 'freetds')
-	conflicts=('php-mssql')
-        replaces=('php-mssql')
-        provides=('php-mssql')
 	pkgdesc='mssql module for PHP'
-	install -D -m755 ${srcdir}/build-php/modules/mssql.so ${pkgdir}/usr/lib/php/modules/mssql.so
+	install -D -m755 ${srcdir}/build-php/modules/mssql.so ${pkgdir}/opt/php53/modules/mssql.so
 }
 
 package_php53-odbc() {
 	depends=('php53' 'unixodbc')
-	conflicts=('php-odbc')
-        replaces=('php-odbc')
-        provides=('php-odbc')
 	pkgdesc='ODBC modules for PHP'
-	install -D -m755 ${srcdir}/build-php/modules/odbc.so ${pkgdir}/usr/lib/php/modules/odbc.so
-	install -D -m755 ${srcdir}/build-php/modules/pdo_odbc.so ${pkgdir}/usr/lib/php/modules/pdo_odbc.so
+	install -D -m755 ${srcdir}/build-php/modules/odbc.so ${pkgdir}/opt/php53/modules/odbc.so
+	install -D -m755 ${srcdir}/build-php/modules/pdo_odbc.so ${pkgdir}/opt/php53/modules/pdo_odbc.so
 }
 
 package_php53-pgsql() {
 	depends=('php53' 'postgresql-libs')
-	conflicts=('php-pgsql')
-        replaces=('php-pgsql')
-        provides=('php-pgsql')
 	pkgdesc='PostgreSQL modules for PHP'
-	install -D -m755 ${srcdir}/build-php/modules/pgsql.so ${pkgdir}/usr/lib/php/modules/pgsql.so
-	install -D -m755 ${srcdir}/build-php/modules/pdo_pgsql.so ${pkgdir}/usr/lib/php/modules/pdo_pgsql.so
+	install -D -m755 ${srcdir}/build-php/modules/pgsql.so ${pkgdir}/opt/php53/modules/pgsql.so
+	install -D -m755 ${srcdir}/build-php/modules/pdo_pgsql.so ${pkgdir}/opt/php53/modules/pdo_pgsql.so
 }
 
 package_php53-pspell() {
 	depends=('php53' 'aspell')
-	conflicts=('php-aspell')
-        replaces=('php-aspell')
-        provides=('php-aspell')
 	pkgdesc='pspell module for PHP'
-	install -D -m755 ${srcdir}/build-php/modules/pspell.so ${pkgdir}/usr/lib/php/modules/pspell.so
+	install -D -m755 ${srcdir}/build-php/modules/pspell.so ${pkgdir}/opt/php53/modules/pspell.so
 }
 
 package_php53-snmp() {
 	depends=('php53' 'net-snmp')
-	conflicts=('php-snmp')
-        replaces=('php-snmp')
-        provides=('php-snmp')
 	pkgdesc='snmp module for PHP'
-	install -D -m755 ${srcdir}/build-php/modules/snmp.so ${pkgdir}/usr/lib/php/modules/snmp.so
+	install -D -m755 ${srcdir}/build-php/modules/snmp.so ${pkgdir}/opt/php53/modules/snmp.so
 }
 
 package_php53-sqlite() {
 	depends=('php53' 'sqlite')
-	conflicts=('php-sqlite')
-        replaces=('php-sqlite')
-        provides=('php-sqlite')
 	pkgdesc='sqlite module for PHP'
-	install -D -m755 ${srcdir}/build-php/modules/sqlite3.so ${pkgdir}/usr/lib/php/modules/sqlite3.so
-	install -D -m755 ${srcdir}/build-php/modules/pdo_sqlite.so ${pkgdir}/usr/lib/php/modules/pdo_sqlite.so
+	install -D -m755 ${srcdir}/build-php/modules/sqlite3.so ${pkgdir}/opt/php53/modules/sqlite3.so
+	install -D -m755 ${srcdir}/build-php/modules/pdo_sqlite.so ${pkgdir}/opt/php53/modules/pdo_sqlite.so
 }
 
 package_php53-tidy() {
 	depends=('php53' 'tidyhtml')
-	conflicts=('php-tidy')
-        replaces=('php-tidy')
-        provides=('php-tidy')
 	pkgdesc='tidy module for PHP'
-	install -D -m755 ${srcdir}/build-php/modules/tidy.so ${pkgdir}/usr/lib/php/modules/tidy.so
+	install -D -m755 ${srcdir}/build-php/modules/tidy.so ${pkgdir}/opt/php53/modules/tidy.so
 }
 
 package_php53-xsl() {
 	depends=('php53' 'libxslt')
-	conflicts=('php-xsl')
-        replaces=('php-xsl')
-        provides=('php-xsl')
 	pkgdesc='xsl module for PHP'
-	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/usr/lib/php/modules/xsl.so
+	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/opt/php53/modules/xsl.so
 }
 
-sha256sums=('fc3bcadf19c35827b130acb92c90777077e10a6c6ab10535164b2ee3c3875703'
+sha256sums=('e12db21c623b82a2244c4dd9b06bb75af20868c1b748a105a6829a5acc36b287'
             '6cd0bc90bd7a307154aaba596dbe23bcfa9977c989bc49ff0f926e10868ef6fd'
-            '8b5b15f1c348d8897d837ea9894157d9630dc542bbb0dbc7ad93c5dc0235d1d5'
-            '686d3612779d97d294c23036c5e289833049623680e14125d4c4196e3318ef4e'
-            '9a4fd21f5491484ccad1e923ff3c4ce4ced514fe5d9bd8978a55dc4d8c2b0fd8'
-            'aa4836da95f8678856704c385693465c39d02f86a0edcdbe42a49033c729bbd8'
+            '3179973015d22869e7182ed04add701f68b48651d3ea33a508830024b85e3caa'
+            '2608db714797c9ffc65dd6a7119221738b7de5abe55f105986bdd50152d6b7c8'
+            '1ec4a5d6f65257bccc5ea691014ca773d3bacc2eb9a60b2138f2b7d42b715448'
             '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5')
