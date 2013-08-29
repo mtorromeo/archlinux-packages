@@ -2,22 +2,22 @@ _cfgdir=/etc/nginx
 _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
-pkgver=1.4.1
+pkgver=1.4.2
 pkgrel=1
-_naxsiver=0.49
 _uploadprogver=0.9.0
 _cachepurgever=2.1
+_modver=2.7.5
 pkgdesc="Lightweight HTTP server and IMAP/POP3 proxy server with some additional modules"
 arch=('i686' 'x86_64')
 depends=('pcre' 'zlib' 'openssl')
-makedepends=('git' 'passenger')
-optdepends=('passenger')
+makedepends=('git')
 url="http://nginx.org"
 license=('custom')
 conflicts=('nginx')
 provides=('nginx')
 
-backup=(${_cfgdir:1}/fastcgi.conf
+backup=(${_cfgdir:1}/modsec-recommended.conf
+        ${_cfgdir:1}/fastcgi.conf
         ${_cfgdir:1}/fastcgi_params
         ${_cfgdir:1}/koi-win
         ${_cfgdir:1}/koi-utf
@@ -26,25 +26,38 @@ backup=(${_cfgdir:1}/fastcgi.conf
         ${_cfgdir:1}/scgi_params
         ${_cfgdir:1}/uwsgi_params
         ${_cfgdir:1}/win-utf
-        ${_cfgdir:1}/naxsi_core.rules
-        ${_cfgdir:1}/naxsi.conf
         etc/logrotate.d/nginx)
 
 source=(http://nginx.org/download/nginx-$pkgver.tar.gz
-        http://naxsi.googlecode.com/files/naxsi-core-$_naxsiver.tgz
-        http://naxsi.googlecode.com/files/naxsi-ui-$_naxsiver.tgz
+		https://github.com/SpiderLabs/ModSecurity/archive/$_modver.tar.gz
         nginx-upload-progress-$_uploadprogver.tgz::https://github.com/masterzen/nginx-upload-progress-module/tarball/v$_uploadprogver
         http://labs.frickle.com/files/ngx_cache_purge-$_cachepurgever.tar.gz
+        modsec-recommended.conf
         service
         nginx.logrotate)
 
 build() {
 	local _modules=(
-		--add-module=/usr/lib/passenger/ext/nginx
-		--add-module=../naxsi-core-$_naxsiver/naxsi_src
 		--add-module=../masterzen-nginx-upload-progress-module-a788dea/
 		--add-module=../ngx_cache_purge-$_cachepurgever
 	)
+
+	msg "Compiling mod-security"
+	_modules=(${_modules[@]} --add-module=../ModSecurity-$_modver/nginx/modsecurity)
+	cd "$srcdir/ModSecurity-$_modver"
+	sh autogen.sh
+ 	CFLAGS="-g -O0" ./configure \
+		--prefix=/usr \
+		--enable-standalone-module \
+		--disable-apache2-module \
+		--enable-pcre-study \
+		--enable-pcre-jit \
+		--enable-pcre-match-limit=1000 \
+		--enable-pcre-match-limit-recursion=1000 \
+		--enable-lua-cache
+	sed -r '/\$\$base/d' -i standalone/Makefile
+ 	make
+ 	make DESTDIR="$srcdir/ModSecurity-$_modver/install" install
 
 	cd "$srcdir"
 
@@ -72,7 +85,7 @@ build() {
 
 	msg "Building nginx"
 
-	./configure \
+	CFLAGS="-I /usr/include/httpd -I /usr/include/apr-1" ./configure \
         --prefix=$_cfgdir \
         --conf-path=$_cfgdir/nginx.conf \
         --sbin-path=/usr/bin/nginx \
@@ -117,6 +130,11 @@ package() {
 	cd "$srcdir"/nginx-$pkgver
 	make DESTDIR="$pkgdir" install
 
+	for bin in "$srcdir/ModSecurity-$_modver"/install/usr/bin/*; do
+		binname=$(basename "$bin")
+		install -Dm755 "$bin" "$pkgdir/usr/bin/$binname"
+	done
+
 	sed -e 's|\<user\s\+\w\+;|user html;|g' \
 	    -e '2s|worker_processes  1|worker_processes auto|' \
 	    -e '44s|html|/usr/share/nginx/html|' \
@@ -124,30 +142,27 @@ package() {
 	    -i "$pkgdir"$_cfgdir/nginx.conf
 	rm "$pkgdir"/etc/nginx/*.default
 
+	install -Dm644 "$srcdir/modsec-recommended.conf" "$pkgdir/$_cfgdir/modsec-recommended.conf"
+
 	install -d "$pkgdir"/$_tmpdir
-	install -dm700 "$pkgdir"/$_tmpdir/proxy
+	install -dm700 -o http "$pkgdir"/$_tmpdir/{proxy,modsecurity/{suspicious,msa}}
 	
-	chmod 750 "$pkgdir"/var/log/nginx
-	chown http:log "$pkgdir"/var/log/nginx
+	install -d "$pkgdir"/var/log
+	install -dm750 -o http -g log "$pkgdir"/var/log/nginx/modsec
 
 	install -d "$pkgdir"/usr/share/nginx
 	mv "$pkgdir"/etc/nginx/html/ "$pkgdir"/usr/share/nginx
 
-	install -Dm644 "$srcdir"/naxsi-core-$_naxsiver/naxsi_config/default_location_config.example "$pkgdir$_cfgdir/naxsi.conf"
-	install -Dm644 "$srcdir"/naxsi-core-$_naxsiver/naxsi_config/naxsi_core.rules "$pkgdir$_cfgdir/naxsi_core.rules"
-
-	cp -a "$srcdir"/naxsi-ui-$_naxsiver/naxsi-ui "$pkgdir"/usr/share/
-
-	install -Dm644 "$srcdir"/logrotate "$pkgdir"/etc/logrotate.d/nginx
+	install -Dm644 "$srcdir"/nginx.logrotate "$pkgdir"/etc/logrotate.d/nginx
 	install -Dm644 "$srcdir"/service "$pkgdir"/usr/lib/systemd/system/nginx.service
 	install -D -m644 LICENSE "$pkgdir"/usr/share/licenses/nginx/LICENSE
 	rm -rf "$pkgdir"/var/run
 }
 
-sha256sums=('bca5d1e89751ba29406185e1736c390412603a7e6b604f5b4575281f6565d119'
-            'bb0b63713d5a9446401d5acd1ef0882b9c2a0fc506502bbd88bc4663d273e9c7'
-            '54289f263a915b1222030bab97e4210619a893515da9ce41a1d9e95f8b87ddbe'
+sha256sums=('5361ffb7b0ebf8b1a04369bc3d1295eaed091680c1c58115f88d56c8e51f3611'
+            'cfe61feb6e26dbb8abd475acededc30d3dffe9fd8927d133029315ed20ef6722'
             '3fb903dab595cf6656fa0fc5743a48daffbba2f6b5c554836be630800eaad4e2'
             '424005af0c04e59ffa65a65e446081d4f95ee76a801a7555e001c67810bcb3b9'
+            '838637cc4f5fd9d3209720db23234d99972e95549d8ac8eb619474f66376e8b1'
             '05fdc0c0483410944b988d7f4beabb00bec4a44a41bd13ebc9b78585da7d3f9b'
             '9523a1fdd5eb61bf62f3049f6ee088b198e36d5edcce2d9b08bbeb2930aa5a16')
