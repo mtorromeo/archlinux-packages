@@ -23,7 +23,7 @@
  ; Directory in which the loadable extensions (modules) reside.
  ; http://php.net/extension-dir
 -; extension_dir = "./"
-+extension_dir = "/usr/lib/php/modules/"
++extension_dir = "/opt/php53/modules/"
  ; On windows:
  ; extension_dir = "ext"
  

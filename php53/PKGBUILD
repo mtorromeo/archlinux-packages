@@ -19,7 +19,7 @@ pkgname=('php53'
          'php53-tidy'
          'php53-xsl')
 pkgver=5.3.27
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -199,6 +199,9 @@ package_php53() {
 	install -D -m644 ${srcdir}/${pkgbase%53}-${pkgver}/php.ini-production ${pkgdir}/etc/php53/php.ini
 	install -d -m755 ${pkgdir}/etc/php53/conf.d/
 
+	# remove conflicting files
+	rm -rf ${pkgdir}/usr/share/man
+
 	# remove static modules
 	rm -f ${pkgdir}/opt/php53/modules/*.a
 	# remove modules provided by sub packages
@@ -321,8 +324,8 @@ package_php53-xsl() {
 }
 
 sha256sums=('e12db21c623b82a2244c4dd9b06bb75af20868c1b748a105a6829a5acc36b287'
-            '6cd0bc90bd7a307154aaba596dbe23bcfa9977c989bc49ff0f926e10868ef6fd'
+            '4c4caae7abd383a686b67f1478f0fb1ecc2c720753badae365792dd88f1de2ab'
             '3179973015d22869e7182ed04add701f68b48651d3ea33a508830024b85e3caa'
             '2608db714797c9ffc65dd6a7119221738b7de5abe55f105986bdd50152d6b7c8'
             '1ec4a5d6f65257bccc5ea691014ca773d3bacc2eb9a60b2138f2b7d42b715448'
-            '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5')
+            '2e35102a7fbe42a5e5ac90bd856746cad3720f32bc569bf3cdca3ee867cf6852')
