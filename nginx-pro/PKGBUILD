@@ -3,13 +3,13 @@ _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
 pkgver=1.4.2
-pkgrel=1
+pkgrel=2
 _uploadprogver=0.9.0
 _cachepurgever=2.1
 _modver=2.7.5
 pkgdesc="Lightweight HTTP server and IMAP/POP3 proxy server with some additional modules"
 arch=('i686' 'x86_64')
-depends=('pcre' 'zlib' 'openssl')
+depends=('pcre' 'zlib' 'openssl' 'apr-util' 'geoip')
 makedepends=('git')
 url="http://nginx.org"
 license=('custom')
