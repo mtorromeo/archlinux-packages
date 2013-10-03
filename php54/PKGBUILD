@@ -18,8 +18,8 @@ pkgname=('php54'
          'php54-sqlite'
          'php54-tidy'
          'php54-xsl')
-pkgver=5.4.19
-pkgrel=1
+pkgver=5.4.20
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -199,6 +199,12 @@ package_php54() {
 	install -D -m644 ${srcdir}/${pkgbase%54}-${pkgver}/php.ini-production ${pkgdir}/etc/php54/php.ini
 	install -d -m755 ${pkgdir}/etc/php54/conf.d/
 
+	# links
+	install -dm755 "$pkgdir/usr/bin"
+	for bin in php phar; do
+		ln -s /opt/php54/bin/$bin "$pkgdir/usr/bin/${bin}54"
+	done
+
 	# remove conflicting files
 	rm -rf ${pkgdir}/usr/share/man
 
@@ -240,6 +246,12 @@ package_php54-pear() {
 	while read i; do
 		[ ! -e "$i" ] || rm -rf "$i"
 	done < <(find ${pkgdir} -name '.*')
+
+	# links
+	install -dm755 "$pkgdir/usr/bin"
+	for bin in pear pecl; do
+		ln -s /opt/php54/bin/$bin "$pkgdir/usr/bin/${bin}54"
+	done
 }
 
 package_php54-enchant() {
@@ -323,8 +335,8 @@ package_php54-xsl() {
 	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/opt/php54/modules/xsl.so
 }
 
-sha256sums=('7a565360e64c5be5102ef948e7c732778a40850e709270e64be7a3a3207c029b'
-            '3325a6975c14811fc25a75eaefe3cd491646f2597d6875be53771c67e2093f32'
+sha256sums=('cd0e42cf8b01b2fe23d5acbb30e04d64e8df21b0b4093e28aef36743646759e1'
+            '754391c75a3304a6442492d4885b13b16ba2cdf0d0c7f0e605d9929a2035db9f'
             '8386e4d937ec909cadc9403a9eb50dc0aa278f02d8420eafed5734df94a7e3b7'
             '2608db714797c9ffc65dd6a7119221738b7de5abe55f105986bdd50152d6b7c8'
             '14e01c1b51be18885fe224c37d36f9408e3f05f9cb3bb482a0743345da002442'

@@ -1,5 +1,5 @@
---- php.ini-production	2012-03-29 06:17:59.000000000 +0200
-+++ php.ini-production	2012-03-30 10:46:21.181340861 +0200
+--- php.ini-production.orig	2013-09-18 07:48:57.000000000 +0200
++++ php.ini-production	2013-10-03 09:50:31.547151175 +0200
 @@ -305,7 +305,7 @@
  ; or per-virtualhost web server configuration file. This directive is
  ; *NOT* affected by whether Safe Mode is turned On or Off.
@@ -9,12 +9,39 @@
  
  ; This directive allows you to disable certain functions for security reasons.
  ; It receives a comma-delimited list of function names. This directive is
+@@ -372,7 +372,7 @@
+ ; threat in any way, but it makes it possible to determine whether you use PHP
+ ; on your server or not.
+ ; http://php.net/expose-php
+-expose_php = On
++expose_php = Off
+ 
+ ;;;;;;;;;;;;;;;;;;;
+ ; Resource Limits ;
+@@ -398,7 +398,7 @@
+ ;max_input_nesting_level = 64
+ 
+ ; How many GET/POST/COOKIE input variables may be accepted
+-; max_input_vars = 1000
++max_input_vars = 10000
+ 
+ ; Maximum amount of memory a script may consume (128MB)
+ ; http://php.net/memory-limit
+@@ -583,7 +583,7 @@
+ ; Example:
+ ;error_log = php_errors.log
+ ; Log errors to syslog (Event Log on NT, not valid in Windows 95).
+-;error_log = syslog
++error_log = syslog
+ 
+ ;windows.show_crt_warning
+ ; Default value: 0
 @@ -702,7 +702,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;
  
  ; UNIX: "/path1:/path2"
 -;include_path = ".:/php/includes"
-+include_path = ".:/usr/share/pear"
++include_path = ".:/opt/php54/share/pear"
  ;
  ; Windows: "\path1;\path2"
  ;include_path = ".;c:\php\includes"
@@ -27,7 +54,16 @@
  ; On windows:
  ; extension_dir = "ext"
  
-@@ -859,51 +859,47 @@
+@@ -797,7 +797,7 @@
+ 
+ ; Maximum allowed size for uploaded files.
+ ; http://php.net/upload-max-filesize
+-upload_max_filesize = 2M
++upload_max_filesize = 8M
+ 
+ ; Maximum number of files that can be uploaded via a single request
+ max_file_uploads = 20
+@@ -859,50 +859,47 @@
  ; If you only provide the name of the extension, PHP will look for it in its
  ; default extension directory.
  ;
@@ -75,9 +111,8 @@
 -;extension=php_tidy.dll
 -;extension=php_xmlrpc.dll
 -;extension=php_xsl.dll
--;extension=php_zip.dll
 +;extension=bcmath.so
-+;extension=bz2.so
++extension=bz2.so
 +;extension=calendar.so
 +extension=curl.so
 +;extension=dba.so
