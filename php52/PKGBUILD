@@ -17,10 +17,8 @@ pkgname=('php52'
          'php52-sqlite'
          'php52-tidy'
          'php52-xsl')
-
-pkgname=php52
 pkgver=5.2.17
-pkgrel=9
+pkgrel=10
 _suhosinver=5.2.16-0.9.7
 _fpmversion=0.5.14
 pkgdesc='A high-level scripting language with FastCGI Process Manager'
@@ -194,6 +192,7 @@ build() {
 
 package_php52() {
 	pkgdesc='An HTML-embedded scripting language'
+	provides="php=$pkgver"
 	depends=('pcre' 'libxml2' 'bzip2' 'openssl')
 	backup=('etc/php52/php.ini')
 
@@ -212,6 +211,7 @@ package_php52() {
 
 package_php52-cgi() {
 	pkgdesc='CGI and FCGI SAPI for PHP'
+	provides="php-cgi=$pkgver"
 	depends=('php52' 'pcre' 'libxml2')
 
 	install -D -m755 "${srcdir}/build-cgi/sapi/cgi/php-cgi" "${pkgdir}/opt/php52/bin/php-cgi"
@@ -219,6 +219,7 @@ package_php52-cgi() {
 
 package_php52-fpm() {
 	pkgdesc='FastCGI Process Manager for PHP'
+	provides="php-fpm=$pkgver"
 	depends=('php52-cgi')
 	backup=('etc/php52/php-fpm.conf')
 	install='php52-fpm.install'
@@ -232,6 +233,7 @@ package_php52-fpm() {
 
 package_php52-pear() {
 	pkgdesc='PHP Extension and Application Repository'
+	provides="php-pear=$pkgver"
 	depends=('php52' 'bash')
 	backup=('etc/php52/pear.conf')
 
@@ -244,36 +246,42 @@ package_php52-pear() {
 }
 
 package_php52-curl() {
+	provides="php-curl=$pkgver"
 	depends=('php52' 'curl')
 	pkgdesc='curl module for PHP'
 	install -D -m755 "${srcdir}/build-php/modules/curl.so" "${pkgdir}/opt/php52/modules/curl.so"
 }
 
 package_php52-gd() {
+	provides="php-gd=$pkgver"
 	depends=('php52' 'libpng' 'libjpeg' 'freetype2')
 	pkgdesc='gd module for PHP'
 	install -D -m755 "${srcdir}/build-php/modules/gd.so" "${pkgdir}/opt/php52/modules/gd.so"
 }
 
 package_php52-gmp() {
+	provides="php-gmp=$pkgver"
 	depends=('php52' 'gmp')
 	pkgdesc='gmp module for PHP'
 	install -D -m755 "${srcdir}/build-php/modules/gmp.so" "${pkgdir}/opt/php52/modules/gmp.so"
 }
 
 package_php52-ldap() {
+	provides="php-ldap=$pkgver"
 	depends=('php52' 'libldap')
 	pkgdesc='ldap module for PHP'
 	install -D -m755 "${srcdir}/build-php/modules/ldap.so" "${pkgdir}/opt/php52/modules/ldap.so"
 }
 
 package_php52-mcrypt() {
+	provides="php-mcrypt=$pkgver"
 	depends=('php52' 'libmcrypt' 'libtool')
 	pkgdesc='mcrypt module for PHP'
 	install -D -m755 "${srcdir}/build-php/modules/mcrypt.so" "${pkgdir}/opt/php52/modules/mcrypt.so"
 }
 
 package_php52-odbc() {
+	provides="php-odbc=$pkgver"
 	depends=('php52' 'unixodbc')
 	pkgdesc='ODBC modules for PHP'
 	install -D -m755 "${srcdir}/build-php/modules/odbc.so" "${pkgdir}/opt/php52/modules/odbc.so"
@@ -281,6 +289,7 @@ package_php52-odbc() {
 }
 
 package_php52-pgsql() {
+	provides="php-pgsql=$pkgver"
 	depends=('php52' 'postgresql-libs')
 	pkgdesc='PostgreSQL modules for PHP'
 	install -D -m755 "${srcdir}/build-php/modules/pgsql.so" "${pkgdir}/opt/php52/modules/pgsql.so"
@@ -288,18 +297,21 @@ package_php52-pgsql() {
 }
 
 package_php52-pspell() {
+	provides="php-pspell=$pkgver"
 	depends=('php52' 'aspell')
 	pkgdesc='pspell module for PHP'
 	install -D -m755 "${srcdir}/build-php/modules/pspell.so" "${pkgdir}/opt/php52/modules/pspell.so"
 }
 
 package_php52-snmp() {
+	provides="php-snmp=$pkgver"
 	depends=('php52' 'net-snmp')
 	pkgdesc='snmp module for PHP'
 	install -D -m755 "${srcdir}/build-php/modules/snmp.so" "${pkgdir}/opt/php52/modules/snmp.so"
 }
 
 package_php52-sqlite() {
+	provides="php-sqlite=$pkgver"
 	depends=('php52' 'sqlite3')
 	pkgdesc='sqlite3 module for PHP'
 	install -D -m755 "${srcdir}/build-php/modules/sqlite.so" "${pkgdir}/opt/php52/modules/sqlite.so"
@@ -307,12 +319,14 @@ package_php52-sqlite() {
 }
 
 package_php52-tidy() {
+	provides="php-tidy=$pkgver"
 	depends=('php52' 'tidyhtml')
 	pkgdesc='tidy module for PHP'
 	install -D -m755 "${srcdir}/build-php/modules/tidy.so" "${pkgdir}/opt/php52/modules/tidy.so"
 }
 
 package_php52-xsl() {
+	provides="php-xsl=$pkgver"
 	depends=('php52' 'libxslt')
 	pkgdesc='xsl module for PHP'
 	install -D -m755 "${srcdir}/build-php/modules/xsl.so" "${pkgdir}/opt/php52/modules/xsl.so"

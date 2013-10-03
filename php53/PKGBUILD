@@ -19,7 +19,7 @@ pkgname=('php53'
          'php53-tidy'
          'php53-xsl')
 pkgver=5.3.27
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -189,6 +189,7 @@ build() {
 
 package_php53() {
 	pkgdesc='An HTML-embedded scripting language'
+	provides="php=$pkgver"
 	depends=('pcre' 'libxml2' 'bzip2' 'curl')
 	backup=('etc/php53/php.ini')
 
@@ -210,6 +211,7 @@ package_php53() {
 
 package_php53-cgi() {
 	pkgdesc='CGI and FCGI SAPI for PHP'
+	provides="php-cgi=$pkgver"
 	depends=('php53')
 
 	install -D -m755 ${srcdir}/build-cgi/sapi/cgi/php-cgi ${pkgdir}/opt/php53/bin/php-cgi
@@ -217,6 +219,7 @@ package_php53-cgi() {
 
 package_php53-fpm() {
 	pkgdesc='FastCGI Process Manager for PHP'
+	provides="php-fpm=$pkgver"
 	depends=('php53' 'systemd')
 	backup=('etc/php53/php-fpm.conf')
 	install='php-fpm.install'
@@ -231,6 +234,7 @@ package_php53-fpm() {
 
 package_php53-pear() {
 	pkgdesc='PHP Extension and Application Repository'
+	provides="php-pear=$pkgver"
 	depends=('php53')
 	backup=('etc/php53/pear.conf')
 
@@ -243,42 +247,49 @@ package_php53-pear() {
 }
 
 package_php53-enchant() {
+	provides="php-enchant=$pkgver"
 	depends=('php53' 'enchant')
 	pkgdesc='enchant module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/enchant.so ${pkgdir}/opt/php53/modules/enchant.so
 }
 
 package_php53-gd() {
+	provides="php-gd=$pkgver"
 	depends=('php53' 'libpng' 'libjpeg' 'freetype2')
 	pkgdesc='gd module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/gd.so ${pkgdir}/opt/php53/modules/gd.so
 }
 
 package_php53-intl() {
+	provides="php-intl=$pkgver"
 	depends=('php53' 'icu')
 	pkgdesc='intl module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/intl.so ${pkgdir}/opt/php53/modules/intl.so
 }
 
 package_php53-ldap() {
+	provides="php-ldap=$pkgver"
 	depends=('php53' 'libldap')
 	pkgdesc='ldap module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/ldap.so ${pkgdir}/opt/php53/modules/ldap.so
 }
 
 package_php53-mcrypt() {
+	provides="php-mcrypt=$pkgver"
 	depends=('php53' 'libmcrypt' 'libltdl')
 	pkgdesc='mcrypt module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/mcrypt.so ${pkgdir}/opt/php53/modules/mcrypt.so
 }
 
 package_php53-mssql() {
+	provides="php-mssql=$pkgver"
 	depends=('php53' 'freetds')
 	pkgdesc='mssql module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/mssql.so ${pkgdir}/opt/php53/modules/mssql.so
 }
 
 package_php53-odbc() {
+	provides="php-odbc=$pkgver"
 	depends=('php53' 'unixodbc')
 	pkgdesc='ODBC modules for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/odbc.so ${pkgdir}/opt/php53/modules/odbc.so
@@ -286,6 +297,7 @@ package_php53-odbc() {
 }
 
 package_php53-pgsql() {
+	provides="php-pgsql=$pkgver"
 	depends=('php53' 'postgresql-libs')
 	pkgdesc='PostgreSQL modules for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/pgsql.so ${pkgdir}/opt/php53/modules/pgsql.so
@@ -293,18 +305,21 @@ package_php53-pgsql() {
 }
 
 package_php53-pspell() {
+	provides="php-pspell=$pkgver"
 	depends=('php53' 'aspell')
 	pkgdesc='pspell module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/pspell.so ${pkgdir}/opt/php53/modules/pspell.so
 }
 
 package_php53-snmp() {
+	provides="php-snmp=$pkgver"
 	depends=('php53' 'net-snmp')
 	pkgdesc='snmp module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/snmp.so ${pkgdir}/opt/php53/modules/snmp.so
 }
 
 package_php53-sqlite() {
+	provides="php-sqlite=$pkgver"
 	depends=('php53' 'sqlite')
 	pkgdesc='sqlite module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/sqlite3.so ${pkgdir}/opt/php53/modules/sqlite3.so
@@ -312,12 +327,14 @@ package_php53-sqlite() {
 }
 
 package_php53-tidy() {
+	provides="php-tidy=$pkgver"
 	depends=('php53' 'tidyhtml')
 	pkgdesc='tidy module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/tidy.so ${pkgdir}/opt/php53/modules/tidy.so
 }
 
 package_php53-xsl() {
+	provides="php-xsl=$pkgver"
 	depends=('php53' 'libxslt')
 	pkgdesc='xsl module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/opt/php53/modules/xsl.so
