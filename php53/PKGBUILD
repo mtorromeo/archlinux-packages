@@ -3,6 +3,7 @@
 pkgbase=php53
 pkgname=('php53'
          'php53-cgi'
+         'php53-apache'
          'php53-fpm'
          'php53-pear'
          'php53-enchant'
@@ -23,22 +24,22 @@ pkgrel=3
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
-makedepends=('imap' 'postgresql-libs' 'libldap' 'postfix'
+makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix'
              'sqlite' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'file' 'freetds'
              'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
              'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'freetype2'
              'pkg-config')
 source=("http://www.php.net/distributions/${pkgbase%53}-${pkgver}.tar.bz2"
-        'php.ini.patch' 'php-fpm.conf.in.patch'
+        'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
-        
+
 prepare() {
 	cd ${srcdir}/${pkgbase%53}-${pkgver}
 
 	# adjust paths
 	patch -p0 -i ${srcdir}/php.ini.patch
 	patch -p0 -i ${srcdir}/php-fpm.conf.in.patch
-	
+
 	# workaround for pkg-config 0.28
 	sed 's/ && test -n "$OPENSSL_INCS"//g' -i configure
 }
@@ -155,6 +156,15 @@ build() {
 		${_phpextensions}
 	make
 
+	# apache
+	cp -a ${srcdir}/build-php ${srcdir}/build-apache
+	cd ${srcdir}/build-apache
+	./configure ${_phpconfig} \
+		--disable-cli \
+		--with-apxs2 \
+		${_phpextensions}
+	make
+
 	msg2 "Building FPM API"
 	cd "$srcdir"
 	rm -rf build-fpm
@@ -215,6 +225,17 @@ package_php53-cgi() {
 	depends=('php53')
 
 	install -D -m755 ${srcdir}/build-cgi/sapi/cgi/php-cgi ${pkgdir}/opt/php53/bin/php-cgi
+}
+
+package_php53-apache() {
+	pkgdesc='Apache SAPI for PHP'
+	provides="php-apache=$pkgver"
+	conflicts="php-apache"
+	depends=('php53' 'apache')
+	backup=('etc/httpd/conf/extra/php5_module.conf')
+
+	install -D -m755 ${srcdir}/build-apache/libs/libphp5.so ${pkgdir}/usr/lib/httpd/modules/libphp5.so
+	install -D -m644 ${srcdir}/apache.conf ${pkgdir}/etc/httpd/conf/extra/php5_module.conf
 }
 
 package_php53-fpm() {
@@ -342,6 +363,7 @@ package_php53-xsl() {
 
 sha256sums=('e12db21c623b82a2244c4dd9b06bb75af20868c1b748a105a6829a5acc36b287'
             '4c4caae7abd383a686b67f1478f0fb1ecc2c720753badae365792dd88f1de2ab'
+            '6ee6ed48b8416390c56b2e32b75c79f85586431b5c44c48ed22ae6a8dbe68332'
             '3179973015d22869e7182ed04add701f68b48651d3ea33a508830024b85e3caa'
             '2608db714797c9ffc65dd6a7119221738b7de5abe55f105986bdd50152d6b7c8'
             '1ec4a5d6f65257bccc5ea691014ca773d3bacc2eb9a60b2138f2b7d42b715448'
