@@ -1,0 +1,10 @@
+post_install() {
+  post_upgrade $@
+}
+
+post_upgrade() {
+  VERSION="$(cut -d- -f1 <<<$1 | cut -d: -f2)"
+  echo ">>> Enable building of spl modules:"
+  echo ">>> $ dkms add spl/$VERSION"
+  echo ">>>"
+}

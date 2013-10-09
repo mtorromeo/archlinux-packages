@@ -1,0 +1,75 @@
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgbase=zfs
+pkgname=('zfs'
+         'zfs-dkms')
+pkgver=0.6.2
+pkgrel=1
+url="http://zfsonlinux.org"
+arch=("x86_64" "i686")
+license=("CDDL")
+
+source=("http://archive.zfsonlinux.org/downloads/zfsonlinux/$pkgbase/$pkgbase-$pkgver.tar.gz"
+        zfs.bash-completion
+        zfs.initcpio.install
+        zfs.initcpio.hook
+        zfs.service)
+
+prepare() {
+    cd "$srcdir"
+    rm -rf build
+    cp -a $pkgbase-$pkgver build
+}
+
+build() {
+    cd "$srcdir/$pkgbase-$pkgver"
+    ./scripts/dkms.mkconf -n $pkgbase -v $pkgver -f dkms.conf
+
+    cd "$srcdir/build"
+    ./autogen.sh
+    ./configure --prefix=/usr \
+                --sysconfdir=/etc \
+                --sbindir=/usr/bin \
+                --libdir=/usr/lib \
+                --datadir=/usr/share \
+                --includedir=/usr/include \
+                --with-udevdir=/lib/udev \
+                --libexecdir=/usr/lib/zfs-$pkgver \
+                --with-config=user
+    make
+}
+
+package_zfs() {
+    pkgdesc="ZFS utilities"
+    depends=("$pkgbase-dkms")
+
+    cd "$srcdir/build"
+    make DESTDIR="$pkgdir" install
+
+    cd "$pkgdir"
+
+    install -Dm644 "$srcdir/zfs.initcpio.hook" usr/lib/initcpio/hooks/zfs
+    install -Dm644 "$srcdir/zfs.initcpio.install" usr/lib/initcpio/install/zfs
+    install -Dm644 "$srcdir/zfs.service" usr/lib/systemd/system/zfs.service
+    install -Dm644 "$srcdir/zfs.bash-completion" usr/share/bash-completion/completions/zfs
+
+    cp -a {lib,usr}
+    mv sbin/* usr/bin
+
+    rm -r lib sbin etc/init.d usr/lib/dracut
+}
+
+package_zfs-dkms() {
+    pkgdesc="ZFS kernel modules (DKMS)"
+    install=$pkgbase-dkms.install
+    depends=("spl-dkms")
+
+    install -dm755 "$pkgdir/usr/src"
+    cp -a "$srcdir/$pkgbase-$pkgver" "$pkgdir/usr/src"
+}
+
+sha256sums=('6b8cd79486b3a51204fac07297b8c45aa8702b8dfade58f2098b5734517065a1'
+            '15e742477fad0104871fc055b6ce9bf803540070e47fa515ea7ca3c1a401f831'
+            '1ea6d2cdd27798680a96c9ebf18e9167b0575d032c7cfc731f16456cd38f2040'
+            'ab63abbd7fd8cb0a8293651947fda82a1b41d420cbb8e6c71c0fd3884ab43030'
+            '1207d544b22ef03ad33814dba3bd325fad8ada9f60cf59ade1a12b51ec25c172')
