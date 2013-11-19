@@ -1,0 +1,66 @@
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgname=docker-io
+pkgver=0.7
+
+commit=1fe08e004686b25aaf56bc01194629c0b7e658f9
+shortcommit=${commit:0:7}
+
+pkgrel=1
+pkgdesc="Automates deployment of containerized applications"
+arch=(x86_64)
+url="http://www.docker.io"
+license=('Apache')
+depends=(lxc)
+makedepends=(go python-sphinxcontrib-httpdomain)
+source=(https://github.com/dotcloud/docker/archive/$commit/docker-$shortcommit.tar.gz
+        docker.service)
+install=docker.install
+
+prepare() {
+	cd "$srcdir/docker-$commit"
+	rm -rf vendor
+
+	sed -r 's|github.com/dotcloud/tar|archive/tar|' -i utils/tarsum.go
+
+	export GOPATH="$srcdir/gocode"
+	go get github.com/gorilla/mux
+	go get github.com/kr/pty
+	go get code.google.com/p/go.net/websocket
+}
+
+build() {
+	rm -rf "$srcdir/build"
+	mkdir -p "$srcdir/build/src/github.com/dotcloud"
+	cd "$srcdir/build"
+	ln -s "$srcdir/docker-$commit" "src/github.com/dotcloud/docker"
+
+	export GOPATH="$PWD:$srcdir/gocode"
+
+	# passing version information build flags BZ #1017186
+	export LDFLAGS="-X main.GITCOMMIT $shortcommit/$pkgrel -X main.VERSION $pkgver -w"
+	go build -v -a -ldflags "$LDFLAGS" github.com/dotcloud/docker/docker
+	go build -v -a -ldflags "$LDFLAGS" github.com/dotcloud/docker/docker-init
+
+	cd "$srcdir/docker-$commit"
+
+	# holding off on man page building until sphinx 1.2 is released due to bug #1214
+	# https://bitbucket.org/birkenfeld/sphinx/issue/1214/note-directive-causes-man-page-writer-to
+	#make -C docs/ man
+}
+
+package() {
+	cd "$srcdir/build"
+	install -pDm755 docker "$pkgdir/usr/bin/docker"
+	install -pDm755 docker-init "$pkgdir/usr/bin/docker-init"
+
+	cd "$srcdir/docker-$commit"
+	install -pDm644 contrib/completion/bash/docker "$pkgdir/usr/share/bash-completion/completions/docker"
+	install -pDm644 contrib/completion/zsh/_docker "$pkgdir/usr/share/zsh/site-functions/_docker"
+	install -pDm644 "$srcdir/docker.service" "$pkgdir/usr/lib/systemd/system/docker.service"
+
+	install -dm700 "$pkgdir/var/lib/docker"
+}
+
+sha256sums=('3ef7a8e5a24508ee727571bd2959c7172283a07bcb9ea422e819f4fbceda4bb4'
+            'f07d3c4b6a3e5f82b855fc7c55156df6e6283371d9337639c1f024722bcbe49d')

@@ -1,0 +1,13 @@
+[Unit]
+Description=Docker container management daemon
+
+[Service]
+Type=simple
+ExecStartPre=/usr/bin/sysctl -w net.ipv4.ip_forward=1 net.ipv6.conf.all.forwarding=1
+ExecStart=/usr/bin/docker -d
+ExecStartPost=/usr/bin/iptables -w -I FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+ExecStartPost=/usr/bin/iptables -w -I FORWARD -i docker0 ! -o docker0 -j ACCEPT
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
