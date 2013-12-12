@@ -18,7 +18,7 @@ pkgname=('php54'
          'php54-sqlite'
          'php54-tidy'
          'php54-xsl')
-pkgver=5.4.21
+pkgver=5.4.22
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -31,16 +31,18 @@ makedepends=('imap' 'postgresql-libs' 'libldap' 'postfix'
 source=("http://www.php.net/distributions/${pkgbase%54}-${pkgver}.tar.bz2"
         'php.ini.patch' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
-        
+
 prepare() {
 	cd ${srcdir}/${pkgbase%54}-${pkgver}
 
 	# adjust paths
 	patch -p0 -i ${srcdir}/php.ini.patch
 	patch -p0 -i ${srcdir}/php-fpm.conf.in.patch
-	
+
 	# workaround for pkg-config 0.28
-	sed 's/ && test -n "$OPENSSL_INCS"//g' -i configure
+	sed -e 's/ && test -n "$OPENSSL_INCS"//g' \
+		-e 's|freetype2/freetype|freetype2|' \
+		-i configure
 }
 
 build() {
@@ -129,7 +131,7 @@ build() {
 
 	export EXTENSION_DIR=/opt/php54/modules
 	export PEAR_INSTALLDIR=/opt/php54/pear
-	export CPPFLAGS="$CPPFLAGS -O2"
+	export CPPFLAGS="$CPPFLAGS -O2 -I/usr/include/freetype2"
 
 	msg2 "Building CLI"
 	cd "$srcdir"
@@ -352,7 +354,7 @@ package_php54-xsl() {
 	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/opt/php54/modules/xsl.so
 }
 
-sha256sums=('ea8f7cee1adcc6f3c850f17334563c4a229f8792c18ca215517253b0dec656ec'
+sha256sums=('3b8619b030e372f2b64e3a059d05a3ef3354e81f8a72923ba45475bf222f7cca'
             '754391c75a3304a6442492d4885b13b16ba2cdf0d0c7f0e605d9929a2035db9f'
             '8386e4d937ec909cadc9403a9eb50dc0aa278f02d8420eafed5734df94a7e3b7'
             '2608db714797c9ffc65dd6a7119221738b7de5abe55f105986bdd50152d6b7c8'

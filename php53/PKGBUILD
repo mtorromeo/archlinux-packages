@@ -20,7 +20,7 @@ pkgname=('php53'
          'php53-tidy'
          'php53-xsl')
 pkgver=5.3.27
-pkgrel=3
+pkgrel=4
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -41,7 +41,9 @@ prepare() {
 	patch -p0 -i ${srcdir}/php-fpm.conf.in.patch
 
 	# workaround for pkg-config 0.28
-	sed 's/ && test -n "$OPENSSL_INCS"//g' -i configure
+	sed -e 's/ && test -n "$OPENSSL_INCS"//g' \
+		-e 's|freetype2/freetype|freetype2|' \
+		-i configure
 }
 
 build() {
@@ -367,4 +369,4 @@ sha256sums=('e12db21c623b82a2244c4dd9b06bb75af20868c1b748a105a6829a5acc36b287'
             '3179973015d22869e7182ed04add701f68b48651d3ea33a508830024b85e3caa'
             '2608db714797c9ffc65dd6a7119221738b7de5abe55f105986bdd50152d6b7c8'
             '1ec4a5d6f65257bccc5ea691014ca773d3bacc2eb9a60b2138f2b7d42b715448'
-            '2e35102a7fbe42a5e5ac90bd856746cad3720f32bc569bf3cdca3ee867cf6852')
+            '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5')
