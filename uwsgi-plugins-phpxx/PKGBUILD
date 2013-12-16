@@ -1,0 +1,72 @@
+# $Id: PKGBUILD 101963 2013-12-03 00:41:07Z dwallace $
+# Maintainer: Daniel Wallace <danielwallace at gtmanfred dot com>
+# Contributor: Valentin Hăloiu <vially.ichb+aur@gmail.com>
+# Contributor: Angel Velasquez <angvp@archlinux.org>  
+# Contributor: Kevin Zuber <uKev@knet.eu>
+# Contributor: Vsevolod Balashov <vsevolod@balashov.name>
+
+pkgbase=uwsgi-plugins-phpxx
+pkgname=(
+        uwsgi-plugin-php53
+        uwsgi-plugin-php54
+        )
+pkgver=1.9.20
+pkgrel=1
+arch=(i686 x86_64)
+url="http://projects.unbit.it/uwsgi"
+license=(GPL2)
+conflicts=(python-uwsgi)
+makedepends=(gcc python2 php-embed curl libxml2 libyaml pcre libedit openssl bzip2 gmp pam jansson php53-embed php54-embed)
+source=(http://projects.unbit.it/downloads/uwsgi-$pkgver.tar.gz
+        archlinux.ini
+        tmpfilesd
+        uwsgi@.service
+        uwsgi@.socket
+        uwsgi_fix_rpath.patch
+        uwsgi_ruby20_compatibility.patch
+        uwsgi_trick_chroot.patch)
+
+prepare(){
+    cd $srcdir/uwsgi-$pkgver
+    cp $srcdir/archlinux.ini buildconf/archlinux.ini
+    #sed -i 's/LIBS .*-lphp5.*/LIBS = []/' plugins/php/uwsgiplugin.py
+    for patch in uwsgi_fix_rpath.patch uwsgi_ruby20_compatibility.patch uwsgi_trick_chroot.patch; do
+        patch -Np1 -i $srcdir/$patch
+    done
+    rm -rf plugins/ruby
+    mv plugins/ruby{19,}
+    sed -i 's:\(ruby\)19:\1:' plugins/ruby/uwsgiplugin.py
+
+}
+build() {
+  pushd $srcdir/uwsgi-$pkgver
+
+  python uwsgiconfig.py --build archlinux
+  UWSGICONFIG_PHPDIR=/opt/php53 python2 uwsgiconfig.py --plugin plugins/php archlinux php53
+  UWSGICONFIG_PHPDIR=/opt/php54 python2 uwsgiconfig.py --plugin plugins/php archlinux php54
+}
+
+package_uwsgi-plugin-php53(){
+    depends=(uwsgi-plugin-common php53-embed libyaml jansson)
+    pkgdesc="Plugin for PHP 5.3 support"
+    install -dm755 $pkgdir/usr/bin
+    install -Dm755 uwsgi-$pkgver/php53_plugin.so $pkgdir/usr/lib/uwsgi/php53_plugin.so
+    ln -s uwsgi $pkgdir/usr/bin/uwsgi_${pkgname#uwsgi-plugin-}
+}
+
+package_uwsgi-plugin-php54(){
+    depends=(uwsgi-plugin-common php54-embed libyaml jansson)
+    pkgdesc="Plugin for PHP 5.4 support"
+    install -dm755 $pkgdir/usr/bin
+    install -Dm755 uwsgi-$pkgver/php54_plugin.so $pkgdir/usr/lib/uwsgi/php54_plugin.so
+    ln -s uwsgi $pkgdir/usr/bin/uwsgi_${pkgname#uwsgi-plugin-}
+}
+
+sha256sums=('1a0e47c051f0490c0083717d018964ed0dbe546283f2d7fb628aebb85af39e8e'
+            '2f7fe5d260696232411f1d1c1af4b9b07927c63b483ec1672ec361f6da8b5c82'
+            'c3f52496e75749356cdcf2114e9c1734c0187f40fdee0f32637f9f0a088e97eb'
+            '9050aa3dc16ec8bcf5ad6022ee9885baa58e3b7485e72b86825779276a9aacbf'
+            'cc59179db9f2442810fef0b32332d6e6ed754ab3d34b631a4d39d35d4275ba47'
+            '9111425606330c6909bc5f8fe24208267358b6cf7fee4a23d0ec677fd1b51e49'
+            '5afd52a346e2676456422b927518da2d3f7beae899ee6bcb959002f07e63c808'
+            '43f7244b3372b4f43f88adfd6564960a1e08cdc1007f578e66262222d6b174f4')
