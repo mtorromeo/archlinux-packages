@@ -5,6 +5,7 @@ pkgname=('php53'
          'php53-cgi'
          'php53-apache'
          'php53-fpm'
+         'php53-embed'
          'php53-pear'
          'php53-enchant'
          'php53-gd'
@@ -180,6 +181,16 @@ build() {
 		${_phpextensions}
 	make
 
+	msg2 "Building Embed"
+	# embed
+	cp -a ${srcdir}/build-php ${srcdir}/build-embed
+	cd ${srcdir}/build-embed
+	./configure ${_phpconfig} \
+		--disable-cli \
+		--enable-embed=shared \
+		${_phpextensions}
+	make
+
 	msg2 "Building PEAR"
 	cd "$srcdir"
 	rm -rf build-pear
@@ -232,7 +243,7 @@ package_php53-cgi() {
 package_php53-apache() {
 	pkgdesc='Apache SAPI for PHP'
 	provides="php-apache=$pkgver"
-	conflicts="php-apache"
+# 	conflicts="php-apache"
 	depends=('php53' 'apache')
 	backup=('etc/httpd/conf/extra/php5_module.conf')
 
@@ -253,6 +264,15 @@ package_php53-fpm() {
 	install -d -m755 ${pkgdir}/etc/php53/fpm.d
 	install -D -m644 ${srcdir}/php-fpm.tmpfiles ${pkgdir}/usr/lib/tmpfiles.d/php53-fpm.conf
 	install -D -m644 ${srcdir}/php-fpm.service ${pkgdir}/usr/lib/systemd/system/php53-fpm.service
+}
+
+package_php53-embed() {
+	pkgdesc='Embed SAPI for PHP'
+	provides="php-embed=$pkgver"
+	depends=('php53')
+
+	install -D -m755 ${srcdir}/build-embed/libs/libphp5.so ${pkgdir}/opt/php53/lib/libphp5.so
+	install -D -m644 ${srcdir}/php-${pkgver}/sapi/embed/php_embed.h ${pkgdir}/opt/php53/include/php/sapi/embed/php_embed.h
 }
 
 package_php53-pear() {

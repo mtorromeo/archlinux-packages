@@ -4,6 +4,7 @@ pkgbase=php54
 pkgname=('php54'
          'php54-cgi'
          'php54-fpm'
+         'php54-embed'
          'php54-pear'
          'php54-enchant'
          'php54-gd'
@@ -170,6 +171,16 @@ build() {
 		${_phpextensions}
 	make
 
+	msg2 "Building Embed"
+	# embed
+	cp -a ${srcdir}/build-php ${srcdir}/build-embed
+	cd ${srcdir}/build-embed
+	./configure ${_phpconfig} \
+		--disable-cli \
+		--enable-embed=shared \
+		${_phpextensions}
+	make
+
 	msg2 "Building PEAR"
 	cd "$srcdir"
 	rm -rf build-pear
@@ -238,6 +249,15 @@ package_php54-fpm() {
 	install -d -m755 ${pkgdir}/etc/php54/fpm.d
 	install -D -m644 ${srcdir}/php-fpm.tmpfiles ${pkgdir}/usr/lib/tmpfiles.d/php54-fpm.conf
 	install -D -m644 ${srcdir}/php-fpm.service ${pkgdir}/usr/lib/systemd/system/php54-fpm.service
+}
+
+package_php54-embed() {
+	pkgdesc='Embed SAPI for PHP'
+	provides="php-embed=$pkgver"
+	depends=('php54')
+
+	install -D -m755 ${srcdir}/build-embed/libs/libphp5.so ${pkgdir}/opt/php54/lib/libphp5.so
+	install -D -m644 ${srcdir}/php-${pkgver}/sapi/embed/php_embed.h ${pkgdir}/opt/php54/include/php/sapi/embed/php_embed.h
 }
 
 package_php54-pear() {
@@ -359,4 +379,4 @@ sha256sums=('3b8619b030e372f2b64e3a059d05a3ef3354e81f8a72923ba45475bf222f7cca'
             '8386e4d937ec909cadc9403a9eb50dc0aa278f02d8420eafed5734df94a7e3b7'
             '2608db714797c9ffc65dd6a7119221738b7de5abe55f105986bdd50152d6b7c8'
             '14e01c1b51be18885fe224c37d36f9408e3f05f9cb3bb482a0743345da002442'
-            'ff65ed80264ff16e8ff8230d603a899947411538d96773dc098b399ab6c95919')
+            '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5')

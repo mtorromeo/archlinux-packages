@@ -4,6 +4,7 @@ pkgbase=php52
 pkgname=('php52'
          'php52-cgi'
          'php52-fpm'
+#          'php52-embed'
          'php52-pear'
          'php52-curl'
          'php52-gd'
@@ -61,6 +62,11 @@ prepare() {
 
 	# libxml2 fix
 	patch -p1 -i "${srcdir}/php52-libxml.patch"
+
+	# workaround for pkg-config 0.28
+	sed -e 's/ && test -n "$OPENSSL_INCS"//g' \
+		-e 's|freetype2/freetype|freetype2|' \
+		-i configure
 }
 
 build() {
@@ -176,6 +182,16 @@ build() {
 		${phpextensions}
 	make
 
+# 	# embed
+# 	[ -d "${srcdir}/build-embed" ] && rm -rf "${srcdir}/build-embed"
+# 	cp -a ${srcdir}/build-php ${srcdir}/build-embed
+# 	cd ${srcdir}/build-embed
+# 	./configure ${phpconfig} \
+# 		--disable-cli \
+# 		--enable-embed=shared \
+# 		${_phpextensions}
+# 	make
+
 	# pear
 	[ -d "${srcdir}/build-pear" ] && rm -rf "${srcdir}/build-pear"
 	cp -a "${srcdir}/build-php" "${srcdir}/build-pear"
@@ -229,6 +245,15 @@ package_php52-fpm() {
 	install -d -m755 "${pkgdir}/etc/php52/fpm.d"
 	install -D -m644 "${srcdir}/php52-fpm.tmpfiles" "${pkgdir}/usr/lib/tmpfiles.d/php52-fpm.conf"
 	install -D -m644 "${srcdir}/php52-fpm.service" "${pkgdir}/usr/lib/systemd/system/php52-fpm.service"
+}
+
+package_php52-embed() {
+	pkgdesc='Embed SAPI for PHP'
+	provides="php-embed=$pkgver"
+	depends=('php52')
+
+	install -D -m755 ${srcdir}/build-embed/libs/libphp5.so ${pkgdir}/opt/php52/lib/libphp5.so
+	install -D -m644 ${srcdir}/php-${pkgver}/sapi/embed/php_embed.h ${pkgdir}/opt/php52/include/php/sapi/embed/php_embed.h
 }
 
 package_php52-pear() {
