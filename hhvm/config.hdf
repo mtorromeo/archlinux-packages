@@ -1,0 +1,32 @@
+Server {
+  DefaultDocument = index.php
+}
+
+Log {
+  Level = Warning
+  AlwaysLogUnhandledExceptions = true
+  RuntimeErrorReportingLevel = 8191
+}
+
+Repo {
+  Central {
+    Path = /run/hhvm/hhbc.sq3
+  }
+}
+
+#include "/usr/share/hhvm/hdf/static.mime-types.hdf"
+StaticFile {
+  FilesMatch {
+    * {
+      pattern = .*\.(dll|exe)
+      headers {
+        * = Content-Disposition: attachment
+      }
+    }
+  }
+  Extensions : StaticMimeTypes
+}
+
+MySQL {
+  TypedResults = false
+}
