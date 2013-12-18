@@ -57,7 +57,7 @@ build() {
     export PATH="$srcdir/bin:$PATH" # git fix
     export HPHP_HOME="$PWD"
 
-    # HPHP_NOTEST=1 \
+    HPHP_NOTEST=1 \ # comment for tests
     LDFLAGS="$LDFLAGS -lgssapi_krb5 -lkrb5 -lk5crypto -lcom_err" \
     CC=gcc \
     CXX=g++ \
@@ -70,10 +70,10 @@ build() {
     make hhvm
 }
 
-check() {
-    cd "$srcdir/$pkgname-HHVM-$pkgver"
-    test/run test/quick
-}
+# check() {
+#     cd "$srcdir/$pkgname-HHVM-$pkgver/hphp/test"
+#     ./run --threads 8 quick
+# }
 
 package() {
     cd "$srcdir/$pkgname-HHVM-$pkgver"
