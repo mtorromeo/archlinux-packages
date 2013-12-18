@@ -45,6 +45,7 @@ prepare() {
 build() {
     cd "$srcdir/libevent"
     msg2 "Building Custom Libevent"
+
     ./autogen.sh
     ./configure --prefix="$srcdir" --disable-shared
     make
@@ -52,13 +53,15 @@ build() {
 
     cd "$srcdir/$pkgname-HHVM-$pkgver"
     msg2 "Building hhvm"
+
     export PATH="$srcdir/bin:$PATH" # git fix
+    export HPHP_HOME="$PWD"
+
     # HPHP_NOTEST=1 \
     LDFLAGS="$LDFLAGS -lgssapi_krb5 -lkrb5 -lk5crypto -lcom_err" \
     CC=gcc \
     CXX=g++ \
     INCLUDE=/usr/include/libdwarf \
-    HPHP_HOME="$PWD" \
     cmake \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_PREFIX_PATH="$srcdir" \
