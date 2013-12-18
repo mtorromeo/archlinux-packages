@@ -3,10 +3,11 @@ Description=HHVM FastCGI application server
 After=syslog.target network.target
 
 [Service]
-PIDFile=/run/hhvm/hhvm.pid
+PIDFile=/run/hhvm/%I.pid
 PrivateTmp=true
 User=http
-ExecStart=/usr/bin/hhvm --mode server -vPidFile=/run/hhvm/hhvm.pid -vServer.Type=fastcgi --config=/etc/hhvm/fastcgi.hdf --user http
+ExecStart=/usr/bin/hhvm --mode server -vPidFile=/run/hhvm/%I.pid --config=/etc/hhvm/%I.hdf --user http
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target

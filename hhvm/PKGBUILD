@@ -16,12 +16,12 @@ source=("$pkgname-$pkgver.tar.gz::https://github.com/facebook/hhvm/archive/HHVM-
         'git+https://github.com/libevent/libevent.git#tag=release-1.4.14b-stable'
         'git+https://github.com/facebook/folly.git#commit=8e8b5e75d573305b7a9c34f4a405be5df0f17738'
         'hhvm.tmpfile'
-        'hhvm-fcgi.service'
+        'hhvm@.service'
         'static.mime-types.hdf'
-        'config.hdf'
-        'fastcgi.hdf')
+        'default.hdf'
+        'server.hdf')
 install=hhvm.install
-backup=(etc/hhvm/{config,fastcgi}.hdf)
+backup=(etc/hhvm/{conf.d/default,conf.d/static.mime-types,server}.hdf)
 
 prepare() {
     cd "$srcdir/$pkgname-HHVM-$pkgver"
@@ -82,11 +82,11 @@ package() {
 
     cd "$srcdir"
     install -Dm644 hhvm.tmpfile "$pkgdir"/usr/lib/tmpfiles.d/hhvm.conf
-    install -Dm644 hhvm-fcgi.service "$pkgdir"/usr/lib/systemd/system/hhvm-fcgi.service
-    install -Dm644 static.mime-types.hdf "$pkgdir"/usr/share/hhvm/hdf/static.mime-types.hdf
+    install -Dm644 hhvm@.service "$pkgdir"/usr/lib/systemd/system/hhvm@.service
 
-    install -Dm644 config.hdf "$pkgdir"/etc/hhvm/config.hdf
-    install -Dm644 fastcgi.hdf "$pkgdir"/etc/hhvm/fastcgi.hdf
+    install -Dm644 static.mime-types.hdf "$pkgdir"/etc/hhvm/conf.d/static.mime-types.hdf
+    install -Dm644 default.hdf "$pkgdir"/etc/hhvm/conf.d/default.hdf
+    install -Dm644 server.hdf "$pkgdir"/etc/hhvm/server.hdf
 
     install -dm755 -o http "$pkgdir"/var/log/hhvm
 }
@@ -95,7 +95,7 @@ sha256sums=('2c5bdfff63e320024f312ed30bd24a9ed6a280c7d6cb98e4816fb9731787df69'
             'SKIP'
             'SKIP'
             'cabf505fa85e33d7149f90fae95c6f67d5148895fc6efa353b21a3b31c1c3ec6'
-            '1a4eab3776d389659f43e6a4745ce1e3a5f260c14adbaffdf882888f1d15673f'
+            '8681582439385807fd0f8caff780953d3049de93218ac785c48f6df4f4296bce'
             '8b9f1dcb0a2fc7d3657e70b880425eccb963e0566247d99d26513d141e84a937'
-            '29a7b9acb9ee22c0382a5b0ee6723c9fab671f00b15ea08879aca269989b0e83'
-            '09f689acfdf72b086f35e7a5a96fd99b3815237a2d188b5b7aa60eeafd6aa72b')
+            '6d48e6bdc546d60a9770d507366ad23702f9997613cbe355d76463e0bf052f68'
+            'ba82950161ff38e634841360d7e15cf5314f233ed4d97b02c18e0ba9f7a3f560')
