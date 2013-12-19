@@ -9,8 +9,8 @@ arch=('x86_64')
 url="http://hhvm.com"
 license=('PHP')
 depends=('boost-libs' 'google-glog' 'libmysqlclient' 'libmemcached' 'pcre' 'gd'
-         'libxml2' 'intel-tbb' 'libmcrypt' 'oniguruma' 'libldap' 'elfutils'
-         'jemalloc' 'curl' 'imap' 'libdwarf')
+         'libxml2' 'intel-tbb' 'libmcrypt' 'oniguruma' 'jemalloc' 'curl' 'imap'
+         'libdwarf')
 makedepends=('git' 'cmake' 'gcc' 'chrpath' 'boost')
 source=("$pkgname-$pkgver.tar.gz::https://github.com/facebook/hhvm/archive/HHVM-$pkgver.tar.gz"
         'git+https://github.com/libevent/libevent.git#tag=release-1.4.14b-stable'
@@ -39,7 +39,7 @@ prepare() {
     # git fix
     cd "$srcdir"
     mkdir -p bin
-    [ ! -f bin/git ] && ln -s /usr/bin/false bin/git
+    [ ! -f bin/git ] && ln -s /usr/bin/false bin/git || true
 }
 
 build() {
@@ -57,10 +57,8 @@ build() {
     export PATH="$srcdir/bin:$PATH" # git fix
     export HPHP_HOME="$PWD"
 
-    HPHP_NOTEST=1 \ # comment for tests
-    LDFLAGS="$LDFLAGS -lgssapi_krb5 -lkrb5 -lk5crypto -lcom_err" \
-    CC=gcc \
-    CXX=g++ \
+    # comment for tests
+    HPHP_NOTEST=1 \
     INCLUDE=/usr/include/libdwarf \
     cmake \
         -DCMAKE_INSTALL_PREFIX=/usr \
