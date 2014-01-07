@@ -3,10 +3,10 @@ _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
 pkgver=1.4.4
-pkgrel=2
+pkgrel=3
 _uploadprogver=0.9.0
 _cachepurgever=2.1
-_modver=2.7.5
+_modver=2.7.7
 pkgdesc="Lightweight HTTP server and IMAP/POP3 proxy server with some additional modules"
 arch=('i686' 'x86_64')
 depends=('pcre' 'zlib' 'openssl' 'apr-util' 'geoip')
@@ -29,7 +29,7 @@ backup=(${_cfgdir:1}/modsec-recommended.conf
         etc/logrotate.d/nginx)
 
 source=(http://nginx.org/download/nginx-$pkgver.tar.gz
-        https://github.com/SpiderLabs/ModSecurity/archive/$_modver.tar.gz
+        https://github.com/SpiderLabs/ModSecurity/archive/v$_modver.tar.gz
         nginx-upload-progress-$_uploadprogver.tgz::https://github.com/masterzen/nginx-upload-progress-module/tarball/v$_uploadprogver
         http://labs.frickle.com/files/ngx_cache_purge-$_cachepurgever.tar.gz
         modsec-recommended.conf
@@ -160,7 +160,7 @@ package() {
 }
 
 sha256sums=('7c989a58e5408c9593da0bebcd0e4ffc3d892d1316ba5042ddb0be5b0b4102b9'
-            'cfe61feb6e26dbb8abd475acededc30d3dffe9fd8927d133029315ed20ef6722'
+            'fe9b599490c9667c72b215de263a913564ea1933b9dbeff8b99c9144aa65be26'
             '3fb903dab595cf6656fa0fc5743a48daffbba2f6b5c554836be630800eaad4e2'
             '424005af0c04e59ffa65a65e446081d4f95ee76a801a7555e001c67810bcb3b9'
             '838637cc4f5fd9d3209720db23234d99972e95549d8ac8eb619474f66376e8b1'
