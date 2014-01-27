@@ -20,8 +20,8 @@ pkgname=('php53'
          'php53-sqlite'
          'php53-tidy'
          'php53-xsl')
-pkgver=5.3.27
-pkgrel=4
+pkgver=5.3.28
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -159,7 +159,7 @@ build() {
 		${_phpextensions}
 	make
 
-	# apache
+	msg2 "Building apache API"
 	cp -a ${srcdir}/build-php ${srcdir}/build-apache
 	cd ${srcdir}/build-apache
 	./configure ${_phpconfig} \
@@ -383,7 +383,7 @@ package_php53-xsl() {
 	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/opt/php53/modules/xsl.so
 }
 
-sha256sums=('e12db21c623b82a2244c4dd9b06bb75af20868c1b748a105a6829a5acc36b287'
+sha256sums=('0cac960c651c4fbb3d21cf2f2b279a06e21948fb35a0d1439b97296cac1d8513'
             '4c4caae7abd383a686b67f1478f0fb1ecc2c720753badae365792dd88f1de2ab'
             '6ee6ed48b8416390c56b2e32b75c79f85586431b5c44c48ed22ae6a8dbe68332'
             '3179973015d22869e7182ed04add701f68b48651d3ea33a508830024b85e3caa'
