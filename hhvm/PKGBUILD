@@ -13,6 +13,7 @@ depends=('boost-libs' 'google-glog' 'libmysqlclient' 'libmemcached' 'pcre' 'gd'
          'libdwarf' 'libunwind')
 makedepends=('git' 'cmake' 'gcc' 'chrpath' 'boost')
 source=("$pkgname-$pkgver.tar.gz::https://github.com/facebook/hhvm/archive/HHVM-$pkgver.tar.gz"
+        'https://github.com/facebook/hhvm/pull/1600.diff'
         'git+https://github.com/libevent/libevent.git#tag=release-1.4.14b-stable'
         'git+https://github.com/facebook/folly.git'
         'hhvm.tmpfile'
@@ -25,6 +26,9 @@ backup=(etc/hhvm/{conf.d/default,conf.d/static.mime-types,server}.hdf)
 
 prepare() {
     cd "$srcdir/$pkgname-HHVM-$pkgver"
+
+    # pull request 1600 (reflection fixes)
+    patch -p1 -i "$srcdir/1600.diff"
 
     cd hphp/submodules
     rm -rf folly
@@ -90,6 +94,7 @@ package() {
 }
 
 sha256sums=('d88af8655a74c699d77a9b04aa8e94ea5ee88748fb82089bbf623e35a8200f46'
+            'b5c091a2849d164dbfd0d0d106f109998657c2f9102a9dc08b7ce3161e765055'
             'SKIP'
             'SKIP'
             'cabf505fa85e33d7149f90fae95c6f67d5148895fc6efa353b21a3b31c1c3ec6'
