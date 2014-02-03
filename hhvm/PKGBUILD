@@ -2,7 +2,7 @@
 # Contributor: James Miller <james@pocketrent.com>
 
 pkgname=hhvm
-pkgver=2.3.1
+pkgver=2.4.0
 pkgrel=1
 pkgdesc="Virtual Machine, Runtime, and JIT for PHP"
 arch=('x86_64')
@@ -10,11 +10,11 @@ url="http://hhvm.com"
 license=('PHP')
 depends=('boost-libs' 'google-glog' 'libmysqlclient' 'libmemcached' 'pcre' 'gd'
          'libxml2' 'intel-tbb' 'libmcrypt' 'oniguruma' 'jemalloc' 'curl' 'imap'
-         'libdwarf')
+         'libdwarf' 'libunwind')
 makedepends=('git' 'cmake' 'gcc' 'chrpath' 'boost')
 source=("$pkgname-$pkgver.tar.gz::https://github.com/facebook/hhvm/archive/HHVM-$pkgver.tar.gz"
         'git+https://github.com/libevent/libevent.git#tag=release-1.4.14b-stable'
-        'git+https://github.com/facebook/folly.git#commit=8e8b5e75d573305b7a9c34f4a405be5df0f17738'
+        'git+https://github.com/facebook/folly.git'
         'hhvm.tmpfile'
         'hhvm@.service'
         'static.mime-types.hdf'
@@ -89,7 +89,7 @@ package() {
     install -dm755 -o http "$pkgdir"/var/log/hhvm
 }
 
-sha256sums=('2c5bdfff63e320024f312ed30bd24a9ed6a280c7d6cb98e4816fb9731787df69'
+sha256sums=('d88af8655a74c699d77a9b04aa8e94ea5ee88748fb82089bbf623e35a8200f46'
             'SKIP'
             'SKIP'
             'cabf505fa85e33d7149f90fae95c6f67d5148895fc6efa353b21a3b31c1c3ec6'
