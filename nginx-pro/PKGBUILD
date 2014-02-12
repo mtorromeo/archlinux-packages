@@ -2,11 +2,15 @@ _cfgdir=/etc/nginx
 _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
-pkgver=1.4.4
-pkgrel=3
+pkgver=1.4.5
+pkgrel=1
+
 _uploadprogver=0.9.0
 _cachepurgever=2.1
+_davextver=0.0.3
+_pushstreamver=0.4.0
 _modver=2.7.7
+
 pkgdesc="Lightweight HTTP server and IMAP/POP3 proxy server with some additional modules"
 arch=('i686' 'x86_64')
 depends=('pcre' 'zlib' 'openssl' 'apr-util' 'geoip')
@@ -31,6 +35,9 @@ backup=(${_cfgdir:1}/modsec-recommended.conf
 source=(http://nginx.org/download/nginx-$pkgver.tar.gz
         https://github.com/SpiderLabs/ModSecurity/archive/v$_modver.tar.gz
         nginx-upload-progress-$_uploadprogver.tgz::https://github.com/masterzen/nginx-upload-progress-module/tarball/v$_uploadprogver
+        nginx-dav-ext-module-$_davextver.tgz::https://github.com/arut/nginx-dav-ext-module/tarball/v$_davextver
+        http://labs.frickle.com/files/ngx_cache_purge-$_cachepurgever.tar.gz
+        nginx-push-stream-module-$_pushstreamver.tgz::https://github.com/wandenberg/nginx-push-stream-module/tarball/$_pushstreamver
         http://labs.frickle.com/files/ngx_cache_purge-$_cachepurgever.tar.gz
         modsec-recommended.conf
         service
@@ -40,6 +47,8 @@ build() {
 	local _modules=(
 		--add-module=../masterzen-nginx-upload-progress-module-a788dea/
 		--add-module=../ngx_cache_purge-$_cachepurgever
+		--add-module=../arut-nginx-dav-ext-module-6974186
+		--add-module=../wandenberg-nginx-push-stream-module-3d3a204
 	)
 
 	msg "Compiling mod-security"
@@ -58,28 +67,6 @@ build() {
 	sed -r '/\$\$base/d' -i standalone/Makefile
  	make
  	make DESTDIR="$srcdir/ModSecurity-$_modver/install" install
-
-	cd "$srcdir"
-
-	msg "Fetching nginx-push-stream-module"
-	_modules=(${_modules[@]} --add-module=../nginx-push-stream-module)
-	if [ -d nginx-push-stream-module ]; then
-		pushd nginx-push-stream-module
-		git pull
-		popd
-	else
-		git clone --depth=0 https://github.com/wandenberg/nginx-push-stream-module.git
-	fi
-
-	msg "Fetching nginx-dav-ext-module"
-	_modules=(${_modules[@]} --add-module=../nginx-dav-ext-module)
-	if [ -d nginx-dav-ext-module ]; then
-		pushd nginx-dav-ext-module
-		git pull
-		popd
-	else
-		git clone --depth=0 https://github.com/arut/nginx-dav-ext-module.git
-	fi
 
 	cd "$srcdir/nginx-$pkgver"
 
@@ -159,9 +146,12 @@ package() {
 	rm -rf "$pkgdir"/var/run
 }
 
-sha256sums=('7c989a58e5408c9593da0bebcd0e4ffc3d892d1316ba5042ddb0be5b0b4102b9'
+sha256sums=('ade9024356a8f2b0679ea50e477b2585d46f43aa695cbe8ace9d65f457e0077e'
             'fe9b599490c9667c72b215de263a913564ea1933b9dbeff8b99c9144aa65be26'
             '3fb903dab595cf6656fa0fc5743a48daffbba2f6b5c554836be630800eaad4e2'
+            '6f40a158be9f60918162cd1cdf4ab01c7ad2d07c94983e44240ce4201a4f07a0'
+            '424005af0c04e59ffa65a65e446081d4f95ee76a801a7555e001c67810bcb3b9'
+            '2712faf70bae3008f38e3bb2b0096b1274d11ac861f2c29c0f2917f0a519e4af'
             '424005af0c04e59ffa65a65e446081d4f95ee76a801a7555e001c67810bcb3b9'
             '838637cc4f5fd9d3209720db23234d99972e95549d8ac8eb619474f66376e8b1'
             '05fdc0c0483410944b988d7f4beabb00bec4a44a41bd13ebc9b78585da7d3f9b'
