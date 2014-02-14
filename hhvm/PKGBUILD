@@ -2,7 +2,7 @@
 # Contributor: James Miller <james@pocketrent.com>
 
 pkgname=hhvm
-pkgver=2.4.0
+pkgver=2.4.1
 pkgrel=1
 pkgdesc="Virtual Machine, Runtime, and JIT for PHP"
 arch=('x86_64')
@@ -93,7 +93,7 @@ package() {
     install -dm755 -o http "$pkgdir"/var/log/hhvm
 }
 
-sha256sums=('d88af8655a74c699d77a9b04aa8e94ea5ee88748fb82089bbf623e35a8200f46'
+sha256sums=('97a88f767cc79b3fee89b08a644a924dff83948d052bff3e62d40e39d0ada76e'
             'b5c091a2849d164dbfd0d0d106f109998657c2f9102a9dc08b7ce3161e765055'
             'SKIP'
             'SKIP'
