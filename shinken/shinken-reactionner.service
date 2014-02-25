@@ -3,8 +3,8 @@ Description=Shinken Reactionner
 After=syslog.target
 
 [Service]
-Type=simple
-ExecStart=/usr/bin/shinken-reactionner -c /etc/shinken/reactionnerd.ini
+Type=forking
+ExecStart=/usr/bin/shinken-reactionner -dc /etc/shinken/reactionnerd.ini
 
 [Install]
 WantedBy=multi-user.target
