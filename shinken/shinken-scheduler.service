@@ -3,8 +3,8 @@ Description=Shinken Scheduler
 After=syslog.target
 
 [Service]
-Type=forking
-ExecStart=/usr/sbin/shinken-scheduler -d -c /etc/shinken/schedulerd.ini
+Type=simple
+ExecStart=/usr/bin/shinken-scheduler -c /etc/shinken/schedulerd.ini
 
 [Install]
 WantedBy=multi-user.target
