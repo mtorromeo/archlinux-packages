@@ -1,0 +1,95 @@
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgbase=ceph
+pkgname=(ceph ceph-radosgw ceph-fuse)
+pkgver=0.76
+pkgrel=1
+
+arch=('i686' 'x86_64')
+url="http://ceph.com"
+license=('GPL')
+makedepends=('fcgi' 'boost' 'fuse' 'crypto++' 'libedit' 'snappy' 'leveldb' 'libaio' 'python2' 'yasm' 'gperftools')
+source=("http://ceph.com/download/$pkgbase-$pkgver.tar.bz2")
+
+build() {
+	cd "$srcdir/$pkgbase-$pkgver"
+	./autogen.sh
+	./configure \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--with-radosgw
+	make
+}
+
+package_ceph() {
+	pkgdesc="A distributed object store and file system designed to provide excellent performance, reliability and scalability."
+	depends=('util-linux' 'keyutils' 'leveldb' 'libedit' 'libaio' 'python2' 'libatomic_ops' 'crypto++' 'boost-libs')
+	backup=('etc/ceph/ceph.conf')
+
+	cd "$srcdir/$pkgbase-$pkgver"
+	make DESTDIR="$pkgdir" install
+
+	cd "$pkgdir"
+	mv sbin/* usr/bin/ && rm -r sbin
+
+	install -dm755 usr/share/bash-completion
+	mv etc/bash_completion.d usr/share/bash-completion/completions
+
+	find usr/share/man/man8 \
+	     usr/bin \
+	     usr/share/bash-completion/completions/ \
+	     -type f \
+	     \( -name "radosgw*" -o -name "*fuse*" \) \
+	     -delete
+
+	cp usr/share/doc/ceph/sample.ceph.conf etc/ceph/ceph.conf
+
+	sed '1 s/env python$/env python2/' -i usr/bin/ceph*
+}
+
+package_ceph-radosgw() {
+	pkgdesc="Ceph rados REST gateway."
+	depends=('ceph' 'fcgi' 'curl')
+
+	cd "$srcdir/$pkgbase-$pkgver"
+	make DESTDIR="$pkgdir" install
+
+	cd "$pkgdir"
+	mv sbin/* usr/bin/ && rm -r sbin
+
+	install -dm755 usr/share/bash-completion
+	mv etc/bash_completion.d usr/share/bash-completion/completions
+
+	find usr/share/man/man8 \
+	     usr/bin \
+	     usr/share/bash-completion/completions \
+	     -type f \
+	     ! -name "radosgw*" -delete
+
+	rm -rf usr/share/{doc,ceph} usr/{lib,include} etc var
+}
+
+package_ceph-fuse() {
+	pkgdesc="FUSE based client for Ceph distributed network file system."
+	depends=('ceph' 'fuse')
+
+	cd "$srcdir/$pkgbase-$pkgver"
+	make DESTDIR="$pkgdir" install
+
+	cd "$pkgdir"
+	mv sbin/* usr/bin/ && rm -r sbin
+
+	install -dm755 usr/share/bash-completion
+	mv etc/bash_completion.d usr/share/bash-completion/completions
+
+	find usr/share/man/man8 \
+	     usr/bin \
+	     -type f \
+	     ! -name "*fuse*" -delete
+
+	rm -rf usr/share/{doc,ceph,bash-completion} usr/{lib,include} etc var
+}
+
+sha256sums=('caf27c6098fd8b11c77bd4eb06fa5f12f929476ae2ccdeba5e5d288488b0a8c1')
