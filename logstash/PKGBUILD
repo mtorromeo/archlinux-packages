@@ -5,7 +5,7 @@ pkgdesc='Logstash is a tool for managing events and logs'
 arch=('any')
 url='http://logstash.net'
 license=('Apache License')
-depends=('java-environment')
+depends=('java-runtime')
 install=logstash.install
 
 source=("https://download.elasticsearch.org/$pkgname/$pkgname/$pkgname-$pkgver-flatjar.jar"
