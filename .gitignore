@@ -1,4 +1,5 @@
 *.zip
+*.jar
 *.tar
 *.tgz
 *.tbz2
