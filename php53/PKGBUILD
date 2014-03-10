@@ -21,7 +21,7 @@ pkgname=('php53'
          'php53-tidy'
          'php53-xsl')
 pkgver=5.3.28
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -388,5 +388,5 @@ sha256sums=('0cac960c651c4fbb3d21cf2f2b279a06e21948fb35a0d1439b97296cac1d8513'
             '6ee6ed48b8416390c56b2e32b75c79f85586431b5c44c48ed22ae6a8dbe68332'
             '3179973015d22869e7182ed04add701f68b48651d3ea33a508830024b85e3caa'
             '2608db714797c9ffc65dd6a7119221738b7de5abe55f105986bdd50152d6b7c8'
-            '1ec4a5d6f65257bccc5ea691014ca773d3bacc2eb9a60b2138f2b7d42b715448'
+            '8c3025487b07f1932e8d5dd908959cf048d7f1a8280f5ebf1d3b2cf1eae4cacf'
             '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5')
