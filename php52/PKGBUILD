@@ -19,7 +19,7 @@ pkgname=('php52'
          'php52-tidy'
          'php52-xsl')
 pkgver=5.2.17
-pkgrel=10
+pkgrel=11
 _suhosinver=5.2.16-0.9.7
 _fpmversion=0.5.14
 pkgdesc='A high-level scripting language with FastCGI Process Manager'
@@ -364,7 +364,7 @@ sha256sums=('e81beb13ec242ab700e56f366e9da52fd6cf18961d155b23304ca870e53f116c'
             '0a2c4dfc9dd481ac141809e0ddd80bb43f078056efa16933f53de5f76f3e5c6c'
             '1c468e728aa09f2856756e797cf2ab475c9c9740a77ba122993532b94c60898d'
             '2e5a18e8cb2cc444b6648100ee6a34d7b5ed9166242f3fdbf1835832654ba6ba'
-            '0cc929eb00dbb16fb8917ba42683f0299b0cbdcc2aa501ea90d5fe8c4f8c80aa'
-            '6c293d117667c44dbe1ffa5a2cbbef4723401801d1f763ae27b6aa1fb8bebbcf'
-            'd7848ada30878d9020aa2cb8fe07269873c6bdb4cb4547335d504c3c51433ff8'
-            '8673e8ad1296614faf95efc9edf6fcc0d7eb85664be6751f5b76a0f5eb3479e2')
+            '9ed860a6a6f00480656522d189874bfea462891b671d26d351b60f3f298fda3f'
+            '0081b99d05e6066d675cd5a9808018383ffc25cec2901a53e59bc8d0a84bcbee'
+            '939452d5feb0e48ca19b3df36740f2ebf467f428835dad3e987531197c05fdc6'
+            '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5')

@@ -4,7 +4,7 @@ After=syslog.target network.target
 
 [Service]
 Type=forking
-PIDFile=/run/php52-fpm/php-fpm.pid
+PIDFile=/run/php-fpm/php52-fpm.pid
 PrivateTmp=true
 ExecStart=/opt/php52/bin/php-cgi --fpm --fpm-config /etc/php52/php-fpm.conf
 ExecReload=/usr/bin/kill -USR2 $MAINPID
