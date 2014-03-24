@@ -20,7 +20,7 @@ pkgname=('php54'
          'php54-sqlite'
          'php54-tidy'
          'php54-xsl')
-pkgver=5.4.25
+pkgver=5.4.26
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -37,18 +37,25 @@ source=("http://www.php.net/distributions/${pkgbase%54}-${pkgver}.tar.bz2"
 prepare() {
 	cd ${srcdir}/${pkgbase%54}-${pkgver}
 
+	# fix man pages (bug #66842)
+	# sed '/.1 | xargs rm -f$/d' -i Makefile.global
+
 	# adjust paths
 	patch -p0 -i ${srcdir}/php.ini.patch
 	patch -p0 -i ${srcdir}/php-fpm.conf.in.patch
 
 	# workaround for pkg-config 0.28
 	sed -e 's/ && test -n "$OPENSSL_INCS"//g' \
-		-e 's|freetype2/freetype|freetype2|' \
 		-i configure
+
+	# Just because our Apache 2.4 is configured with a threaded MPM by default does not mean we want to build a ZTS PHP.
+	# Let's supress this behaviour and build a SAPI that works fine with the prefork MPM.
+	sed '/APACHE_THREADED_MPM=/d' -i sapi/apache2handler/config.m4 -i configure
 }
 
 build() {
 	local _phpconfig="--srcdir=../${pkgbase%54}-${pkgver} \
+		--config-cache \
 		--prefix=/opt/php54 \
 		--sysconfdir=/etc/php54 \
 		--localstatedir=/var \
@@ -81,7 +88,6 @@ build() {
 		--enable-shmop=shared \
 		--enable-soap=shared \
 		--enable-sockets=shared \
-		--enable-sqlite-utf8 \
 		--enable-sysvmsg=shared \
 		--enable-sysvsem=shared \
 		--enable-sysvshm=shared \
@@ -121,7 +127,6 @@ build() {
 		--with-regex=php \
 		--with-snmp=shared \
 		--with-sqlite3=shared,/usr \
-		--with-sqlite=shared \
 		--with-tidy=shared \
 		--with-unixODBC=shared,/usr \
 		--with-xmlrpc=shared \
@@ -133,7 +138,6 @@ build() {
 
 	export EXTENSION_DIR=/opt/php54/modules
 	export PEAR_INSTALLDIR=/opt/php54/pear
-	export CPPFLAGS="$CPPFLAGS -O2 -I/usr/include/freetype2"
 
 	msg2 "Building CLI"
 	cd "$srcdir"
@@ -395,10 +399,10 @@ package_php54-xsl() {
 	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/opt/php54/modules/xsl.so
 }
 
-sha256sums=('b6c18c07c6bf34f75e601b28829d636e44c1c9f4267aac4ed013443c32a2245f'
+sha256sums=('5053649317b9331df40bd836c976a32b31dbc5c5d68997d3ae01cb90db22d240'
             '754391c75a3304a6442492d4885b13b16ba2cdf0d0c7f0e605d9929a2035db9f'
             '6ee6ed48b8416390c56b2e32b75c79f85586431b5c44c48ed22ae6a8dbe68332'
             '8386e4d937ec909cadc9403a9eb50dc0aa278f02d8420eafed5734df94a7e3b7'
             '2608db714797c9ffc65dd6a7119221738b7de5abe55f105986bdd50152d6b7c8'
-            '14e01c1b51be18885fe224c37d36f9408e3f05f9cb3bb482a0743345da002442'
+            '72eb165f7074df22a623428b71b03269e7e4d41cae14da41166ec746ab18cd92'
             '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5')
