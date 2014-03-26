@@ -14,7 +14,6 @@ depends=('boost-libs' 'google-glog' 'libmysqlclient' 'libmemcached' 'pcre' 'gd'
          'libdwarf' 'libunwind')
 makedepends=('git' 'cmake' 'gcc' 'chrpath' 'boost' 'double-conversion' 'google-gflags')
 source=("$pkgname-$pkgver.tar.gz::https://github.com/facebook/hhvm/archive/HHVM-$pkgver.tar.gz"
-        'https://github.com/facebook/hhvm/pull/1600.diff'
         'git+https://github.com/libevent/libevent.git#tag=release-1.4.14b-stable'
         "folly-$_folly_commit.tar.gz::https://github.com/facebook/folly/archive/$_folly_commit.tar.gz"
         'hhvm.tmpfile'
@@ -26,17 +25,14 @@ install=hhvm.install
 backup=(etc/hhvm/{conf.d/default,conf.d/static.mime-types,server}.hdf)
 
 prepare() {
-    cd "$srcdir/$pkgname-HHVM-$pkgver"
-
-    # pull request 1600 (reflection fixes)
-    patch -p1 -i "$srcdir/1600.diff"
+    cd "$srcdir"/$pkgname-HHVM-$pkgver
 
     cd hphp/submodules
     rm -rf folly
-    ln -s "$srcdir/folly-$_folly_commit" folly
+    ln -s "$srcdir"/folly-$_folly_commit folly
 
     cd "$srcdir/libevent"
-    patch -p1 -i "$srcdir/$pkgname-HHVM-$pkgver/hphp/third_party/libevent-1.4.14.fb-changes.diff"
+    patch -p1 -i "$srcdir"/$pkgname-HHVM-$pkgver/hphp/third_party/libevent-1.4.14.fb-changes.diff
 
     # replace hashbang 'python' with 'python2'
     sed '1 s/\bpython\b/python2/' -i event_rpcgen.py
@@ -56,7 +52,7 @@ build() {
     make
     make install
 
-    cd "$srcdir/$pkgname-HHVM-$pkgver"
+    cd "$srcdir"/$pkgname-HHVM-$pkgver
     msg2 "Building hhvm"
 
     export PATH="$srcdir/bin:$PATH" # git fix
@@ -74,12 +70,12 @@ build() {
 }
 
 # check() {
-#     cd "$srcdir/$pkgname-HHVM-$pkgver/hphp/test"
+#     cd "$srcdir"/$pkgname-HHVM-$pkgver/hphp/test
 #     ./run --threads 8 quick
 # }
 
 package() {
-    cd "$srcdir/$pkgname-HHVM-$pkgver"
+    cd "$srcdir"/$pkgname-HHVM-$pkgver
     make DESTDIR="$pkgdir/" install
     rm -rf "$pkgdir"/usr/{lib,include}
 
@@ -95,7 +91,6 @@ package() {
 }
 
 sha256sums=('01e498b4aed69253ad3b538baf3187a9303182add17c9f4a5049b04bab9616e0'
-            '792d8fee569b7c60fe1ca90c88650dfd0016055d1fcebcdd97e5e99a63ed70c8'
             'SKIP'
             'ee33e0a43f86761f57d37866c8dd383d5f23e4d28d7bdc30cc49cc6bb180d354'
             'cabf505fa85e33d7149f90fae95c6f67d5148895fc6efa353b21a3b31c1c3ec6'
