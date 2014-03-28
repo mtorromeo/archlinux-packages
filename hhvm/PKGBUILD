@@ -2,18 +2,18 @@
 # Contributor: James Miller <james@pocketrent.com>
 
 pkgname=hhvm
-pkgver=2.4.2
-_folly_commit=a247c8d3ff52e65c097170614ecb0639edebc569
+pkgver=3.0.0
+_folly_commit=d9c79af86a4dc0576d8df453804d3354347c07dc
 pkgrel=1
 pkgdesc="Virtual Machine, Runtime, and JIT for PHP"
 arch=('x86_64')
 url="http://hhvm.com"
 license=('PHP')
 depends=('boost-libs' 'google-glog' 'libmysqlclient' 'libmemcached' 'pcre' 'gd'
-         'libxml2' 'intel-tbb' 'libmcrypt' 'oniguruma' 'jemalloc' 'curl' 'imap'
-         'libdwarf' 'libunwind')
-makedepends=('git' 'cmake' 'gcc' 'chrpath' 'boost' 'double-conversion' 'google-gflags')
-source=("$pkgname-$pkgver.tar.gz::https://github.com/facebook/hhvm/archive/HHVM-$pkgver.tar.gz"
+         'libxml2' 'libxslt' 'intel-tbb' 'libmcrypt' 'oniguruma' 'jemalloc' 'curl' 'imap'
+         'libdwarf' 'libunwind' 'imagemagick')
+makedepends=('git' 'cmake' 'gcc' 'chrpath' 'boost' 'double-conversion' 'google-gflags' 'python2')
+source=("https://github.com/facebook/hhvm/archive/HHVM-$pkgver.tar.gz"
         'git+https://github.com/libevent/libevent.git#tag=release-1.4.14b-stable'
         "folly-$_folly_commit.tar.gz::https://github.com/facebook/folly/archive/$_folly_commit.tar.gz"
         'hhvm.tmpfile'
@@ -90,9 +90,9 @@ package() {
     install -dm755 -o http "$pkgdir"/var/log/hhvm
 }
 
-sha256sums=('01e498b4aed69253ad3b538baf3187a9303182add17c9f4a5049b04bab9616e0'
+sha256sums=('aec335be19cabe017b82becd17d737632d90012360f393d7994f88948958911d'
             'SKIP'
-            'ee33e0a43f86761f57d37866c8dd383d5f23e4d28d7bdc30cc49cc6bb180d354'
+            '0db0f79c45411b3a90889fecd1fb0b505abe51a6fe24724e62372bd4e52abf49'
             'cabf505fa85e33d7149f90fae95c6f67d5148895fc6efa353b21a3b31c1c3ec6'
             '8681582439385807fd0f8caff780953d3049de93218ac785c48f6df4f4296bce'
             '8b9f1dcb0a2fc7d3657e70b880425eccb963e0566247d99d26513d141e84a937'
