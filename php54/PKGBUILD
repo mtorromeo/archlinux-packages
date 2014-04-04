@@ -20,7 +20,7 @@ pkgname=('php54'
          'php54-sqlite'
          'php54-tidy'
          'php54-xsl')
-pkgver=5.4.26
+pkgver=5.4.27
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -399,7 +399,7 @@ package_php54-xsl() {
 	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/opt/php54/modules/xsl.so
 }
 
-sha256sums=('5053649317b9331df40bd836c976a32b31dbc5c5d68997d3ae01cb90db22d240'
+sha256sums=('09dcc44cded735e1cf1b1b9f2749d1a0fd90e03378b6a70364a662f4740e61e2'
             '754391c75a3304a6442492d4885b13b16ba2cdf0d0c7f0e605d9929a2035db9f'
             '6ee6ed48b8416390c56b2e32b75c79f85586431b5c44c48ed22ae6a8dbe68332'
             '8386e4d937ec909cadc9403a9eb50dc0aa278f02d8420eafed5734df94a7e3b7'
