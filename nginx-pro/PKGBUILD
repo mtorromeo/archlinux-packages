@@ -13,7 +13,7 @@ _modver=2.8.0
 
 pkgdesc="Lightweight HTTP server and IMAP/POP3 proxy server with some additional modules"
 arch=('i686' 'x86_64')
-depends=('pcre' 'zlib' 'openssl' 'apr-util' 'geoip')
+depends=('libxml2' 'lua51' 'yajl' 'curl' 'apr-util' 'geoip')
 makedepends=('git')
 url="http://nginx.org"
 license=('custom')
@@ -142,7 +142,7 @@ package() {
 
 	install -Dm644 "$srcdir"/nginx.logrotate "$pkgdir"/etc/logrotate.d/nginx
 	install -Dm644 "$srcdir"/service "$pkgdir"/usr/lib/systemd/system/nginx.service
-	install -D -m644 LICENSE "$pkgdir"/usr/share/licenses/nginx/LICENSE
+	install -D -m644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
 	rm -rf "$pkgdir"/var/run
 }
 
