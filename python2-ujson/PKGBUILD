@@ -2,7 +2,7 @@
 
 pkgname=python2-ujson
 pkgver=1.33
-pkgrel=1
+pkgrel=2
 _libname=${pkgname/python2-/}
 pkgdesc="Ultra fast JSON encoder and decoder for Python."
 url="https://github.com/esnme/ultrajson"
