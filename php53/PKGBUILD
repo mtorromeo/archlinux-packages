@@ -21,7 +21,7 @@ pkgname=('php53'
          'php53-tidy'
          'php53-xsl')
 pkgver=5.3.28
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
