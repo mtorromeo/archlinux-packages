@@ -3,7 +3,7 @@ _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
 pkgver=1.6.0
-pkgrel=1
+pkgrel=2
 
 _uploadprogver=0.9.0
 _cachepurgever=2.1
@@ -154,5 +154,5 @@ sha256sums=('943ad757a1c3e8b3df2d5c4ddacc508861922e36fa10ea6f8e3a348fc9abfc1a'
             '2712faf70bae3008f38e3bb2b0096b1274d11ac861f2c29c0f2917f0a519e4af'
             '424005af0c04e59ffa65a65e446081d4f95ee76a801a7555e001c67810bcb3b9'
             '838637cc4f5fd9d3209720db23234d99972e95549d8ac8eb619474f66376e8b1'
-            '05fdc0c0483410944b988d7f4beabb00bec4a44a41bd13ebc9b78585da7d3f9b'
+            '78631071af6aed03cca9c53778984ab4c010346102634ce3372246f439c76b82'
             '9523a1fdd5eb61bf62f3049f6ee088b198e36d5edcce2d9b08bbeb2930aa5a16')
