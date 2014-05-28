@@ -1,0 +1,9 @@
+[Desktop Entry]
+Categories=Network;
+Exec=/usr/bin/ipmiview
+GenericName=IPMI management interface
+Icon=preferences-system-performance
+Name=IPMIView
+StartupNotify=true
+Terminal=false
+Type=Application

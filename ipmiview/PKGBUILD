@@ -1,0 +1,38 @@
+# $Id: PKGBUILD 111935 2014-05-27 07:39:44Z mtorromeo $
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgname=ipmiview
+pkgver=2.9.30
+_buildnr=20140317
+pkgrel=1
+pkgdesc="GUI to manage multiple ipmi targets"
+arch=('i686' 'x86_64')
+url="http://www.supermicro.com/"
+license=('custom')
+depends=('java-runtime')
+source=(ftp://ftp.supermicro.com/utility/IPMIView/Jar/IPMIView_${pkgver}_jar_${_buildnr}.zip
+        ipmiview.sh
+        java.sh
+        ipmiview.desktop)
+sha256sums=('3ffb8579b5b494d1020ad83fd0fcbbacaa7873484fec3d8410b48d61c013a7af'
+            '61abf7e8d30b3c4a3e812d08911745f643e5a0c3e23524f624f01e9a7b53e073'
+            '072bf46b1ead288ec3a4f06ee67e0171a0a51e96a0a3a497c73e249410ab69ea'
+            'becdfe832bd5ea4c507a0a5f392d0b408f4f23cc38e67eeab55e505cac1d83f7')
+
+package() {
+  cd "$srcdir"/IPMIView_${pkgver}_jar_${_buildnr}
+
+  install -dm755 "$pkgdir"/opt/ipmiview/
+  cp -a *.{jar,sh} "$pkgdir"/opt/ipmiview/
+  chmod 755 "$pkgdir"/opt/ipmiview/*.sh
+
+  if [ $CARCH == x86_64 ]; then
+    cp -a *64.{so,jnilib} "$pkgdir"/opt/ipmiview/
+  else
+    cp -a *32.so "$pkgdir"/opt/ipmiview/
+  fi
+
+  install -Dm755 "$srcdir"/java.sh "$pkgdir"/opt/ipmiview/java
+  install -Dm755 "$srcdir"/ipmiview.sh "$pkgdir"/usr/bin/ipmiview
+  install -m0644 -D "$srcdir"/ipmiview.desktop "$pkgdir"/usr/share/applications/ipmiview.desktop
+}
