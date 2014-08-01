@@ -26,6 +26,6 @@ build() {
 package() {
 	cd "$srcdir"/$pkgname-$pkgver
 	make DESTDIR=$pkgdir install
-	install -dm755 "$pkgdir"/lib/ocaml
-	make OCAMLFIND_LDCONF="$pkgdir"/tmp/ld.conf OCAMLFIND_DESTDIR="$pkgdir"/lib/ocaml install-findlib
+	install -dm755 "$pkgdir"/usr/lib/ocaml
+	make OCAMLFIND_LDCONF="$pkgdir"/tmp/ld.conf OCAMLFIND_DESTDIR="$pkgdir"/usr/lib/ocaml install-findlib
 }
