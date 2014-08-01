@@ -2,9 +2,9 @@
 # Contributor: James Miller <james@pocketrent.com>
 
 pkgname=hhvm
-pkgver=3.1.0
-_folly_commit=b215baa25240dc038c53c6b9b333dc040ada8d59
-_thirdparty_commit=5baba1bca65cb10531fa959bd997b3715698902d
+pkgver=3.2.0
+_folly_commit=09a81a96ea2f9790242675f3c84013266c38d684
+_thirdparty_commit=1b7752522776202e7051031004cd12d97302872f
 pkgrel=1
 pkgdesc="Virtual Machine, Runtime, and JIT for PHP"
 arch=('x86_64')
@@ -12,12 +12,13 @@ url="http://hhvm.com"
 license=('PHP')
 depends=('boost-libs' 'google-glog' 'libmysqlclient' 'libmemcached' 'pcre' 'gd'
          'libxml2' 'libxslt' 'intel-tbb' 'libmcrypt' 'oniguruma' 'jemalloc' 'curl' 'imap'
-         'libdwarf' 'libunwind' 'imagemagick' 'libedit')
-makedepends=('git' 'cmake' 'gcc' 'chrpath' 'boost' 'double-conversion' 'google-gflags' 'python2')
+         'libdwarf-20140413' 'libunwind' 'imagemagick' 'libedit' 'pfff')
+makedepends=('git' 'cmake' 'gcc' 'chrpath' 'boost' 'google-gflags' 'python2')
 source=("https://github.com/facebook/hhvm/archive/HHVM-$pkgver.tar.gz"
-        'git+https://github.com/libevent/libevent.git#tag=release-1.4.14b-stable'
         "folly-$_folly_commit.tar.gz::https://github.com/facebook/folly/archive/$_folly_commit.tar.gz"
         "hhvm-third-party-$_thirdparty_commit.tar.gz::https://github.com/hhvm/hhvm-third-party/archive/$_thirdparty_commit.tar.gz"
+        "cmakelibs-1.patch::https://github.com/facebook/hhvm/commit/f420f7ea181daaefbea31be0b028ede3a92ced7a.patch"
+        "cmakelibs-2.patch::https://github.com/facebook/hhvm/commit/fdcf1ba00859baca6526bfb11aca4aecc1a1c923.patch"
         'hhvm.tmpfile'
         'hhvm@.service'
         'static.mime-types.hdf'
@@ -28,6 +29,8 @@ backup=(etc/hhvm/{conf.d/default,conf.d/static.mime-types,server}.hdf)
 
 prepare() {
     cd "$srcdir"/$pkgname-HHVM-$pkgver
+    patch -p1 -i "$srcdir"/cmakelibs-1.patch
+    patch -p1 -i "$srcdir"/cmakelibs-2.patch
 
     # fix freetype includes path
     sed 's|#include <freetype/config/ftheader.h>|#include <freetype2/config/ftheader.h>|' \
@@ -39,28 +42,9 @@ prepare() {
     cd third-party/folly
     rm -rf src
     ln -s "$srcdir"/folly-$_folly_commit src
-
-    cd "$srcdir/libevent"
-    patch -p1 -i "$srcdir"/$pkgname-HHVM-$pkgver/third-party/libevent-1.4.14.fb-changes.diff
-
-    # replace hashbang 'python' with 'python2'
-    sed '1 s/\bpython\b/python2/' -i event_rpcgen.py
-
-    # git fix
-    cd "$srcdir"
-    mkdir -p bin
-    [ ! -f bin/git ] && ln -s /usr/bin/false bin/git || true
 }
 
 build() {
-    cd "$srcdir/libevent"
-    msg2 "Building Custom Libevent"
-
-    ./autogen.sh
-    ./configure --prefix="$srcdir" --disable-shared
-    make
-    make install
-
     cd "$srcdir"/$pkgname-HHVM-$pkgver
     msg2 "Building hhvm"
 
@@ -74,17 +58,15 @@ build() {
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_PREFIX_PATH="$srcdir" \
         -DFREETYPE_INCLUDE_DIRS:PATH=/usr/include/freetype2 \
-        -DLIBDWARF_HAVE_ENCODE_LEB128:INTERNAL=1 \
         .
 
     make
 
-    # needs pfff
-    # for hacktool in hackificator remove_soft_types; do
-    #     cd "$srcdir"/$pkgname-HHVM-$pkgver/hphp/hack/tools/$hacktool
-    #     make depend
-    #     make
-    # done
+    for hacktool in hackificator remove_soft_types; do
+        cd "$srcdir"/$pkgname-HHVM-$pkgver/hphp/hack/tools/$hacktool
+        make depend
+        make
+    done
 }
 
 # check() {
@@ -97,10 +79,10 @@ package() {
     make DESTDIR="$pkgdir/" install
     rm -rf "$pkgdir"/usr/{lib,include}
 
-    # cd hphp/hack/bin
-    # for bin in hh_*; do
-    #     install -Dm755 $bin "$pkgdir"/usr/bin/$bin
-    # done
+    cd hphp/hack/bin
+    for bin in hh_*; do
+        install -Dm755 $bin "$pkgdir"/usr/bin/$bin
+    done
 
     cd "$srcdir"
     install -Dm644 hhvm.tmpfile "$pkgdir"/usr/lib/tmpfiles.d/hhvm.conf
@@ -113,10 +95,11 @@ package() {
     install -dm755 -o http "$pkgdir"/var/log/hhvm
 }
 
-sha256sums=('9bcf0dc69af3d5cf64d57915912e92a76b360e4ae95762953de059d13db04c4d'
-            'SKIP'
-            'cd2fa3a9348ffc27a4a289c32867ae131aacf1801427d68e52d241ebea6b5fdc'
-            '8e037251d41c613eb465852ab2ecef8eb7fe37c1395eedc69000132b343c7fbe'
+sha256sums=('de446142d3e5470ab520a5103435aba457e1a43c8977a1b935670938659fb5fd'
+            '6d18f59a3d8d0e3682bc65287342801e48e6cfdd04507b897a921acd580e7e76'
+            '53e3a40fb79d4d2844e93a83f71c93fd52feac78a2d3bd27201add4f556b14b6'
+            'c9b5021518079a08de70037b8dea8c7069f8cdce9f331f77fd8116373172f77e'
+            '1eb7ebce65ada883daccfca6ea2416e17d93e91f5f55e1fe51bf512e3bebcd1b'
             'cabf505fa85e33d7149f90fae95c6f67d5148895fc6efa353b21a3b31c1c3ec6'
             '8681582439385807fd0f8caff780953d3049de93218ac785c48f6df4f4296bce'
             '8b9f1dcb0a2fc7d3657e70b880425eccb963e0566247d99d26513d141e84a937'
