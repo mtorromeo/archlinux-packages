@@ -2,8 +2,8 @@ _cfgdir=/etc/nginx
 _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
-pkgver=1.6.0
-pkgrel=2
+pkgver=1.6.1
+pkgrel=1
 
 _uploadprogver=0.9.0
 _cachepurgever=2.1
@@ -146,7 +146,7 @@ package() {
 	rm -rf "$pkgdir"/var/run
 }
 
-sha256sums=('943ad757a1c3e8b3df2d5c4ddacc508861922e36fa10ea6f8e3a348fc9abfc1a'
+sha256sums=('f5cfe682a1aeef4602c2ca705402d5049b748f946563f41d8256c18674836067'
             'e1ffabe59e5d7128c5a6d75ffee1404d189fe55246431f7ac334aa7ab92ed229'
             '3fb903dab595cf6656fa0fc5743a48daffbba2f6b5c554836be630800eaad4e2'
             '6f40a158be9f60918162cd1cdf4ab01c7ad2d07c94983e44240ce4201a4f07a0'
