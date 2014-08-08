@@ -3,7 +3,7 @@ _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
 pkgver=1.6.1
-pkgrel=1
+pkgrel=2
 
 _uploadprogver=0.9.0
 _cachepurgever=2.1
@@ -11,7 +11,7 @@ _davextver=0.0.3
 _pushstreamver=0.4.0
 _modver=2.8.0
 
-pkgdesc="Lightweight HTTP server and IMAP/POP3 proxy server with some additional modules"
+pkgdesc="Lightweight HTTP server with some additional modules (no mail modules)"
 arch=('i686' 'x86_64')
 depends=('libxml2' 'lua51' 'yajl' 'curl' 'apr-util' 'geoip')
 makedepends=('git')
@@ -80,7 +80,7 @@ build() {
         --lock-path=/var/lock/nginx.lock \
         --user=http --group=http \
         --http-log-path=/var/log/nginx/access.log \
-        --error-log-path=/var/log/nginx/error.log \
+        --error-log-path=stderr \
         --http-client-body-temp-path=$_tmpdir/client-body \
         --http-proxy-temp-path=$_tmpdir/proxy \
         --http-fastcgi-temp-path=$_tmpdir/fastcgi \
@@ -97,17 +97,17 @@ build() {
         --with-http_spdy_module \
         --with-http_ssl_module \
         --with-http_stub_status_module \
+        --with-http_addition_module \
+        --with-http_degradation_module \
+        --with-http_flv_module \
+        --with-http_mp4_module \
+        --with-http_secure_link_module \
+        --with-http_sub_module \
         --without-mail_pop3_module --without-mail_imap_module --without-mail_smtp_module \
         ${_modules[@]} \
-        #--with-http_mp4_module \
-        #--with-http_addition_module \
         #--with-http_xslt_module \
         #--with-http_image_filter_module \
-        #--with-http_sub_module \
-        #--with-http_flv_module \
         #--with-http_random_index_module \
-        #--with-http_secure_link_module \
-        #--with-http_degradation_module \
         #--with-http_perl_module \
 
 	make
@@ -116,6 +116,14 @@ build() {
 package() {
 	cd "$srcdir"/nginx-$pkgver
 	make DESTDIR="$pkgdir" install
+
+
+	install -Dm644 contrib/vim/ftdetect/nginx.vim \
+		"$pkgdir"/usr/share/vim/vimfiles/ftdetect/nginx.vim
+	install -Dm644 contrib/vim/syntax/nginx.vim \
+		"$pkgdir"/usr/share/vim/vimfiles/syntax/nginx.vim
+	install -Dm644 contrib/vim/indent/nginx.vim \
+		"$pkgdir"/usr/share/vim/vimfiles/indent/nginx.vim
 
 	for bin in "$srcdir/ModSecurity-$_modver"/install/usr/bin/*; do
 		binname=$(basename "$bin")
@@ -127,7 +135,11 @@ package() {
 	    -e '44s|html|/usr/share/nginx/html|' \
 	    -e '54s|html|/usr/share/nginx/html|' \
 	    -i "$pkgdir"$_cfgdir/nginx.conf
+
 	rm "$pkgdir"/etc/nginx/*.default
+
+	install -d "$pkgdir"/var/lib/nginx
+	install -dm700 "$pkgdir"/var/lib/nginx/proxy
 
 	install -Dm644 "$srcdir/modsec-recommended.conf" "$pkgdir/$_cfgdir/modsec-recommended.conf"
 
@@ -143,7 +155,11 @@ package() {
 	install -Dm644 "$srcdir"/nginx.logrotate "$pkgdir"/etc/logrotate.d/nginx
 	install -Dm644 "$srcdir"/service "$pkgdir"/usr/lib/systemd/system/nginx.service
 	install -D -m644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
-	rm -rf "$pkgdir"/var/run
+
+	rmdir "$pkgdir"/var/run
+
+	install -d "$pkgdir"/usr/share/man/man8/
+	gzip -9c man/nginx.8 > "$pkgdir"/usr/share/man/man8/nginx.8.gz
 }
 
 sha256sums=('f5cfe682a1aeef4602c2ca705402d5049b748f946563f41d8256c18674836067'
