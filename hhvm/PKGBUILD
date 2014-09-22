@@ -2,9 +2,9 @@
 # Contributor: James Miller <james@pocketrent.com>
 
 pkgname=hhvm
-pkgver=3.2.0
-_folly_commit=09a81a96ea2f9790242675f3c84013266c38d684
-_thirdparty_commit=1b7752522776202e7051031004cd12d97302872f
+pkgver=3.3.0
+_folly_commit=6e46d468cf2876dd59c7a4dddcb4e37abf070b7a
+_thirdparty_commit=fdef620998ce599280904416263968b59ef21794
 pkgrel=1
 pkgdesc="Virtual Machine, Runtime, and JIT for PHP"
 arch=('x86_64')
@@ -17,8 +17,6 @@ makedepends=('git' 'cmake' 'gcc' 'chrpath' 'boost' 'google-gflags' 'python2')
 source=("https://github.com/facebook/hhvm/archive/HHVM-$pkgver.tar.gz"
         "folly-$_folly_commit.tar.gz::https://github.com/facebook/folly/archive/$_folly_commit.tar.gz"
         "hhvm-third-party-$_thirdparty_commit.tar.gz::https://github.com/hhvm/hhvm-third-party/archive/$_thirdparty_commit.tar.gz"
-        "cmakelibs-1.patch::https://github.com/facebook/hhvm/commit/f420f7ea181daaefbea31be0b028ede3a92ced7a.patch"
-        "cmakelibs-2.patch::https://github.com/facebook/hhvm/commit/fdcf1ba00859baca6526bfb11aca4aecc1a1c923.patch"
         'hhvm.tmpfile'
         'hhvm@.service'
         'static.mime-types.hdf'
@@ -29,12 +27,6 @@ backup=(etc/hhvm/{conf.d/default,conf.d/static.mime-types,server}.hdf)
 
 prepare() {
     cd "$srcdir"/$pkgname-HHVM-$pkgver
-    patch -p1 -i "$srcdir"/cmakelibs-1.patch
-    patch -p1 -i "$srcdir"/cmakelibs-2.patch
-
-    # fix freetype includes path
-    sed 's|#include <freetype/config/ftheader.h>|#include <freetype2/config/ftheader.h>|' \
-        -i hphp/runtime/ext/gd/libgd/gdft.cpp
 
     rm -rf third-party
     ln -s "$srcdir"/hhvm-third-party-$_thirdparty_commit third-party
@@ -95,11 +87,9 @@ package() {
     install -dm755 -o http "$pkgdir"/var/log/hhvm
 }
 
-sha256sums=('de446142d3e5470ab520a5103435aba457e1a43c8977a1b935670938659fb5fd'
-            '6d18f59a3d8d0e3682bc65287342801e48e6cfdd04507b897a921acd580e7e76'
-            '53e3a40fb79d4d2844e93a83f71c93fd52feac78a2d3bd27201add4f556b14b6'
-            'c9b5021518079a08de70037b8dea8c7069f8cdce9f331f77fd8116373172f77e'
-            '1eb7ebce65ada883daccfca6ea2416e17d93e91f5f55e1fe51bf512e3bebcd1b'
+sha256sums=('f7361628b64eac42e5c357a468d70fe398f4d1fb26c2b612ade3759a6a6e867b'
+            '0770f8702bf956b5128536e3cb1d55d045791bf5f66c358dc2c27d3e1a6ce197'
+            'fe21df6abe1991708bb6cd840cb3fdd11f024b740d3fe9fa9e6083a9cabec9cb'
             'cabf505fa85e33d7149f90fae95c6f67d5148895fc6efa353b21a3b31c1c3ec6'
             '8681582439385807fd0f8caff780953d3049de93218ac785c48f6df4f4296bce'
             '8b9f1dcb0a2fc7d3657e70b880425eccb963e0566247d99d26513d141e84a937'
