@@ -4,13 +4,13 @@
 
 pkgname='pfff'
 pkgver=0.28.1
-pkgrel=2
+pkgrel=3
 pkgdesc='Tools and APIs for code analysis, visualization and transformation'
 arch=('x86_64')
 url='https://github.com/facebook/pfff'
 license=('LGPL2.1')
+depends=('ocaml' 'ocaml-findlib' 'camlp4')
 optdepends=('gtk2: required by codegraph and codemap')
-makedepends=('ocaml' 'ocaml-findlib' 'camlp4')
 options=(!makeflags staticlibs) # parallel build fails, need *.a files
 source=("$pkgname-$pkgver.tar.gz::https://github.com/facebook/pfff/archive/v$pkgver.tar.gz"
         414290b4e2593e8f32d014279bf04193ecd55a8b.patch
