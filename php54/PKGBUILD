@@ -244,7 +244,6 @@ package_php54() {
 
 package_php54-cgi() {
 	pkgdesc='CGI and FCGI SAPI for PHP'
-	provides="php-cgi=$pkgver"
 	depends=('php54')
 
 	install -D -m755 ${srcdir}/build-cgi/sapi/cgi/php-cgi ${pkgdir}/opt/php54/bin/php-cgi
@@ -252,7 +251,6 @@ package_php54-cgi() {
 
 package_php54-apache() {
 	pkgdesc='Apache SAPI for PHP'
-	provides="php-apache=$pkgver"
 # 	conflicts="php-apache"
 	depends=('php54' 'apache')
 	backup=('etc/httpd/conf/extra/php5_module.conf')
@@ -263,7 +261,6 @@ package_php54-apache() {
 
 package_php54-fpm() {
 	pkgdesc='FastCGI Process Manager for PHP'
-	provides="php-fpm=$pkgver"
 	depends=('php54' 'systemd')
 	backup=('etc/php54/php-fpm.conf')
 	install='php-fpm.install'
@@ -278,7 +275,6 @@ package_php54-fpm() {
 
 package_php54-embed() {
 	pkgdesc='Embed SAPI for PHP'
-	provides="php-embed=$pkgver"
 	depends=('php54')
 
 	install -D -m755 ${srcdir}/build-embed/libs/libphp5.so ${pkgdir}/opt/php54/lib/libphp5.so
@@ -287,7 +283,6 @@ package_php54-embed() {
 
 package_php54-pear() {
 	pkgdesc='PHP Extension and Application Repository'
-	provides="php-pear=$pkgver"
 	depends=('php54')
 	backup=('etc/php54/pear.conf')
 
@@ -306,49 +301,42 @@ package_php54-pear() {
 }
 
 package_php54-enchant() {
-	provides="php-enchant=$pkgver"
 	depends=('php54' 'enchant')
 	pkgdesc='enchant module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/enchant.so ${pkgdir}/opt/php54/modules/enchant.so
 }
 
 package_php54-gd() {
-	provides="php-gd=$pkgver"
 	depends=('php54' 'libpng' 'libjpeg' 'freetype2')
 	pkgdesc='gd module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/gd.so ${pkgdir}/opt/php54/modules/gd.so
 }
 
 package_php54-intl() {
-	provides="php-intl=$pkgver"
 	depends=('php54' 'icu')
 	pkgdesc='intl module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/intl.so ${pkgdir}/opt/php54/modules/intl.so
 }
 
 package_php54-ldap() {
-	provides="php-ldap=$pkgver"
 	depends=('php54' 'libldap')
 	pkgdesc='ldap module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/ldap.so ${pkgdir}/opt/php54/modules/ldap.so
 }
 
 package_php54-mcrypt() {
-	provides="php-mcrypt=$pkgver"
 	depends=('php54' 'libmcrypt' 'libltdl')
 	pkgdesc='mcrypt module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/mcrypt.so ${pkgdir}/opt/php54/modules/mcrypt.so
 }
 
 package_php54-mssql() {
-	provides="php-mssql=$pkgver"
 	depends=('php54' 'freetds')
 	pkgdesc='mssql module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/mssql.so ${pkgdir}/opt/php54/modules/mssql.so
 }
 
 package_php54-odbc() {
-	provides="php-odbc=$pkgver"
 	depends=('php54' 'unixodbc')
 	pkgdesc='ODBC modules for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/odbc.so ${pkgdir}/opt/php54/modules/odbc.so
@@ -356,7 +344,6 @@ package_php54-odbc() {
 }
 
 package_php54-pgsql() {
-	provides="php-pgsql=$pkgver"
 	depends=('php54' 'postgresql-libs')
 	pkgdesc='PostgreSQL modules for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/pgsql.so ${pkgdir}/opt/php54/modules/pgsql.so
@@ -364,21 +351,18 @@ package_php54-pgsql() {
 }
 
 package_php54-pspell() {
-	provides="php-pspell=$pkgver"
 	depends=('php54' 'aspell')
 	pkgdesc='pspell module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/pspell.so ${pkgdir}/opt/php54/modules/pspell.so
 }
 
 package_php54-snmp() {
-	provides="php-snmp=$pkgver"
 	depends=('php54' 'net-snmp')
 	pkgdesc='snmp module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/snmp.so ${pkgdir}/opt/php54/modules/snmp.so
 }
 
 package_php54-sqlite() {
-	provides="php-sqlite=$pkgver"
 	depends=('php54' 'sqlite')
 	pkgdesc='sqlite module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/sqlite3.so ${pkgdir}/opt/php54/modules/sqlite3.so
@@ -386,14 +370,12 @@ package_php54-sqlite() {
 }
 
 package_php54-tidy() {
-	provides="php-tidy=$pkgver"
 	depends=('php54' 'tidyhtml')
 	pkgdesc='tidy module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/tidy.so ${pkgdir}/opt/php54/modules/tidy.so
 }
 
 package_php54-xsl() {
-	provides="php-xsl=$pkgver"
 	depends=('php54' 'libxslt')
 	pkgdesc='xsl module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/opt/php54/modules/xsl.so
