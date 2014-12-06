@@ -17,9 +17,9 @@ sha256sums=('7325ab97cdcd7b896503c04cd4844ae62d50bee7bbf4f6a777196ec27a1a1079'
             'SKIP')
 
 prepare() {
-  cd "$srcdir"/$pkgname-$pkgver
-  rm -r gvc
-  mv ../libgnome-volume-control gvc
+	cd "$srcdir"/$pkgname-$pkgver
+	rm -r gvc
+	mv ../libgnome-volume-control gvc
 }
 
 build() {
