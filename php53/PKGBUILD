@@ -20,8 +20,8 @@ pkgname=('php53'
          'php53-sqlite'
          'php53-tidy'
          'php53-xsl')
-pkgver=5.3.28
-pkgrel=3
+pkgver=5.3.29
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -39,7 +39,7 @@ prepare() {
 
 	# adjust paths
 	patch -p0 -i ${srcdir}/php.ini.patch
-	patch -p0 -i ${srcdir}/php-fpm.conf.in.patch
+	patch -p1 -i ${srcdir}/php-fpm.conf.in.patch
 
 	# workaround for pkg-config 0.28
 	sed -e 's/ && test -n "$OPENSSL_INCS"//g' \
@@ -212,7 +212,6 @@ build() {
 
 package_php53() {
 	pkgdesc='An HTML-embedded scripting language'
-	provides="php=$pkgver"
 	depends=('pcre' 'libxml2' 'bzip2' 'curl')
 	backup=('etc/php53/php.ini')
 
@@ -234,7 +233,6 @@ package_php53() {
 
 package_php53-cgi() {
 	pkgdesc='CGI and FCGI SAPI for PHP'
-	provides="php-cgi=$pkgver"
 	depends=('php53')
 
 	install -D -m755 ${srcdir}/build-cgi/sapi/cgi/php-cgi ${pkgdir}/opt/php53/bin/php-cgi
@@ -242,7 +240,6 @@ package_php53-cgi() {
 
 package_php53-apache() {
 	pkgdesc='Apache SAPI for PHP'
-	provides="php-apache=$pkgver"
 # 	conflicts="php-apache"
 	depends=('php53' 'apache')
 	backup=('etc/httpd/conf/extra/php5_module.conf')
@@ -253,7 +250,6 @@ package_php53-apache() {
 
 package_php53-fpm() {
 	pkgdesc='FastCGI Process Manager for PHP'
-	provides="php-fpm=$pkgver"
 	depends=('php53' 'systemd')
 	backup=('etc/php53/php-fpm.conf')
 	install='php-fpm.install'
@@ -268,7 +264,6 @@ package_php53-fpm() {
 
 package_php53-embed() {
 	pkgdesc='Embed SAPI for PHP'
-	provides="php-embed=$pkgver"
 	depends=('php53')
 
 	install -D -m755 ${srcdir}/build-embed/libs/libphp5.so ${pkgdir}/opt/php53/lib/libphp5.so
@@ -277,7 +272,6 @@ package_php53-embed() {
 
 package_php53-pear() {
 	pkgdesc='PHP Extension and Application Repository'
-	provides="php-pear=$pkgver"
 	depends=('php53')
 	backup=('etc/php53/pear.conf')
 
@@ -290,49 +284,42 @@ package_php53-pear() {
 }
 
 package_php53-enchant() {
-	provides="php-enchant=$pkgver"
 	depends=('php53' 'enchant')
 	pkgdesc='enchant module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/enchant.so ${pkgdir}/opt/php53/modules/enchant.so
 }
 
 package_php53-gd() {
-	provides="php-gd=$pkgver"
 	depends=('php53' 'libpng' 'libjpeg' 'freetype2')
 	pkgdesc='gd module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/gd.so ${pkgdir}/opt/php53/modules/gd.so
 }
 
 package_php53-intl() {
-	provides="php-intl=$pkgver"
 	depends=('php53' 'icu')
 	pkgdesc='intl module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/intl.so ${pkgdir}/opt/php53/modules/intl.so
 }
 
 package_php53-ldap() {
-	provides="php-ldap=$pkgver"
 	depends=('php53' 'libldap')
 	pkgdesc='ldap module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/ldap.so ${pkgdir}/opt/php53/modules/ldap.so
 }
 
 package_php53-mcrypt() {
-	provides="php-mcrypt=$pkgver"
 	depends=('php53' 'libmcrypt' 'libltdl')
 	pkgdesc='mcrypt module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/mcrypt.so ${pkgdir}/opt/php53/modules/mcrypt.so
 }
 
 package_php53-mssql() {
-	provides="php-mssql=$pkgver"
 	depends=('php53' 'freetds')
 	pkgdesc='mssql module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/mssql.so ${pkgdir}/opt/php53/modules/mssql.so
 }
 
 package_php53-odbc() {
-	provides="php-odbc=$pkgver"
 	depends=('php53' 'unixodbc')
 	pkgdesc='ODBC modules for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/odbc.so ${pkgdir}/opt/php53/modules/odbc.so
@@ -340,7 +327,6 @@ package_php53-odbc() {
 }
 
 package_php53-pgsql() {
-	provides="php-pgsql=$pkgver"
 	depends=('php53' 'postgresql-libs')
 	pkgdesc='PostgreSQL modules for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/pgsql.so ${pkgdir}/opt/php53/modules/pgsql.so
@@ -348,21 +334,18 @@ package_php53-pgsql() {
 }
 
 package_php53-pspell() {
-	provides="php-pspell=$pkgver"
 	depends=('php53' 'aspell')
 	pkgdesc='pspell module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/pspell.so ${pkgdir}/opt/php53/modules/pspell.so
 }
 
 package_php53-snmp() {
-	provides="php-snmp=$pkgver"
 	depends=('php53' 'net-snmp')
 	pkgdesc='snmp module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/snmp.so ${pkgdir}/opt/php53/modules/snmp.so
 }
 
 package_php53-sqlite() {
-	provides="php-sqlite=$pkgver"
 	depends=('php53' 'sqlite')
 	pkgdesc='sqlite module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/sqlite3.so ${pkgdir}/opt/php53/modules/sqlite3.so
@@ -370,23 +353,21 @@ package_php53-sqlite() {
 }
 
 package_php53-tidy() {
-	provides="php-tidy=$pkgver"
 	depends=('php53' 'tidyhtml')
 	pkgdesc='tidy module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/tidy.so ${pkgdir}/opt/php53/modules/tidy.so
 }
 
 package_php53-xsl() {
-	provides="php-xsl=$pkgver"
 	depends=('php53' 'libxslt')
 	pkgdesc='xsl module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/opt/php53/modules/xsl.so
 }
 
-sha256sums=('0cac960c651c4fbb3d21cf2f2b279a06e21948fb35a0d1439b97296cac1d8513'
+sha256sums=('c4e1cf6972b2a9c7f2777a18497d83bf713cdbecabb65d3ff62ba441aebb0091'
             '4c4caae7abd383a686b67f1478f0fb1ecc2c720753badae365792dd88f1de2ab'
             '6ee6ed48b8416390c56b2e32b75c79f85586431b5c44c48ed22ae6a8dbe68332'
-            '3179973015d22869e7182ed04add701f68b48651d3ea33a508830024b85e3caa'
+            '3de08a2df52057884b13ece9ec031f063c3297c47bfb933cdf844a3574552874'
             '2608db714797c9ffc65dd6a7119221738b7de5abe55f105986bdd50152d6b7c8'
             '8c3025487b07f1932e8d5dd908959cf048d7f1a8280f5ebf1d3b2cf1eae4cacf'
             '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5')
