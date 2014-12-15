@@ -1,41 +1,43 @@
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 # Contributor: Julien "Adyxax" Dessaux <judessaux@gmail.com>
+# Contributor: Arthur Vuillard <arthur@hashbang.fr>
 
 pkgname=shinken
 pkgver=2.0.3
-pkgrel=1
+pkgrel=2
 pkgdesc='An open source Nagios® like tool, redesigned and rewritten from scratch. Its main goal is to meet today’s system monitoring requirements while still following compatibility to Nagios®'
 arch=('any')
 url='http://www.shinken-monitoring.org/'
 license=('GPL3')
-depends=('python2-pyro')
+depends=('python2-pyro' 'python2-pycurl')
 makedepends=('python2-setuptools' 'python2-sphinx')
-optdepends=('nagios-plugins: various monitoring checks'
-            'nagcon: a simple yet great curses interface over nagios style status.dat file'
-            'python-pysqlite: for the livestatus module'
-            'python-simplejson: for the livestatus module')
+optdepends=(
+    'monitoring-plugins: various monitoring checks'
+)
 install='shinken.install'
-source=("https://pypi.python.org/packages/source/S/Shinken/Shinken-${pkgver//_/-}.tar.gz"
-        'shinken.install'
-        'shinken.logrotate'
-        'shinken.tmpfiles'
-        'nagios-user.conf'
-        'shinken-arbiter.service'
-        'shinken-broker.service'
-        'shinken-poller.service'
-        'shinken-reactionner.service'
-        'shinken-receiver.service'
-        'shinken-scheduler.service'
-        'setup.cfg')
+source=(
+	"https://pypi.python.org/packages/source/S/Shinken/Shinken-${pkgver//_/-}.tar.gz"
+	"shinken-arbiter.service"
+	"shinken-broker.service"
+	"shinken.install"
+	"shinken.logrotate"
+	"shinken-poller.service"
+	"shinken-reactionner.service"
+	"shinken-receiver.service"
+	"shinken-scheduler.service"
+	"shinken.tmpfiles"
+)
 
 prepare() {
 	cd "$srcdir/Shinken-${pkgver//_/-}"
-	find -name '*.py' -exec sed -i 's|^#!/usr/bin/env python2.6$|#!/usr/bin/env python2.7|' {} \;
+	find -name '*.py' -exec sed -i 's|^#!/usr/bin/env python2.6$|#!/usr/bin/env python2|' {} \;
+	find -name '*.py' -exec sed -i 's|^#!/usr/bin/env python\s*$|#!/usr/bin/env python2|' {} \;
+	find bin -exec sed -i 's|^#!/usr/bin/env python\s*$|#!/usr/bin/env python2|' {} \;
+	sed "s#/usr/lib/nagios/plugins#/usr/lib/monitoring-plugins#" etc/resource.d/paths.cfg
 }
 
 build() {
 	cd "$srcdir/Shinken-${pkgver//_/-}"
-	cp -f "$srcdir/setup.cfg" .
 	python2 setup.py build
 
 	msg2 "Building docs"
@@ -45,7 +47,6 @@ build() {
 
 package() {
 	cd "$srcdir/Shinken-${pkgver//_/-}"
-	rm -f setup.cfg
 	python2 setup.py install --skip-build -O1 --root="$pkgdir"
 
 	cd "$pkgdir"
@@ -64,11 +65,13 @@ package() {
 	install -Dm0644 shinken.logrotate "$pkgdir/etc/logrotate.d/shinken"
 
 	# systemd
-	install -Dm644 nagios-user.conf "$pkgdir"/usr/lib/sysusers.d/nagios.conf
 	install -Dm0644 shinken.tmpfiles "$pkgdir/usr/lib/tmpfiles.d/shinken.conf"
 	for service in *.service; do
 	    install -Dm0644 $service "$pkgdir/usr/lib/systemd/system/$service"
 	done
+    
+	install -dDm750 "$pkgdir/var/log/shinken"
+	install -dDm710 "$pkgdir/var/run/shinken"
 }
 
 sha256sums=('c47b68c2ba4073bbb3b5e65f46eb73c76479e69b363b6f570a7bdb6e0bc3ed67'
