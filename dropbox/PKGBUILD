@@ -9,7 +9,7 @@ pkgdesc="A free service that lets you bring your photos, docs, and videos anywhe
 arch=("i686" "x86_64")
 url="http://www.dropbox.com"
 license=(custom)
-depends=("dbus-glib" "libsm")
+depends=("libsm")
 optdepends=(
     'ufw-extras: ufw rules for dropbox'
     'perl-file-mimeinfo: opening dropbox folder on some desktop environments'
