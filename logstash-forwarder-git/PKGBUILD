@@ -1,8 +1,8 @@
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 
 pkgname=logstash-forwarder-git
-pkgver=v0.3.1.15.g8c05066
-pkgrel=2
+pkgver=v0.3.1.79.g0ae8ca7
+pkgrel=1
 pkgdesc="Logstash shipping tool using the lumberjack protocol"
 arch=('x86_64')
 url="https://github.com/elasticsearch/logstash-forwarder"
@@ -29,7 +29,7 @@ package() {
 	cd "$srcdir/logstash-forwarder"
 	install -dm755 "$pkgdir"/var/lib/logstash-forwarder
 	install -Dm644 logstash-forwarder.conf.example "$pkgdir"/etc/logstash-forwarder.conf
-	install -Dm755 build/bin/logstash-forwarder "$pkgdir"/usr/bin/logstash-forwarder
+	install -Dm755 logstash-forwarder "$pkgdir"/usr/bin/logstash-forwarder
 	install -Dm644 "$srcdir"/logstash-forwarder.service "$pkgdir"/usr/lib/systemd/system/logstash-forwarder.service
 	install -Dm644 "$srcdir"/logstash-forwarder-journal.service "$pkgdir"/usr/lib/systemd/system/logstash-forwarder-journal.service
 	install -Dm0755 "$srcdir/logstash-forwarder-journalctl" "$pkgdir/usr/lib/systemd/scripts/logstash-forwarder-journalctl"
