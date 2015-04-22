@@ -2,20 +2,33 @@ _cfgdir=/etc/nginx
 _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
-pkgver=1.6.2
-pkgrel=2
+pkgver=1.8.0
+pkgrel=1
 
-_uploadprogver=0.9.0
-_cachepurgever=2.1
+_uploadprogver=0.9.1
+_uploadprogcommit=39e4d53
+
+_pushstreamver=0.4.1
+_pushstreamcommit=5be47b0
+
 _davextver=0.0.3
-_pushstreamver=0.4.0
-_modver=2.8.0
-_echover=0.57
+_davextcommit=6974186
+
+_headersmorever=0.26
+_headersmorecommit=d20bf26
+
+_subsfilterver=0.6.4
+_cachepurgever=2.3
+_modver=2.9.0
+
+# openresty
+_echover=0.57-1
+_echocommit=a7365111f51fa40443f491f3c88f153727a259be
 
 pkgdesc="Lightweight HTTP server with some additional modules (no mail modules)"
 arch=('i686' 'x86_64')
 depends=('libxml2' 'lua51' 'yajl' 'curl' 'apr-util' 'geoip')
-makedepends=('git')
+makedepends=('git' 'apache')
 url="http://nginx.org"
 license=('custom')
 conflicts=('nginx')
@@ -36,22 +49,25 @@ backup=(${_cfgdir:1}/modsec-recommended.conf
 source=(http://nginx.org/download/nginx-$pkgver.tar.gz
         modsecurity-$_modver.tar.gz::https://github.com/SpiderLabs/ModSecurity/archive/v$_modver.tar.gz
         nginx-upload-progress-$_uploadprogver.tgz::https://github.com/masterzen/nginx-upload-progress-module/tarball/v$_uploadprogver
+        headers-more-nginx-module-$_headersmorever.tgz::https://github.com/openresty/headers-more-nginx-module/tarball/v$_headersmorever
         nginx-dav-ext-module-$_davextver.tgz::https://github.com/arut/nginx-dav-ext-module/tarball/v$_davextver
-        http://labs.frickle.com/files/ngx_cache_purge-$_cachepurgever.tar.gz
+        nginx_cache_purge-$_cachepurgever.tar.gz::https://github.com/FRiCKLE/ngx_cache_purge/archive/$_cachepurgever.tar.gz
         nginx-push-stream-module-$_pushstreamver.tgz::https://github.com/wandenberg/nginx-push-stream-module/tarball/$_pushstreamver
-        http://labs.frickle.com/files/ngx_cache_purge-$_cachepurgever.tar.gz
-        echo-nginx-module-$_echover.tar.gz::https://github.com/openresty/echo-nginx-module/archive/v$_echover.tar.gz
+        echo-nginx-module-$_echover.tar.gz::https://github.com/openresty/echo-nginx-module/archive/$_echocommit.tar.gz
+        ngx_http_substitutions_filter_module-$_subsfilterver.tar.gz::https://github.com/yaoweibin/ngx_http_substitutions_filter_module/archive/v$_subsfilterver.tar.gz
         modsec-recommended.conf
         service
         nginx.logrotate)
 
 build() {
 	local _modules=(
-		--add-module=../masterzen-nginx-upload-progress-module-a788dea/
+		--add-module=../masterzen-nginx-upload-progress-module-$_uploadprogcommit
 		--add-module=../ngx_cache_purge-$_cachepurgever
-		--add-module=../arut-nginx-dav-ext-module-6974186
-		--add-module=../wandenberg-nginx-push-stream-module-3d3a204
-		--add-module=../echo-nginx-module-$_echover
+		--add-module=../arut-nginx-dav-ext-module-$_davextcommit
+		--add-module=../wandenberg-nginx-push-stream-module-$_pushstreamcommit
+		--add-module=../echo-nginx-module-$_echocommit
+    --add-module=../openresty-headers-more-nginx-module-$_headersmorecommit
+    --add-module=../ngx_http_substitutions_filter_module-$_subsfilterver
 	)
 
 	msg "Compiling mod-security"
@@ -92,6 +108,7 @@ build() {
         --with-imap --with-imap_ssl_module \
         --with-ipv6 --with-pcre-jit \
         --with-file-aio \
+        --with-threads \
         --with-http_dav_module \
         --with-http_geoip_module \
         --with-http_gunzip_module \
@@ -148,7 +165,7 @@ package() {
 
 	install -d "$pkgdir"/$_tmpdir
 	install -dm700 -o http "$pkgdir"/$_tmpdir/{proxy,modsecurity/{suspicious,msa}}
-	
+
 	install -d "$pkgdir"/var/log
 	install -dm750 -o http -g log "$pkgdir"/var/log/nginx/modsec
 
@@ -165,14 +182,15 @@ package() {
 	gzip -9c man/nginx.8 > "$pkgdir"/usr/share/man/man8/nginx.8.gz
 }
 
-sha256sums=('b5608c2959d3e7ad09b20fc8f9e5bd4bc87b3bc8ba5936a513c04ed8f1391a18'
-            'e1ffabe59e5d7128c5a6d75ffee1404d189fe55246431f7ac334aa7ab92ed229'
-            '3fb903dab595cf6656fa0fc5743a48daffbba2f6b5c554836be630800eaad4e2'
+sha256sums=('23cca1239990c818d8f6da118320c4979aadf5386deda691b1b7c2c96b9df3d5'
+            '13d3cdc5350bb5c607659e4223d879674437b2357a77cdd2747d5dbfe9b531b8'
+            'f6e2d867ab545eda2028799ac1af09bf0fd8814530cc387df5218cd8de6bbb18'
+            '5ef76a714f4a0444f8c0ff12c50ca7cc2ba21c76799bd84d8e14fbfc0d43b646'
             '6f40a158be9f60918162cd1cdf4ab01c7ad2d07c94983e44240ce4201a4f07a0'
-            '424005af0c04e59ffa65a65e446081d4f95ee76a801a7555e001c67810bcb3b9'
-            '2712faf70bae3008f38e3bb2b0096b1274d11ac861f2c29c0f2917f0a519e4af'
-            '424005af0c04e59ffa65a65e446081d4f95ee76a801a7555e001c67810bcb3b9'
-            '8467237ca0fae74ca7a32fbd34fc6044df307098415d48068214c9c235695a07'
+            'cb7d5f22919c613f1f03341a1aeb960965269302e9eb23425ccaabd2f5dcbbec'
+            '6331c4b30742137c41ebab254f2c14045fb0739e7870ee964419c57a69a21045'
+            'd88b2b909471a0343a1522b6c697c735bf3ba86c9b2dddea9334d920f6fdb6e5'
+            'ed4ddbcf0c434f4a1e97b61251a63ace759792764bd5cb79ff20efe348db8db3'
             '838637cc4f5fd9d3209720db23234d99972e95549d8ac8eb619474f66376e8b1'
             '78631071af6aed03cca9c53778984ab4c010346102634ce3372246f439c76b82'
             '9523a1fdd5eb61bf62f3049f6ee088b198e36d5edcce2d9b08bbeb2930aa5a16')
