@@ -1,33 +1,33 @@
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
 _cfgdir=/etc/nginx
 _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
 pkgver=1.8.0
-pkgrel=1
-
-_uploadprogver=0.9.1
-_uploadprogcommit=39e4d53
-
-_pushstreamver=0.4.1
-_pushstreamcommit=5be47b0
+pkgrel=2
 
 _davextver=0.0.3
-_davextcommit=6974186
-
-_headersmorever=0.26
-_headersmorecommit=d20bf26
-
-_subsfilterver=0.6.4
+_pushstreamver=0.4.1
+_uploadprogver=0.9.1
 _cachepurgever=2.3
-_modver=2.9.0
+_modsecver=2.9.0
+_devkitver=0.2.19
 
-# openresty
-_echover=0.57-1
-_echocommit=a7365111f51fa40443f491f3c88f153727a259be
+_openresty=(
+	'echo a7365111f51fa40443f491f3c88f153727a259be' # v0.57
+	'lua v0.9.16rc1'
+	'srcache 71f527165c20d344b91a34bf0547f893ce335d5b' # v0.29
+	'set-misc ea36b61766921156e89bad234ad3310791757041' # v0.28
+	'redis2 5ff03a0e3e756174ff4a764bd59a1aca12b14ac0 ' # v0.11
+	'memc a6843179ac7066a367259c7087e9ce0d2bf6de4e' # v0.15
+	'headers-more d20bf26a8029bff6870b987994907d22b957f837' # v0.26
+#	'replace-filter 0.01rc5'
+)
 
 pkgdesc="Lightweight HTTP server with some additional modules (no mail modules)"
 arch=('i686' 'x86_64')
-depends=('libxml2' 'lua51' 'yajl' 'curl' 'apr-util' 'geoip')
+depends=('libxml2' 'lua51' 'luajit' 'yajl' 'curl' 'apr-util' 'geoip')
 makedepends=('git' 'apache')
 url="http://nginx.org"
 license=('custom')
@@ -46,35 +46,43 @@ backup=(${_cfgdir:1}/modsec-recommended.conf
         ${_cfgdir:1}/win-utf
         etc/logrotate.d/nginx)
 
-source=(http://nginx.org/download/nginx-$pkgver.tar.gz
-        modsecurity-$_modver.tar.gz::https://github.com/SpiderLabs/ModSecurity/archive/v$_modver.tar.gz
-        nginx-upload-progress-$_uploadprogver.tgz::https://github.com/masterzen/nginx-upload-progress-module/tarball/v$_uploadprogver
-        headers-more-nginx-module-$_headersmorever.tgz::https://github.com/openresty/headers-more-nginx-module/tarball/v$_headersmorever
-        nginx-dav-ext-module-$_davextver.tgz::https://github.com/arut/nginx-dav-ext-module/tarball/v$_davextver
-        nginx_cache_purge-$_cachepurgever.tar.gz::https://github.com/FRiCKLE/ngx_cache_purge/archive/$_cachepurgever.tar.gz
-        nginx-push-stream-module-$_pushstreamver.tgz::https://github.com/wandenberg/nginx-push-stream-module/tarball/$_pushstreamver
-        echo-nginx-module-$_echover.tar.gz::https://github.com/openresty/echo-nginx-module/archive/$_echocommit.tar.gz
-        ngx_http_substitutions_filter_module-$_subsfilterver.tar.gz::https://github.com/yaoweibin/ngx_http_substitutions_filter_module/archive/v$_subsfilterver.tar.gz
-        modsec-recommended.conf
-        service
-        nginx.logrotate)
+source=(
+	http://nginx.org/download/nginx-$pkgver.tar.gz
+  https://github.com/simpl/ngx_devel_kit/archive/v$_devkitver/ngx_devel_kit-$_devkitver.tar.gz
+  https://github.com/SpiderLabs/ModSecurity/archive/v$_modsecver/modsecurity-$_modsecver.tar.gz
+  https://github.com/masterzen/nginx-upload-progress-module/archive/v$_uploadprogver/nginx-upload-progress-$_uploadprogver.tar.gz
+  https://github.com/arut/nginx-dav-ext-module/archive/v$_davextver/nginx-dav-ext-module-$_davextver.tar.gz
+  https://github.com/FRiCKLE/ngx_cache_purge/archive/$_cachepurgever/nginx_cache_purge-$_cachepurgever.tar.gz
+  https://github.com/wandenberg/nginx-push-stream-module/archive/$_pushstreamver/nginx-push-stream-module-$_pushstreamver.tar.gz
+  modsec-recommended.conf
+  service
+  logrotate
+)
+
+_modules=(
+	--add-module=../ngx_devel_kit-$_devkitver
+	--add-module=../nginx-upload-progress-module-$_uploadprogver
+	--add-module=../ngx_cache_purge-$_cachepurgever
+	--add-module=../nginx-dav-ext-module-$_davextver
+	--add-module=../nginx-push-stream-module-$_pushstreamver
+	--add-module=../ModSecurity-$_modsecver/nginx/modsecurity
+)
+
+for _module in "${_openresty[@]}"; do
+	_module=(${_module})
+	_modname=${_module[0]}-nginx-module
+	_modver=${_module[1]}
+	source+=(https://github.com/openresty/$_modname/archive/$_modver/$_modname-$_modver.tar.gz)
+	[ ${_modver:0:1} == 'v' ] && _modver=${_modver:1}
+	_modules+=(--add-module=../$_modname-$_modver)
+done
 
 build() {
-	local _modules=(
-		--add-module=../masterzen-nginx-upload-progress-module-$_uploadprogcommit
-		--add-module=../ngx_cache_purge-$_cachepurgever
-		--add-module=../arut-nginx-dav-ext-module-$_davextcommit
-		--add-module=../wandenberg-nginx-push-stream-module-$_pushstreamcommit
-		--add-module=../echo-nginx-module-$_echocommit
-    --add-module=../openresty-headers-more-nginx-module-$_headersmorecommit
-    --add-module=../ngx_http_substitutions_filter_module-$_subsfilterver
-	)
-
 	msg "Compiling mod-security"
-	_modules=(${_modules[@]} --add-module=../ModSecurity-$_modver/nginx/modsecurity)
-	cd "$srcdir/ModSecurity-$_modver"
+	cd "$srcdir/ModSecurity-$_modsecver"
+
 	sh autogen.sh
- 	CFLAGS="-g -O0" ./configure \
+	CFLAGS="-g -O0" ./configure \
 		--prefix=/usr \
 		--enable-standalone-module \
 		--disable-apache2-module \
@@ -84,51 +92,59 @@ build() {
 		--enable-pcre-match-limit-recursion=1000 \
 		--enable-lua-cache
 	sed -r '/\$\$base/d' -i standalone/Makefile
- 	make
- 	make DESTDIR="$srcdir/ModSecurity-$_modver/install" install
+	make
+	make DESTDIR="$srcdir/ModSecurity-$_modsecver/install" install
 
-	cd "$srcdir/nginx-$pkgver"
 
 	msg "Building nginx"
+	cd "$srcdir/nginx-$pkgver"
 
-	CFLAGS="-I /usr/include/httpd -I /usr/include/apr-1" ./configure \
-        --prefix=$_cfgdir \
-        --conf-path=$_cfgdir/nginx.conf \
-        --sbin-path=/usr/bin/nginx \
-        --pid-path=/var/run/nginx.pid \
-        --lock-path=/var/lock/nginx.lock \
-        --user=http --group=http \
-        --http-log-path=/var/log/nginx/access.log \
-        --error-log-path=stderr \
-        --http-client-body-temp-path=$_tmpdir/client-body \
-        --http-proxy-temp-path=$_tmpdir/proxy \
-        --http-fastcgi-temp-path=$_tmpdir/fastcgi \
-        --http-scgi-temp-path=$_tmpdir/scgi \
-        --http-uwsgi-temp-path=$_tmpdir/uwsgi \
-        --with-imap --with-imap_ssl_module \
-        --with-ipv6 --with-pcre-jit \
-        --with-file-aio \
-        --with-threads \
-        --with-http_dav_module \
-        --with-http_geoip_module \
-        --with-http_gunzip_module \
-        --with-http_gzip_static_module \
-        --with-http_realip_module \
-        --with-http_spdy_module \
-        --with-http_ssl_module \
-        --with-http_stub_status_module \
-        --with-http_addition_module \
-        --with-http_degradation_module \
-        --with-http_flv_module \
-        --with-http_mp4_module \
-        --with-http_secure_link_module \
-        --with-http_sub_module \
-        --without-mail_pop3_module --without-mail_imap_module --without-mail_smtp_module \
-        ${_modules[@]} \
-        #--with-http_xslt_module \
-        #--with-http_image_filter_module \
-        #--with-http_random_index_module \
-        #--with-http_perl_module \
+	CFLAGS="-I /usr/include/httpd -I /usr/include/apr-1" \
+	LUAJIT_LIB=/usr/lib \
+	LUAJIT_INC=$(pkg-config luajit --cflags-only-I | sed 's/^-I//') \
+	./configure \
+		--prefix=$_cfgdir \
+		--conf-path=$_cfgdir/nginx.conf \
+		--sbin-path=/usr/bin/nginx \
+		--pid-path=/run/nginx.pid \
+		--lock-path=/run/lock/nginx.lock \
+		--user=http \
+		--group=http \
+		--http-log-path=/var/log/nginx/access.log \
+		--error-log-path=stderr \
+		--http-client-body-temp-path=$_tmpdir/client-body \
+		--http-proxy-temp-path=$_tmpdir/proxy \
+		--http-fastcgi-temp-path=$_tmpdir/fastcgi \
+		--http-scgi-temp-path=$_tmpdir/scgi \
+		--http-uwsgi-temp-path=$_tmpdir/uwsgi \
+		--with-imap \
+		--with-imap_ssl_module \
+		--with-ipv6 \
+		--with-pcre-jit \
+		--with-file-aio \
+		--with-threads \
+		--with-http_dav_module \
+		--with-http_geoip_module \
+		--with-http_gunzip_module \
+		--with-http_gzip_static_module \
+		--with-http_realip_module \
+		--with-http_spdy_module \
+		--with-http_ssl_module \
+		--with-http_stub_status_module \
+		--with-http_addition_module \
+		--with-http_degradation_module \
+		--with-http_flv_module \
+		--with-http_mp4_module \
+		--with-http_secure_link_module \
+		--with-http_sub_module \
+		--without-mail_pop3_module \
+		--without-mail_imap_module \
+		--without-mail_smtp_module \
+		${_modules[@]} \
+		#--with-http_xslt_module \
+		#--with-http_image_filter_module \
+		#--with-http_random_index_module \
+		#--with-http_perl_module \
 
 	make
 }
@@ -145,9 +161,9 @@ package() {
 	install -Dm644 contrib/vim/indent/nginx.vim \
 		"$pkgdir"/usr/share/vim/vimfiles/indent/nginx.vim
 
-	for bin in "$srcdir/ModSecurity-$_modver"/install/usr/bin/*; do
+	for bin in "$srcdir"/ModSecurity-$_modsecver/install/usr/bin/*; do
 		binname=$(basename "$bin")
-		install -Dm755 "$bin" "$pkgdir/usr/bin/$binname"
+		install -Dm755 "$bin" "$pkgdir"/usr/bin/$binname
 	done
 
 	sed -e 's|\<user\s\+\w\+;|user html;|g' \
@@ -161,10 +177,10 @@ package() {
 	install -d "$pkgdir"/var/lib/nginx
 	install -dm700 "$pkgdir"/var/lib/nginx/proxy
 
-	install -Dm644 "$srcdir/modsec-recommended.conf" "$pkgdir/$_cfgdir/modsec-recommended.conf"
+	install -Dm644 "$srcdir"/modsec-recommended.conf "$pkgdir"$_cfgdir/modsec-recommended.conf
 
-	install -d "$pkgdir"/$_tmpdir
-	install -dm700 -o http "$pkgdir"/$_tmpdir/{proxy,modsecurity/{suspicious,msa}}
+	install -d "$pkgdir"$_tmpdir
+	install -dm700 -o http "$pkgdir"$_tmpdir/{proxy,modsecurity/{suspicious,msa}}
 
 	install -d "$pkgdir"/var/log
 	install -dm750 -o http -g log "$pkgdir"/var/log/nginx/modsec
@@ -172,25 +188,30 @@ package() {
 	install -d "$pkgdir"/usr/share/nginx
 	mv "$pkgdir"/etc/nginx/html/ "$pkgdir"/usr/share/nginx
 
-	install -Dm644 "$srcdir"/nginx.logrotate "$pkgdir"/etc/logrotate.d/nginx
+	install -Dm644 "$srcdir"/logrotate "$pkgdir"/etc/logrotate.d/nginx
 	install -Dm644 "$srcdir"/service "$pkgdir"/usr/lib/systemd/system/nginx.service
-	install -D -m644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
+	install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
 
-	rmdir "$pkgdir"/var/run
+	rmdir "$pkgdir"/run
 
 	install -d "$pkgdir"/usr/share/man/man8/
 	gzip -9c man/nginx.8 > "$pkgdir"/usr/share/man/man8/nginx.8.gz
 }
 
 sha256sums=('23cca1239990c818d8f6da118320c4979aadf5386deda691b1b7c2c96b9df3d5'
+            '501f299abdb81b992a980bda182e5de5a4b2b3e275fbf72ee34dd7ae84c4b679'
             '13d3cdc5350bb5c607659e4223d879674437b2357a77cdd2747d5dbfe9b531b8'
-            'f6e2d867ab545eda2028799ac1af09bf0fd8814530cc387df5218cd8de6bbb18'
-            '5ef76a714f4a0444f8c0ff12c50ca7cc2ba21c76799bd84d8e14fbfc0d43b646'
-            '6f40a158be9f60918162cd1cdf4ab01c7ad2d07c94983e44240ce4201a4f07a0'
+            '99ec072cca35cd7791e77c40a8ded41a7a8c1111e057be26e55fba2fdf105f43'
+            'd428a0236c933779cb40ac8c91afb19d5c25a376dc3caab825bfd543e1ee530d'
             'cb7d5f22919c613f1f03341a1aeb960965269302e9eb23425ccaabd2f5dcbbec'
-            '6331c4b30742137c41ebab254f2c14045fb0739e7870ee964419c57a69a21045'
-            'd88b2b909471a0343a1522b6c697c735bf3ba86c9b2dddea9334d920f6fdb6e5'
-            'ed4ddbcf0c434f4a1e97b61251a63ace759792764bd5cb79ff20efe348db8db3'
+            '553584f557a3faec73702550e7e1417cbc0021f4f98468cc83e61e9d94def5cc'
             '838637cc4f5fd9d3209720db23234d99972e95549d8ac8eb619474f66376e8b1'
             '78631071af6aed03cca9c53778984ab4c010346102634ce3372246f439c76b82'
-            '9523a1fdd5eb61bf62f3049f6ee088b198e36d5edcce2d9b08bbeb2930aa5a16')
+            '303f1a15a4e9da19ccb99b7742fa69b109276fcd9731a87a05d8793f184ce61b'
+            'd88b2b909471a0343a1522b6c697c735bf3ba86c9b2dddea9334d920f6fdb6e5'
+            'edde780f227089c41f6feab56217803c6d8347d82b0ffe99b95fd2217828595b'
+            'a3003fc3ee314fd9b99cd3399578fd44cca50efab9448733a1d516f40671ed74'
+            '487d70cd951b284c355a28321ad7d45e66795170f79700a94427e0d40b10d630'
+            'b2750d397e4cd88302d648969b703d3949edabf9769735e32ce7ec10ab1f5af8'
+            'c727efabe64e6de17650d6016437f212d5ce06c567706f5c6d8c0e620fef65dd'
+            '359b3723a4f2e61dca7103d709c338d28a0f7d01f229eeec5c31e8a4ba6c5cc9')
