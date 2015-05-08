@@ -5,7 +5,7 @@ _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
 pkgver=1.8.0
-pkgrel=2
+pkgrel=3
 
 _davextver=0.0.3
 _pushstreamver=0.4.1
@@ -13,6 +13,7 @@ _uploadprogver=0.9.1
 _cachepurgever=2.3
 _modsecver=2.9.0
 _devkitver=0.2.19
+_redisver=0.3.7
 
 _openresty=(
 	'echo a7365111f51fa40443f491f3c88f153727a259be' # v0.57
@@ -54,6 +55,7 @@ source=(
   https://github.com/arut/nginx-dav-ext-module/archive/v$_davextver/nginx-dav-ext-module-$_davextver.tar.gz
   https://github.com/FRiCKLE/ngx_cache_purge/archive/$_cachepurgever/nginx_cache_purge-$_cachepurgever.tar.gz
   https://github.com/wandenberg/nginx-push-stream-module/archive/$_pushstreamver/nginx-push-stream-module-$_pushstreamver.tar.gz
+	http://people.freebsd.org/~osa/ngx_http_redis-$_redisver.tar.gz
   modsec-recommended.conf
   service
   logrotate
@@ -66,6 +68,7 @@ _modules=(
 	--add-module=../nginx-dav-ext-module-$_davextver
 	--add-module=../nginx-push-stream-module-$_pushstreamver
 	--add-module=../ModSecurity-$_modsecver/nginx/modsecurity
+	--add-module=../ngx_http_redis-$_redisver
 )
 
 for _module in "${_openresty[@]}"; do
@@ -205,6 +208,7 @@ sha256sums=('23cca1239990c818d8f6da118320c4979aadf5386deda691b1b7c2c96b9df3d5'
             'd428a0236c933779cb40ac8c91afb19d5c25a376dc3caab825bfd543e1ee530d'
             'cb7d5f22919c613f1f03341a1aeb960965269302e9eb23425ccaabd2f5dcbbec'
             '553584f557a3faec73702550e7e1417cbc0021f4f98468cc83e61e9d94def5cc'
+            '9dfc14db81f431fdf3d69f3661a37daf110aef5f9479aa7c88cf362bb5d62604'
             '838637cc4f5fd9d3209720db23234d99972e95549d8ac8eb619474f66376e8b1'
             '78631071af6aed03cca9c53778984ab4c010346102634ce3372246f439c76b82'
             '303f1a15a4e9da19ccb99b7742fa69b109276fcd9731a87a05d8793f184ce61b'
