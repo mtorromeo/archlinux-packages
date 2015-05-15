@@ -1,7 +1,9 @@
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
 pkgname=logstash
 pkgver=1.5.0
 pkgrel=1
-pkgdesc='Logstash is a tool for managing events and logs'
+pkgdesc='A tool for managing events and logs'
 arch=('any')
 url='http://logstash.net'
 license=('Apache License')
