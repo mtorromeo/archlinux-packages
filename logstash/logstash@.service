@@ -1,8 +1,0 @@
-.include /usr/lib/systemd/system/logstash.service
-
-[Unit]
-Description=Logstash Agent (%I)
-
-[Service]
-Environment=LOGSTASH_CONF=/etc/logstash/%I.conf
-
