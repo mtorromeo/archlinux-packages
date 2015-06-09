@@ -10,7 +10,7 @@ license=(BSD)
 depends=(python2)
 source=(http://pypi.python.org/packages/source/s/stompy/stompy-$pkgver.tar.gz)
 
-build() {
+package() {
      cd "$srcdir/stompy-$pkgver"
      python2 setup.py install -O1 --root="$pkgdir"
 }
