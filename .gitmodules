@@ -250,3 +250,9 @@
 [submodule "zsh-completions-git"]
 	path = zsh-completions-git
 	url = ssh+git://aur@aur4.archlinux.org:22/zsh-completions-git.git/
+[submodule "netpipe"]
+	path = netpipe
+	url = ssh+git://aur@aur4.archlinux.org:22/netpipe.git/
+[submodule "otf2bdf"]
+	path = otf2bdf
+	url = ssh+git://aur@aur4.archlinux.org:22/otf2bdf.git/
