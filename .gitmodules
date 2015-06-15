@@ -256,3 +256,6 @@
 [submodule "otf2bdf"]
 	path = otf2bdf
 	url = ssh+git://aur@aur4.archlinux.org:22/otf2bdf.git/
+[submodule "piler"]
+	path = piler
+	url = ssh+git://aur@aur4.archlinux.org:22/piler.git/
