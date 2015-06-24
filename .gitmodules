@@ -262,3 +262,6 @@
 [submodule "nodejs-htmlhint"]
 	path = nodejs-htmlhint
 	url = ssh+git://aur@aur4.archlinux.org:22/nodejs-htmlhint.git/
+[submodule "nuclide-server"]
+	path = nuclide-server
+	url = ssh+git://aur@aur4.archlinux.org:22/nuclide-server.git/
