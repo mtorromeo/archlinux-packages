@@ -21,7 +21,7 @@ pkgname=('php53'
          'php53-tidy'
          'php53-xsl')
 pkgver=5.3.29
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -32,14 +32,61 @@ makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix'
              'pkg-config')
 source=("http://www.php.net/distributions/${pkgbase%53}-${pkgver}.tar.bz2"
         'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
-        'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
+        'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles'
+        'php-4.3.11-shutdown.patch'
+        'php-5.0.4-dlopen.patch'
+        'php-5.0.4-tests-wddx.patch'
+        'php-5.2.0-includedir.patch'
+        'php-5.2.4-embed.patch'
+        'php-5.2.4-norpath.patch'
+        'php-5.3.0-easter.patch'
+        'php-5.3.0-install.patch'
+        'php-5.3.0-recode.patch'
+        'php-5.3.28-zendparse.patch'
+        'php-5.3.29-CVE-2014-3597.patch'
+        'php-5.3.29-CVE-2014-8142.patch'
+        'php-5.3.29-CVE-2015-0231.patch'
+        'php-5.3.29-CVE-2015-0232.patch'
+        'php-5.3.3-CVE-2014-2497.patch'
+        'php-5.3.3-CVE-2014-3587.patch'
+        'php-5.3.3-CVE-2014-3668.patch'
+        'php-5.3.3-CVE-2014-3669.patch'
+        'php-5.3.3-CVE-2014-3670.patch'
+        'php-5.3.3-CVE-2014-3710.patch'
+        'php-5.3.3-CVE-2014-4670.patch'
+        'php-5.3.3-CVE-2014-4698.patch'
+        'php-5.3.3-macropen.patch')
 
 prepare() {
 	cd ${srcdir}/${pkgbase%53}-${pkgver}
 
 	# adjust paths
-	patch -p0 -i ${srcdir}/php.ini.patch
-	patch -p1 -i ${srcdir}/php-fpm.conf.in.patch
+	patch -p0 -i "$srcdir"/php.ini.patch
+	patch -p1 -i "$srcdir"/php-fpm.conf.in.patch
+
+  patch -p1 -i "$srcdir"/php-4.3.11-shutdown.patch
+  patch -p1 -i "$srcdir"/php-5.0.4-dlopen.patch
+  patch -p1 -i "$srcdir"/php-5.0.4-tests-wddx.patch
+  patch -p1 -i "$srcdir"/php-5.2.0-includedir.patch
+  patch -p1 -i "$srcdir"/php-5.2.4-embed.patch
+  patch -p1 -i "$srcdir"/php-5.2.4-norpath.patch
+  patch -p1 -i "$srcdir"/php-5.3.0-easter.patch
+  patch -p1 -i "$srcdir"/php-5.3.0-install.patch
+  patch -p1 -i "$srcdir"/php-5.3.0-recode.patch
+  patch -p1 -i "$srcdir"/php-5.3.28-zendparse.patch
+  patch -p1 -i "$srcdir"/php-5.3.29-CVE-2014-3597.patch
+  patch -p1 -i "$srcdir"/php-5.3.29-CVE-2014-8142.patch
+  patch -p1 -i "$srcdir"/php-5.3.29-CVE-2015-0231.patch
+  patch -p1 -i "$srcdir"/php-5.3.29-CVE-2015-0232.patch
+  patch -p1 -i "$srcdir"/php-5.3.3-CVE-2014-2497.patch
+  patch -p1 -i "$srcdir"/php-5.3.3-CVE-2014-3587.patch
+  patch -p1 -i "$srcdir"/php-5.3.3-CVE-2014-3668.patch
+  patch -p1 -i "$srcdir"/php-5.3.3-CVE-2014-3669.patch
+  patch -p1 -i "$srcdir"/php-5.3.3-CVE-2014-3670.patch
+  patch -p1 -i "$srcdir"/php-5.3.3-CVE-2014-3710.patch
+  patch -p1 -i "$srcdir"/php-5.3.3-CVE-2014-4670.patch
+  patch -p1 -i "$srcdir"/php-5.3.3-CVE-2014-4698.patch
+  patch -p1 -i "$srcdir"/php-5.3.3-macropen.patch
 
 	# workaround for pkg-config 0.28
 	sed -e 's/ && test -n "$OPENSSL_INCS"//g' \
@@ -100,6 +147,7 @@ build() {
 		--with-icu-dir=/usr \
 		--with-imap-ssl=shared \
 		--with-imap=shared \
+    --with-kerberos=/usr \
 		--with-jpeg-dir=shared,/usr \
 		--with-ldap=shared \
 		--with-ldap-sasl \
@@ -212,7 +260,7 @@ build() {
 
 package_php53() {
 	pkgdesc='An HTML-embedded scripting language'
-	depends=('pcre' 'libxml2' 'bzip2' 'curl')
+	depends=('pcre' 'libxml2' 'bzip2' 'curl' 'c-client')
 	backup=('etc/php53/php.ini')
 
 	cd ${srcdir}/build-php
@@ -370,4 +418,27 @@ sha256sums=('c4e1cf6972b2a9c7f2777a18497d83bf713cdbecabb65d3ff62ba441aebb0091'
             '3de08a2df52057884b13ece9ec031f063c3297c47bfb933cdf844a3574552874'
             '2608db714797c9ffc65dd6a7119221738b7de5abe55f105986bdd50152d6b7c8'
             '8c3025487b07f1932e8d5dd908959cf048d7f1a8280f5ebf1d3b2cf1eae4cacf'
-            '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5')
+            '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5'
+            '7c89314522b4310243a09d4b1741a379bc4c2964acd99f16cc76238e1ff9660a'
+            'd310c622a73d225974f745a94ac536c12dd67c27fc38b3f4e44a845b7c97863a'
+            '880c914233065ce99bbe0a8b77d0c8fc47c92b42d2718de6dc135acc8b92cb9f'
+            '93b002c43b9b497b259c044dc97f79d4340fed2aed3f7dfd8d0d5d9bc14893cb'
+            'f27bf095aa6e347189d5bed297c176b8ecd3338989a5847a38a0f037bc363af3'
+            '71223a9eb6dc66a10ac1afa56e8dc7017e21125c0960da9b59efc5097d51618f'
+            '183f33be9b43e81b7aefc72619a952549980056fb48d51bdc4450c54c97e7b45'
+            '5fd4d07ee66d7ae422722ef291106424135864e5338af47296e5820788e9ebc9'
+            '9d974b64d7a5bbefc200b84bbca1f86986c97904932e53c6cd5ce499f55c5526'
+            'f08ea9c99a5e58d937ed4da46191ce7ce08369f724c8003db8975c8972db0aa5'
+            '5f33c184f202db85b134c47e6a8ca4ae5a85edb395150ada77f0091dd0c80e37'
+            'a371252b7462839abe5697edfcf2a6e1ff8e51a31fc465994ee415b668c430a0'
+            'ad1eec6852fff3aaa082a8affce1e149b7cd3c75978a274f771c6fb981f9b4ca'
+            '52ac203c74c8cbb6d3e5972df41add75063fefd1c2f5fc430d8980fd72b99639'
+            'a2af48d936e0c3d8cd5f44a0b2137b28d25dd8d1993afd433c0ccf0e584ff285'
+            'c04ff947f56132221915f4f983af4df61b6956a8ef056b6188a856b8fb5d5e26'
+            '8f1d869687336edbb6d274b52a69c77d5640dd539ccbb8a08b0f9c96ff280083'
+            '69b8279c5542163fa1b2ac7f7e2f9ac61e2d701e54b3d16a930dc1de27deb087'
+            'af37e1f06d453fb30686907a238a768570b3f2011311ea2c30dd8e74996ac458'
+            'f500be4cdda199fa7544a136f733086f7f9b42455716d31fe4f6f8f1d2fbe595'
+            '39b48d50b2e659b0a1ebeb97a38f8be7e414e9a9ab7c7fc9cd8f414b650ddbd5'
+            '7db372838c4bb717e6ab0970fe72f3aa354adafb3b0610d6620799fe67c4c5a9'
+            '65e9c911c6ead3b257d62f50968d23dd5388274ec1c0bdb21b3f6d92fb3b5d7f')
