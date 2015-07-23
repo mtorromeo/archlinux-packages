@@ -3,27 +3,28 @@
 pkgname=tshock
 epoch=1
 pkgver=4.3.5
-_apiver=e124c5a51cf4a418de47b7767b13669a379d1935
-pkgrel=1
+_pkgver=f6f2ebdd96f6acde4a4b3d42970c66d8cfdbc33d
+_apiver=fe600ac0d9d799e4b22d95983cc9dbd1669346c5
+pkgrel=2
 pkgdesc="A Terraria Server administration modification that runs on the open source TerrariaAPI."
 arch=(any)
 url="http://tshock.co/xf/"
 license=("GPL")
 depends=('tmux' 'mono')
-source=("https://github.com/NyxStudios/TShock/archive/v$pkgver/$pkgname-$pkgver.tar.gz"
+source=("https://github.com/NyxStudios/TShock/archive/$_pkgver/$pkgname-$_pkgver.tar.gz"
         "https://github.com/NyxStudios/TerrariaAPI-Server/archive/$_apiver/TerrariaAPI-Server-$_apiver.tar.gz"
         'tshock.sh'
         'tshock.service')
 
-sha256sums=('43ea6ece641a0775ca7fe80355986d513917858c8193b877dd65efb3010cc851'
-            'c61aa8d4c91f12f0eef290713096e8987f00c380cdcf411a71beda701cdde24d'
+sha256sums=('7371a25a84bae461bd219584e643e752c6db2dd5c0fd2c6d332e95129b3cd887'
+            'fba4c288677fd7d5d6a02038287418304d3f736add50750c6f55456c709cef4b'
             '2545482d79ded5e503be03beb75495dcbbefe8f97043d5669f0dbbc62306e8d0'
             '298244a08c1828067d11f490d5668df82987f0ceec604114fc832cb585a7b328')
 
 install=tshock.install
 
 build() {
-  cd TShock-$pkgver
+  cd TShock-$_pkgver
   rm -rf TerrariaServerAPI
   ln -s ../TerrariaAPI-Server-$_apiver TerrariaServerAPI
   xbuild TShockAPI/TShockAPI.csproj /p:Configuration=Release
@@ -31,7 +32,7 @@ build() {
 
 package() {
   install -d "$pkgdir"/opt
-  cp -a TShock-$pkgver/TShockAPI/bin/Release "$pkgdir"/opt/tshock
+  cp -a TShock-$_pkgver/TShockAPI/bin/Release "$pkgdir"/opt/tshock
   install -d "$pkgdir"/opt/tshock/ServerPlugins
   install -Dm644 tshock.service "$pkgdir"/usr/lib/systemd/system/tshock.service
 
