@@ -1,7 +1,7 @@
 post_install() {
   getent group tshock >/dev/null 2>&1 || groupadd tshock 
   getent passwd tshock >/dev/null 2>&1 || useradd -g tshock -d /opt/tshock/ -s /bin/bash tshock
-  chown -R tshock:tshock /opt/tshock/
+  chown -R tshock:tshock opt/tshock/ var/log/tshock
 }
 
 post_upgrade() {

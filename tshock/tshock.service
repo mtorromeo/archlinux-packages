@@ -10,7 +10,7 @@ Environment=WORLD=World1
 Environment=PORT=7777
 EnvironmentFile=/etc/default/tshock
 
-ExecStart=/usr/bin/tmux new-session -d -s tshock-console -c /opt/tshock "/usr/bin/mono --server --gc=sgen -O=all TerrariaServer.exe -port $PORT -world /opt/tshock/Terraria/Worlds/$WORLD.wld"
+ExecStart=/usr/bin/tmux new-session -d -s tshock-console -c /opt/tshock "/usr/bin/mono --server --gc=sgen -O=all TerrariaServer.exe -logpath /var/log/tshock -port $PORT -world /opt/tshock/Terraria/Worlds/$WORLD.wld"
 ExecStop=/usr/bin/tmux send-keys -t tshock-console exit C-m
 
 [Install]

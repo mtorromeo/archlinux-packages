@@ -9,14 +9,14 @@ pkgbase = tshock
 	license = GPL
 	depends = tmux
 	depends = mono
-	source = https://github.com/NyxStudios/TShock/archive/v4.3.6/tshock-v4.3.6.tar.gz
+	source = https://github.com/NyxStudios/TShock/archive/b7fedc173b5c44e6e00dba3481406debb26e23f2/tshock-b7fedc173b5c44e6e00dba3481406debb26e23f2.tar.gz
 	source = https://github.com/NyxStudios/TerrariaAPI-Server/archive/7f29c87f6451fe6e68c4cde4ff792e7234b809cf/TerrariaAPI-Server-7f29c87f6451fe6e68c4cde4ff792e7234b809cf.tar.gz
 	source = tshock.sh
 	source = tshock.service
-	sha256sums = 4889a900fb1472cc78820e1ac022a1103578e49198a321d9367938320e69d4f6
+	sha256sums = 88a58d70ba07aa5304edf75bd136eb3b427ccaf8ceab64314b54d5944eff6a65
 	sha256sums = 2a19794c27c5f7b3bbf86c9d932a2d4152ed42c0594206f40c17dd6904b77f51
 	sha256sums = 2545482d79ded5e503be03beb75495dcbbefe8f97043d5669f0dbbc62306e8d0
-	sha256sums = 298244a08c1828067d11f490d5668df82987f0ceec604114fc832cb585a7b328
+	sha256sums = 4ff47e2fad25379a613fe874bf3e9a3e6830c874d3df9e19824ef763b829d939
 
 pkgname = tshock
 
