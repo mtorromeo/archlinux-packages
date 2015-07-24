@@ -3,8 +3,8 @@
 pkgname=tshock
 epoch=1
 pkgver=4.3.6
-#_pkgver=f6f2ebdd96f6acde4a4b3d42970c66d8cfdbc33d
-_pkgver=v$pkgver
+_pkgver=b7fedc173b5c44e6e00dba3481406debb26e23f2
+#_pkgver=v$pkgver
 _apiver=7f29c87f6451fe6e68c4cde4ff792e7234b809cf
 pkgrel=2
 pkgdesc="A Terraria Server administration modification that runs on the open source TerrariaAPI."
@@ -17,7 +17,7 @@ source=("https://github.com/NyxStudios/TShock/archive/$_pkgver/$pkgname-$_pkgver
         'tshock.sh'
         'tshock.service')
 
-sha256sums=('4889a900fb1472cc78820e1ac022a1103578e49198a321d9367938320e69d4f6'
+sha256sums=('88a58d70ba07aa5304edf75bd136eb3b427ccaf8ceab64314b54d5944eff6a65'
             '2a19794c27c5f7b3bbf86c9d932a2d4152ed42c0594206f40c17dd6904b77f51'
             '2545482d79ded5e503be03beb75495dcbbefe8f97043d5669f0dbbc62306e8d0'
             '298244a08c1828067d11f490d5668df82987f0ceec604114fc832cb585a7b328')
@@ -32,13 +32,19 @@ build() {
 }
 
 package() {
-  install -d "$pkgdir"/opt
-  cp -a TShock-${_pkgver#v}/TShockAPI/bin/Release "$pkgdir"/opt/tshock
-  install -d "$pkgdir"/opt/tshock/ServerPlugins
   install -Dm644 tshock.service "$pkgdir"/usr/lib/systemd/system/tshock.service
-
   install -Dm755 tshock.sh "$pkgdir"/usr/bin/tshock
 
+  cd TShock-${_pkgver#v}
+
+  install -dm755 "$pkgdir"/opt/tshock/ServerPlugins
+
+  cp -a TShockAPI/bin/Release/*.dll "$pkgdir"/opt/tshock/ServerPlugins/
+  cp -a TShockAPI/bin/Release/*.exe "$pkgdir"/opt/tshock/
+
+  install -Dm644 prebuilts/sqlite3.dll "$pkgdir"/opt/tshock/sqlite3.dll
+
   cd "$pkgdir"/opt/tshock
+  mv ServerPlugins/Newtonsoft.Json.dll .
   ln -s "My Games/Terraria" Terraria
 }
