@@ -2,11 +2,11 @@
 
 pkgname=tshock
 epoch=1
-pkgver=4.3.6
-_pkgver=b7fedc173b5c44e6e00dba3481406debb26e23f2
-#_pkgver=v$pkgver
-_apiver=7f29c87f6451fe6e68c4cde4ff792e7234b809cf
-pkgrel=2
+pkgver=4.3.8
+#_pkgver=b7fedc173b5c44e6e00dba3481406debb26e23f2
+_pkgver=v$pkgver
+_apiver=c5e564249e7e424a3acf08d3be5584af2b0f4032
+pkgrel=1
 pkgdesc="A Terraria Server administration modification that runs on the open source TerrariaAPI."
 arch=(any)
 url="http://tshock.co/xf/"
@@ -17,8 +17,8 @@ source=("https://github.com/NyxStudios/TShock/archive/$_pkgver/$pkgname-$_pkgver
         'tshock.sh'
         'tshock.service')
 
-sha256sums=('88a58d70ba07aa5304edf75bd136eb3b427ccaf8ceab64314b54d5944eff6a65'
-            '2a19794c27c5f7b3bbf86c9d932a2d4152ed42c0594206f40c17dd6904b77f51'
+sha256sums=('3bd460879a89d554272e1fc2bdbe26efc674f211815c71f5d4e9d1e1233b3798'
+            'e34b3d71f61b9f3b1a5d18c4f0b2cea69af8f4fa1e5266010dd8084ca123f1c0'
             '2545482d79ded5e503be03beb75495dcbbefe8f97043d5669f0dbbc62306e8d0'
             'e1a9a272f5a9674fd045d88c2651135c4d0db1a41433934e668143017a76043d')
 
