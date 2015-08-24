@@ -1,7 +1,7 @@
 pkgbase = tshock
 	pkgdesc = A Terraria Server administration modification that runs on the open source TerrariaAPI.
-	pkgver = 4.3.6
-	pkgrel = 2
+	pkgver = 4.3.9
+	pkgrel = 1
 	epoch = 1
 	url = http://tshock.co/xf/
 	install = tshock.install
@@ -9,12 +9,12 @@ pkgbase = tshock
 	license = GPL
 	depends = tmux
 	depends = mono
-	source = https://github.com/NyxStudios/TShock/archive/b7fedc173b5c44e6e00dba3481406debb26e23f2/tshock-b7fedc173b5c44e6e00dba3481406debb26e23f2.tar.gz
-	source = https://github.com/NyxStudios/TerrariaAPI-Server/archive/7f29c87f6451fe6e68c4cde4ff792e7234b809cf/TerrariaAPI-Server-7f29c87f6451fe6e68c4cde4ff792e7234b809cf.tar.gz
+	source = https://github.com/NyxStudios/TShock/archive/v4.3.9/tshock-v4.3.9.tar.gz
+	source = https://github.com/NyxStudios/TerrariaAPI-Server/archive/24c7c53fc91e3d34f81d6320b064f552679e0d62/TerrariaAPI-Server-24c7c53fc91e3d34f81d6320b064f552679e0d62.tar.gz
 	source = tshock.sh
 	source = tshock.service
-	sha256sums = 88a58d70ba07aa5304edf75bd136eb3b427ccaf8ceab64314b54d5944eff6a65
-	sha256sums = 2a19794c27c5f7b3bbf86c9d932a2d4152ed42c0594206f40c17dd6904b77f51
+	sha256sums = 733bf91682b982ab2f2cfb7e0fea794c74a067bad660eabd9ed8cca089298ffe
+	sha256sums = 6ba5a720e5ebe551ce9c128f426611a72baf5e69fd605c80662f97aa56fce0ec
 	sha256sums = 2545482d79ded5e503be03beb75495dcbbefe8f97043d5669f0dbbc62306e8d0
 	sha256sums = e1a9a272f5a9674fd045d88c2651135c4d0db1a41433934e668143017a76043d
 
