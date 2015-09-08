@@ -268,3 +268,6 @@
 [submodule "mattermost"]
 	path = mattermost
 	url = ssh+git://aur@aur.archlinux.org:22/mattermost.git/
+[submodule "tidb-git"]
+	path = tidb-git
+	url = ssh+git://aur@aur.archlinux.org:22/tidb-git.git
