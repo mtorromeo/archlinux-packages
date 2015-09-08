@@ -265,3 +265,6 @@
 [submodule "nuclide-server"]
 	path = nuclide-server
 	url = ssh+git://aur@aur4.archlinux.org:22/nuclide-server.git/
+[submodule "mattermost"]
+	path = mattermost
+	url = ssh+git://aur@aur.archlinux.org:22/mattermost.git/
