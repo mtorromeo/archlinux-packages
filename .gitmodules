@@ -271,3 +271,6 @@
 [submodule "tidb-git"]
 	path = tidb-git
 	url = ssh+git://aur@aur.archlinux.org:22/tidb-git.git
+[submodule "krdc-git"]
+	path = krdc-git
+	url = ssh+git://aur@aur.archlinux.org/krdc-git.git/
