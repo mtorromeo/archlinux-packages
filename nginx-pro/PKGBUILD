@@ -5,30 +5,32 @@ _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
 pkgver=1.8.0
-pkgrel=3
+pkgrel=4
 
 _davextver=0.0.3
-_pushstreamver=0.4.1
+_pushstreamver=0.5.1
 _uploadprogver=0.9.1
 _cachepurgever=2.3
 _modsecver=2.9.0
 _devkitver=0.2.19
 _redisver=0.3.7
+_pagespeedver=1.9.32.10
+_brotliver=019c0ee2356e10f5209266b457a3596360108a16
 
 _openresty=(
-	'echo a7365111f51fa40443f491f3c88f153727a259be' # v0.57
-	'lua v0.9.16rc1'
-	'srcache 71f527165c20d344b91a34bf0547f893ce335d5b' # v0.29
-	'set-misc ea36b61766921156e89bad234ad3310791757041' # v0.28
-	'redis2 5ff03a0e3e756174ff4a764bd59a1aca12b14ac0 ' # v0.11
-	'memc a6843179ac7066a367259c7087e9ce0d2bf6de4e' # v0.15
-	'headers-more d20bf26a8029bff6870b987994907d22b957f837' # v0.26
+	'echo v0.58'
+	'lua v0.9.19'
+	'srcache v0.30'
+	'set-misc v0.29'
+	'redis2 v0.12'
+	'memc v0.16'
+	'headers-more v0.28'
 #	'replace-filter 0.01rc5'
 )
 
 pkgdesc="Lightweight HTTP server with some additional modules (no mail modules)"
 arch=('i686' 'x86_64')
-depends=('libxml2' 'lua51' 'luajit' 'yajl' 'curl' 'apr-util' 'geoip')
+depends=('libxml2' 'lua51' 'luajit' 'yajl' 'curl' 'apr-util' 'geoip' 'libbrotli')
 makedepends=('git' 'apache')
 url="http://nginx.org"
 license=('custom')
@@ -56,6 +58,9 @@ source=(
   https://github.com/FRiCKLE/ngx_cache_purge/archive/$_cachepurgever/nginx_cache_purge-$_cachepurgever.tar.gz
   https://github.com/wandenberg/nginx-push-stream-module/archive/$_pushstreamver/nginx-push-stream-module-$_pushstreamver.tar.gz
 	http://people.freebsd.org/~osa/ngx_http_redis-$_redisver.tar.gz
+	https://github.com/pagespeed/ngx_pagespeed/archive/release-$_pagespeedver-beta/pagespeed-module-$_pagespeedver.tar.gz
+	pagespeed-$_pagespeedver.tar.gz::https://dl.google.com/dl/page-speed/psol/$_pagespeedver.tar.gz
+	https://github.com/google/ngx_brotli/archive/$_brotliver/ngx_brotli-$_brotliver.tar.gz
   modsec-recommended.conf
   service
   logrotate
@@ -69,6 +74,8 @@ _modules=(
 	--add-module=../nginx-push-stream-module-$_pushstreamver
 	--add-module=../ModSecurity-$_modsecver/nginx/modsecurity
 	--add-module=../ngx_http_redis-$_redisver
+	--add-module=../ngx_pagespeed-release-$_pagespeedver-beta
+	--add-module=../ngx_brotli-$_brotliver
 )
 
 for _module in "${_openresty[@]}"; do
@@ -81,6 +88,9 @@ for _module in "${_openresty[@]}"; do
 done
 
 build() {
+	cd ngx_pagespeed-release-$_pagespeedver-beta
+	ln -s ../psol
+
 	msg "Compiling mod-security"
 	cd "$srcdir/ModSecurity-$_modsecver"
 
@@ -207,15 +217,18 @@ sha256sums=('23cca1239990c818d8f6da118320c4979aadf5386deda691b1b7c2c96b9df3d5'
             '99ec072cca35cd7791e77c40a8ded41a7a8c1111e057be26e55fba2fdf105f43'
             'd428a0236c933779cb40ac8c91afb19d5c25a376dc3caab825bfd543e1ee530d'
             'cb7d5f22919c613f1f03341a1aeb960965269302e9eb23425ccaabd2f5dcbbec'
-            '553584f557a3faec73702550e7e1417cbc0021f4f98468cc83e61e9d94def5cc'
+            'a95f31e80120fd7324795b92a0d94c0b43e1265df7fd0f1eba11a337c1e0a626'
             '9dfc14db81f431fdf3d69f3661a37daf110aef5f9479aa7c88cf362bb5d62604'
+            '2559470d6c5fc0beb2c82e07d77af91d5bf3311c4476723e3f31e0638a20a734'
+            'de4995f986cffc3b683db9e718f2471e3410af9c65c8988e439ae3978390abf7'
+            '890ddfd63476300cdd4bf03328b82fb7054ea68543ea0e996ed33997987e9e78'
             '838637cc4f5fd9d3209720db23234d99972e95549d8ac8eb619474f66376e8b1'
             '78631071af6aed03cca9c53778984ab4c010346102634ce3372246f439c76b82'
             '303f1a15a4e9da19ccb99b7742fa69b109276fcd9731a87a05d8793f184ce61b'
-            'd88b2b909471a0343a1522b6c697c735bf3ba86c9b2dddea9334d920f6fdb6e5'
-            'edde780f227089c41f6feab56217803c6d8347d82b0ffe99b95fd2217828595b'
-            'a3003fc3ee314fd9b99cd3399578fd44cca50efab9448733a1d516f40671ed74'
-            '487d70cd951b284c355a28321ad7d45e66795170f79700a94427e0d40b10d630'
-            'b2750d397e4cd88302d648969b703d3949edabf9769735e32ce7ec10ab1f5af8'
-            'c727efabe64e6de17650d6016437f212d5ce06c567706f5c6d8c0e620fef65dd'
-            '359b3723a4f2e61dca7103d709c338d28a0f7d01f229eeec5c31e8a4ba6c5cc9')
+            '190fe3977dd1910e82059f30f9baae3da2ee6e6fb50f18c9bc2605a19dbb9626'
+            '2b41d4d2627fda76946f194aae6c2b4d89bb59afd792d397c6b481ee82c10eb4'
+            'e34b1ab5f5007661f73819f9c20fd6c2a46ed3e53364e9449b02ef2bd3628633'
+            '8d280fc083420afb41dbe10df9a8ceec98f1d391bd2caa42ebae67d5bc9295d8'
+            'baf5274c815a5f27854747df09ff5bcd6d82e0baa2f224a9db6450d2f3a35a4f'
+            '24f3c3270831aed2d157c01ef74cb26eab26b832971fe7b9f42a03dbfac10ce4'
+            '67e5ca6cd9472938333c4530ab8c8b8bc9fe910a8cb237e5e5f1853e14725580')

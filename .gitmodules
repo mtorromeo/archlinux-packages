@@ -274,3 +274,6 @@
 [submodule "krdc-git"]
 	path = krdc-git
 	url = ssh+git://aur@aur.archlinux.org/krdc-git.git/
+[submodule "libbrotli-git"]
+	path = libbrotli-git
+	url = ssh://aur@aur.archlinux.org/libbrotli-git.git
