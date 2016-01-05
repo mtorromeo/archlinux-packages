@@ -1,5 +1,5 @@
 post_install() {
-	usr/bin/systemd-tmpfiles --create php55-fpm.conf
+	usr/bin/systemd-tmpfiles --create php56-fpm.conf
 }
 
 post_upgrade() {

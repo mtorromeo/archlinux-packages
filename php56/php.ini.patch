@@ -1,15 +1,20 @@
---- php.ini-production.orig	2014-05-05 09:53:16.438718687 +0200
-+++ php.ini-production	2014-05-05 09:54:37.502051360 +0200
-@@ -296,7 +296,7 @@
- ; or per-virtualhost web server configuration file. This directive is
- ; *NOT* affected by whether Safe Mode is turned On or Off.
+--- php.ini-production	2016-01-05 11:55:35.607050441 +0100
++++ php.ini-production-php56	2016-01-05 11:59:41.556175921 +0100
+@@ -291,11 +291,11 @@
+ ; are decoded with unserialize, the data will remain the same.
+ serialize_precision = 17
+ 
+-; open_basedir, if set, limits all file operations to the defined directory
++; , if set, limits all file operations to the defined directory
+ ; and below.  This directive makes most sense if used in a per-directory
+ ; or per-virtualhost web server configuration file.
  ; http://php.net/open-basedir
 -;open_basedir =
 +open_basedir = /srv/http/:/home/:/tmp/:/usr/share/pear/:/usr/share/webapps/
  
  ; This directive allows you to disable certain functions for security reasons.
- ; It receives a comma-delimited list of function names. This directive is
-@@ -363,7 +363,7 @@
+ ; It receives a comma-delimited list of function names.
+@@ -360,7 +360,7 @@
  ; threat in any way, but it makes it possible to determine whether you use PHP
  ; on your server or not.
  ; http://php.net/expose-php
@@ -18,7 +23,7 @@
  
  ;;;;;;;;;;;;;;;;;;;
  ; Resource Limits ;
-@@ -389,7 +389,7 @@
+@@ -386,7 +386,7 @@
  ;max_input_nesting_level = 64
  
  ; How many GET/POST/COOKIE input variables may be accepted
@@ -27,7 +32,7 @@
  
  ; Maximum amount of memory a script may consume (128MB)
  ; http://php.net/memory-limit
-@@ -574,7 +574,7 @@
+@@ -571,7 +571,7 @@
  ; Example:
  ;error_log = php_errors.log
  ; Log errors to syslog (Event Log on Windows).
@@ -36,25 +41,25 @@
  
  ;windows.show_crt_warning
  ; Default value: 0
-@@ -693,7 +693,7 @@
+@@ -708,7 +708,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;
  
  ; UNIX: "/path1:/path2"
 -;include_path = ".:/php/includes"
-+include_path = ".:/opt/php55/share/pear"
++include_path = ".:/opt/php56/share/pear"
  ;
  ; Windows: "\path1;\path2"
  ;include_path = ".;c:\php\includes"
-@@ -716,7 +716,7 @@
+@@ -731,7 +731,7 @@
  
  ; Directory in which the loadable extensions (modules) reside.
  ; http://php.net/extension-dir
 -; extension_dir = "./"
-+extension_dir = "/opt/php55/modules/"
++extension_dir = "/opt/php56/modules/"
  ; On windows:
  ; extension_dir = "ext"
  
-@@ -788,7 +788,7 @@
+@@ -807,7 +807,7 @@
  
  ; Maximum allowed size for uploaded files.
  ; http://php.net/upload-max-filesize
@@ -63,10 +68,11 @@
  
  ; Maximum number of files that can be uploaded via a single request
  max_file_uploads = 20
-@@ -850,50 +850,47 @@
+@@ -868,49 +868,48 @@
+ ;
  ; If you only provide the name of the extension, PHP will look for it in its
  ; default extension directory.
- ;
+-;
 -; Windows Extensions
 -; Note that ODBC support is built in, so no dll is needed for it.
 -; Note that many DLL files are located in the extensions/ (PHP 4) ext/ (PHP 5)
@@ -87,8 +93,7 @@
 -;extension=php_exif.dll      ; Must be after mbstring as it depends on it
 -;extension=php_mysql.dll
 -;extension=php_mysqli.dll
--;extension=php_oci8.dll      ; Use with Oracle 10gR2 Instant Client
--;extension=php_oci8_11g.dll  ; Use with Oracle 11gR2 Instant Client
+-;extension=php_oci8_12c.dll  ; Use with Oracle Database 12c Instant Client
 -;extension=php_openssl.dll
 -;extension=php_pdo_firebird.dll
 -;extension=php_pdo_mysql.dll
@@ -97,7 +102,6 @@
 -;extension=php_pdo_pgsql.dll
 -;extension=php_pdo_sqlite.dll
 -;extension=php_pgsql.dll
--;extension=php_pspell.dll
 -;extension=php_shmop.dll
 -
 -; The MIBS data available in the PHP distribution must be installed. 
@@ -112,15 +116,15 @@
 -;extension=php_xmlrpc.dll
 -;extension=php_xsl.dll
 +;extension=bcmath.so
-+extension=bz2.so
++;extension=bz2.so
 +;extension=calendar.so
-+extension=curl.so
++;extension=curl.so
 +;extension=dba.so
 +;extension=enchant.so
 +;extension=exif.so
 +;extension=ftp.so
 +;extension=gd.so
-+extension=gettext.so
++;extension=gettext.so
 +;extension=gmp.so
 +;extension=iconv.so
 +;extension=imap.so
@@ -131,6 +135,7 @@
 +;extension=mysqli.so
 +;extension=mysql.so
 +;extension=odbc.so
++;zend_extension=opcache.so
 +;extension=openssl.so
 +;extension=pdo_mysql.so
 +;extension=pdo_odbc.so

@@ -4,9 +4,9 @@ After=syslog.target network.target
 
 [Service]
 Type=forking
-PIDFile=/run/php-fpm/php55-fpm.pid
+PIDFile=/run/php-fpm/php56-fpm.pid
 PrivateTmp=true
-ExecStart=/opt/php55/bin/php-fpm --pid /run/php-fpm/php55-fpm.pid
+ExecStart=/opt/php56/bin/php-fpm --pid /run/php-fpm/php56-fpm.pid
 ExecReload=/usr/bin/kill -USR2 $MAINPID
 
 [Install]
