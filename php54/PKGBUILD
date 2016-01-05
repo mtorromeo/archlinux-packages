@@ -20,7 +20,7 @@ pkgname=('php54'
          'php54-sqlite'
          'php54-tidy'
          'php54-xsl')
-pkgver=5.4.44
+pkgver=5.4.45
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -30,7 +30,7 @@ makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix'
              'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
              'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'freetype2'
              'pkg-config')
-source=("http://www.php.net/distributions/${pkgbase%54}-${pkgver}.tar.bz2"
+source=("http://php.net/distributions/${pkgbase%54}-${pkgver}.tar.bz2"
         'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
 
@@ -382,10 +382,10 @@ package_php54-xsl() {
 	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/opt/php54/modules/xsl.so
 }
 
-sha256sums=('8dd59e5ce9248cf36ac3de5412a518b8b24c01ace6c46ce3d12e4ce981a3856d'
+sha256sums=('4e0d28b1554c95cfaea6fa2b64aac85433f158ce72bb571bcd5574f98f4c6582'
             '5498ed2eb6ca5c96384873c2c83db36df82af79100e7543a6d0b17539e0304e2'
             '6ee6ed48b8416390c56b2e32b75c79f85586431b5c44c48ed22ae6a8dbe68332'
             '63d88e95e1ef6e9bed1a695cb56f4c1e2dc768077c64fce45f927b6bee8b1dbf'
-            '2608db714797c9ffc65dd6a7119221738b7de5abe55f105986bdd50152d6b7c8'
+            '185d18221b09a43a0d5a05f9d3455f2f5514bb2b4751df98f297a3b4983c6fdb'
             '72eb165f7074df22a623428b71b03269e7e4d41cae14da41166ec746ab18cd92'
             '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5')
