@@ -1,0 +1,43 @@
+# Maintainer; Eugene Lamskoy <e.lamskoy@gmail.com>
+_pecl=PDO_DBLIB
+_ext=pdo_dblib
+pkgname="php56-${_ext}"
+pkgver=1.0
+pkgrel=5
+pkgdesc="pdo_dblib extension for PHP 5.6"
+arch=('i686' 'x86_64')
+url="http://pecl.php.net/package/${_pecl}"
+license=('PHP')
+depends=('php56' 'freetds')
+makedepends=('php56')
+source=(
+    http://pecl.php.net/get/${_pecl}-${pkgver}.tgz
+    'freetds.patch'
+    'php-54.patch'
+)
+backup=('etc/php56/conf.d/pdo_dblib.ini')
+install="php-${_ext}.install"
+
+build() {
+  cd "$srcdir/${_pecl}-${pkgver}"
+  /opt/php56/bin/phpize
+  patch -i ${srcdir}/freetds.patch -p0
+  patch -i ${srcdir}/php-54.patch -p0
+  ./configure --prefix=/opt/php56 --with-php-config=/opt/php56/bin/php-config
+  make
+}
+
+package() {
+  cd "$srcdir/${_pecl}-$pkgver"
+
+  make INSTALL_ROOT="$pkgdir" install
+  echo ";extension=${_ext}.so" > "${_ext}.ini"
+  install -Dm644 "${_ext}.ini" "$pkgdir/etc/php56/conf.d/${_ext}.ini"
+}
+
+sha256=('017135f92597e02dcacf1c37319f3b2a'
+         '77d3243e4a137bd199ac403caf12a002'
+         '75b34f46f3c964904e6a54cf3614cee4')
+sha256sums=('604f0197a5c7b278a780fa1f7486bd04737e331ac0e8ebad183090fcba83d192'
+            '24a3ee373ee7bdd516a39c5184512dfd01e62ac0116f456421660dfdb8b9067e'
+            '5952b126577529b852d4376608af9ececcbb57aa8d80c02553a782ac11fbe9c5')
