@@ -1,0 +1,32 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    cool.io (1.4.3)
+    http_parser.rb (0.6.0)
+    json (1.8.3)
+    msgpack (0.5.12)
+    sigdump (0.2.3)
+    string-scrub (0.0.5)
+    thread_safe (0.3.5)
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
+    tzinfo-data (1.2015.7)
+      tzinfo (>= 1.0.0)
+    yajl-ruby (1.2.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  cool.io (>= 1.2.2, < 2.0.0)
+  http_parser.rb (>= 0.5.1, < 0.7.0)
+  json (>= 1.4.3)
+  msgpack (>= 0.5.11, < 0.6.0)
+  sigdump (~> 0.2.2)
+  string-scrub (>= 0.0.3)
+  tzinfo (>= 1.0.0)
+  tzinfo-data (>= 1.0.0)
+  yajl-ruby (~> 1.0)
+
+BUNDLED WITH
+   1.11.2

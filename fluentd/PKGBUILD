@@ -1,0 +1,54 @@
+# Maintainer: Daniel Nagy <danielnagy at gmx de>
+# Contributor: kusakata <shohei atmark kusakata period com>
+
+pkgname=fluentd
+pkgver=0.12.19
+pkgrel=1
+pkgdesc="A tool to collect events and logs"
+arch=('i686' 'x86_64')
+url="http://fluentd.org/"
+license=('Apache')
+depends=('ruby-bundler')
+options=(!emptydirs)
+install=$pkgname.install
+source=("https://rubygems.org/downloads/$pkgname-$pkgver.gem"
+        "fluentd.service"
+				"user.conf"
+        "fluent.conf"
+        "Gemfile"
+				"Gemfile.lock")
+backup=("etc/fluent/fluent.conf")
+noextract=("$pkgname-$pkgver.gem")
+
+package() {
+	cd "$srcdir"
+	local _gemdir="$(ruby -e'puts Gem.default_dir')"
+	gem install --ignore-dependencies --no-user-install -i "$pkgdir$_gemdir" -n "$pkgdir"/usr/bin $pkgname-$pkgver.gem
+	rm "$pkgdir$_gemdir"/cache/$pkgname-$pkgver.gem
+
+	cd "$pkgdir$_gemdir"/gems/$pkgname-$pkgver
+	cp "$srcdir"/Gemfile{,.lock} .
+	bundle install --deployment
+
+	cd "$pkgdir"/usr/bin
+	for bin in *; do
+		rm $bin
+		gembin="$_gemdir"/gems/$pkgname-$pkgver/bin/$bin
+		ln -s ../.."$gembin" $bin
+
+		sed 's/__FILE__/File.realpath(__FILE__)/g' -i "$pkgdir$gembin"
+		sed '3 i ENV["BUNDLE_GEMFILE"] = File.expand_path("../../Gemfile", File.realpath(__FILE__))\nrequire "rubygems"\nrequire "bundler/setup"' -i "$pkgdir$gembin"
+	done
+
+  cd "$srcdir"
+	install -Dm644 fluent.conf "$pkgdir"/etc/fluent/fluent.conf
+	install -Dm644 user.conf "$pkgdir"/usr/lib/sysusers.d/user.conf
+	install -Dm644 fluentd.service "$pkgdir"/usr/lib/systemd/system/fluentd.service
+}
+
+sha256sums=('ea4121bc3f1cf033baa6ae3e9b99534a9dc426bf6615c0b7eb10560b1d4f3b87'
+            '7e6365fb28bc60c72235f277af9281738d8098b3ec822771ca826780f42e1f5d'
+            'cd40e478ec83e50771599b83075c5911896c5a693a2ac5a9b8d3882d69a80125'
+            '95e90fdbb518868d04b3f4765b3b002f91ff718c8fd5ec2384fbf6f0c47dcdef'
+            '22108b142068702c7479af12df490518ae0e90ce8a6136ea1dda19ac54c0a01e'
+            '407ee317a724d0a7189442f8b799bf726c9888b2643102628f4c407275832c7f')

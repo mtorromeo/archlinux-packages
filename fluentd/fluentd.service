@@ -1,0 +1,15 @@
+[Unit]
+Description=fluentd
+Documentation=http://www.fluentd.org
+
+[Service]
+Type=forking
+User=fluent
+Group=fluent
+ExecStart=/usr/bin/fluentd -d /run/fluentd/fluentd.pid --no-supervisor --suppress-config-dump
+RuntimeDirectory=fluentd
+PIDFile=/run/fluentd/fluentd.pid
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
