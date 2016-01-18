@@ -42,7 +42,7 @@ package() {
 
   cd "$srcdir"
 	install -Dm644 fluent.conf "$pkgdir"/etc/fluent/fluent.conf
-	install -Dm644 user.conf "$pkgdir"/usr/lib/sysusers.d/user.conf
+	install -Dm644 user.conf "$pkgdir"/usr/lib/sysusers.d/fluent.conf
 	install -Dm644 fluentd.service "$pkgdir"/usr/lib/systemd/system/fluentd.service
 }
 
