@@ -58,9 +58,6 @@
 [submodule "iosshy"]
 	path = iosshy
 	url = ssh+git://aur@aur4.archlinux.org:22/iosshy.git/
-[submodule "kate-bracesane-plugin"]
-	path = kate-bracesane-plugin
-	url = ssh+git://aur@aur4.archlinux.org:22/kate-bracesane-plugin.git/
 [submodule "kregexpeditor-git"]
 	path = kregexpeditor-git
 	url = ssh+git://aur@aur4.archlinux.org:22/kregexpeditor-git.git/
