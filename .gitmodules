@@ -274,3 +274,9 @@
 [submodule "libbrotli-git"]
 	path = libbrotli-git
 	url = ssh://aur@aur.archlinux.org/libbrotli-git.git
+[submodule "python-aiomysql"]
+	path = python-aiomysql
+	url = ssh://aur@aur.archlinux.org/python-aiomysql.git
+[submodule "python-asyncssh"]
+	path = python-asyncssh
+	url = ssh://aur@aur.archlinux.org/python-asyncssh.git
