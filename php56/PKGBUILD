@@ -15,20 +15,21 @@ pkgname=('php56'
          'php56-mcrypt'
          'php56-mssql'
          'php56-odbc'
+         'php56-dblib'
          'php56-pgsql'
          'php56-pspell'
          'php56-snmp'
          'php56-sqlite'
          'php56-tidy'
          'php56-xsl')
-pkgver=5.6.16
+pkgver=5.6.17
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
 makedepends=('apache' 'c-client' 'postgresql-libs' 'libldap' 'postfix'
              'sqlite' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'file' 'freetds'
-             'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'gd' 'icu'
+             'libmcrypt' 'tidy' 'aspell' 'libltdl' 'gd' 'icu'
              'curl' 'libxslt' 'openssl' 'db' 'gmp' 'systemd')
 source=("http://php.net/distributions/${pkgbase%56}-${pkgver}.tar.xz"
         'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
@@ -122,6 +123,7 @@ build() {
 		--with-pdo-odbc=shared,unixODBC,/usr \
 		--with-pdo-pgsql=shared \
 		--with-pdo-sqlite=shared,/usr \
+		--with-pdo-dblib=shared,/usr \
 		--with-pgsql=shared \
 		--with-png-dir=/usr \
 		--with-pspell=shared \
@@ -214,7 +216,7 @@ build() {
 
 package_php56() {
 	pkgdesc='An HTML-embedded scripting language'
-	provides="php=$pkgver"
+	provides=("php=$pkgver")
 	depends=('pcre' 'libxml2' 'bzip2' 'curl')
 	backup=('etc/php56/php.ini')
 	replaces=('php55')
@@ -238,7 +240,7 @@ package_php56() {
 	# remove static modules
 	rm -f ${pkgdir}/opt/php56/modules/*.a
 	# remove modules provided by sub packages
-	rm -f ${pkgdir}/opt/php56/modules/{enchant,gd,intl,ldap,mcrypt,mssql,odbc,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite3,pdo_sqlite,tidy,xsl}.so
+	rm -f ${pkgdir}/opt/php56/modules/{enchant,gd,imap,intl,ldap,mcrypt,mssql,odbc,pdo_dblib,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite3,pdo_sqlite,tidy,xsl}.so
 }
 
 package_php56-cgi() {
@@ -360,6 +362,13 @@ package_php56-odbc() {
 	install -D -m755 ${srcdir}/build-php/modules/pdo_odbc.so ${pkgdir}/opt/php56/modules/pdo_odbc.so
 }
 
+package_php56-dblib() {
+	depends=('php56' 'freetds')
+	replaces=('php55-dblib')
+	pkgdesc='DBLIB modules for PHP'
+	install -D -m755 ${srcdir}/build-php/modules/pdo_dblib.so ${pkgdir}/opt/php56/modules/pdo_dblib.so
+}
+
 package_php56-pgsql() {
 	depends=('php56' 'postgresql-libs')
 	replaces=('php55-pgsql')
@@ -391,7 +400,7 @@ package_php56-sqlite() {
 }
 
 package_php56-tidy() {
-	depends=('php56' 'tidyhtml')
+	depends=('php56' 'tidy')
 	replaces=('php55-tidy')
 	pkgdesc='tidy module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/tidy.so ${pkgdir}/opt/php56/modules/tidy.so
@@ -404,7 +413,7 @@ package_php56-xsl() {
 	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/opt/php56/modules/xsl.so
 }
 
-sha256sums=('8ef43271d9bd8cc8f8d407d3ba569de9fa14a28985ae97c76085bb50d597de98'
+sha256sums=('ea9d5749380c7c7171e131616466deacd7cb124b5010eafc34e551b0a7b0fb2c'
             '89fb65860168a9b04b312c1762db7f68ce4a2ebee91d83f7a8c24c3432969fb6'
             '6ee6ed48b8416390c56b2e32b75c79f85586431b5c44c48ed22ae6a8dbe68332'
             '59f91e8374da3dc1b9fcf5a737aed245ea769f057a3d3542e08274ece2743479'
