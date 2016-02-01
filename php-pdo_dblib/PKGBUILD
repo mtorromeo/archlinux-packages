@@ -1,44 +1,29 @@
-# Maintainer; Eugene Lamskoy <e.lamskoy@gmail.com>
-_pecl=PDO_DBLIB
-_ext=pdo_dblib
-pkgname="php-${_ext}"
-pkgver=1.0
-pkgrel=5
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgname="php-pdo_dblib"
+pkgver=7.0.2
+pkgrel=1
 pkgdesc="pdo_dblib extension for PHP"
 arch=('i686' 'x86_64')
-url="http://pecl.php.net/package/${_pecl}"
+url="http://php.net/manual/en/ref.pdo-dblib.php"
 license=('PHP')
 depends=('php' 'freetds')
 makedepends=('php')
-source=(
-    http://pecl.php.net/get/${_pecl}-${pkgver}.tgz
-    'freetds.patch'
-    'php-54.patch'
-)
+source=("http://php.net/distributions/php-$pkgver.tar.xz")
+sha256sums=('556121271a34c442b48e3d7fa3d3bbb4413d91897abbb92aaeced4a7df5f2ab2')
 backup=('etc/php/conf.d/pdo_dblib.ini')
-install="php-${_ext}.install"
 
 build() {
-  cd "$srcdir/${_pecl}-${pkgver}"
+  cd "$srcdir"/php-$pkgver/ext/pdo_dblib
   phpize
-  patch -i ${srcdir}/freetds.patch -p0 || exit 1
-  _phpversion=$(php-config --vernum)
-  if [ $_phpversion -ge 50400 ]; then
-      echo "PHP 5.4.0+ detected, applying additional patch";
-      patch -i ${srcdir}/php-54.patch -p0 || exit 1;
-  fi;
   ./configure --prefix=/usr
   make
 }
 
 package() {
-  cd "$srcdir/${_pecl}-$pkgver"
+  cd "$srcdir"/php-$pkgver/ext/pdo_dblib
 
   make INSTALL_ROOT="$pkgdir" install
-  echo ";extension=${_ext}.so" > "${_ext}.ini"
-  install -Dm644 "${_ext}.ini" "$pkgdir/etc/php/conf.d/${_ext}.ini"
+  echo ";extension=pdo_dblib.so" > pdo_dblib.ini
+  install -Dm644 pdo_dblib.ini "$pkgdir"/etc/php/conf.d/pdo_dblib.ini
 }
-
-md5sums=('017135f92597e02dcacf1c37319f3b2a'
-         '77d3243e4a137bd199ac403caf12a002'
-         '75b34f46f3c964904e6a54cf3614cee4')
