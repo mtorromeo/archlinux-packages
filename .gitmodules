@@ -37,9 +37,9 @@
 [submodule "hp-snmp-agents"]
 	path = hp-snmp-agents
 	url = ssh+git://aur@aur4.archlinux.org:22/hp-snmp-agents.git/
-[submodule "hpacucli"]
-	path = hpacucli
-	url = ssh+git://aur@aur4.archlinux.org:22/hpacucli.git/
+[submodule "hpssacli"]
+	path = hpssacli
+	url = ssh+git://aur@aur.archlinux.org:22/hpssacli.git/
 [submodule "hponcfg"]
 	path = hponcfg
 	url = ssh+git://aur@aur4.archlinux.org:22/hponcfg.git/
