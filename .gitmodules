@@ -175,9 +175,6 @@
 [submodule "python2-couleur"]
 	path = python2-couleur
 	url = ssh+git://aur@aur4.archlinux.org:22/python2-couleur.git/
-[submodule "python2-daemon"]
-	path = python2-daemon
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-daemon.git/
 [submodule "python2-dbutils"]
 	path = python2-dbutils
 	url = ssh+git://aur@aur4.archlinux.org:22/python2-dbutils.git/
