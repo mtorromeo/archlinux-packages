@@ -277,3 +277,6 @@
 [submodule "python-asyncssh"]
 	path = python-asyncssh
 	url = ssh://aur@aur.archlinux.org/python-asyncssh.git
+[submodule "mattersend"]
+	path = mattersend
+	url = ssh://aur@aur.archlinux.org/mattersend.git
