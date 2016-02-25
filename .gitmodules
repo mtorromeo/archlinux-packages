@@ -283,3 +283,6 @@
 [submodule "nuvola-app-bandcamp-git"]
 	path = nuvola-app-bandcamp-git
 	url = ssh://aur@aur.archlinux.org/nuvola-app-bandcamp-git.git
+[submodule "gox"]
+	path = gox
+	url = ssh://aur@aur.archlinux.org/gox.git

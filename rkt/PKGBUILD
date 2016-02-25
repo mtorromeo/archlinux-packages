@@ -12,7 +12,7 @@ url="https://github.com/coreos/rkt"
 license=(apache)
 depends=('glibc' 'openssl' 'zlib')
 makedepends=('cpio' 'go' 'wget' 'squashfs-tools' 'perl-capture-tiny'
-             'intltool' 'gperf' 'git' 'libseccomp' 'bc' 'glibc-static')
+             'intltool' 'gperf' 'git' 'libseccomp' 'bc')
 provides=('rkt')
 replaces=('rocket')
 conflicts=('rocket')
