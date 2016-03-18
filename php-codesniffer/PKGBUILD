@@ -1,0 +1,19 @@
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgname=php-codesniffer
+pkgver=2.5.1
+pkgrel=1
+pkgdesc="Tokenises PHP, JavaScript and CSS files and detects violations of a defined set of coding standards."
+arch=('any')
+url="https://github.com/squizlabs/PHP_CodeSniffer"
+license=('BSD')
+depends=('php')
+source=("phpcs-$pkgver.phar::https://github.com/squizlabs/PHP_CodeSniffer/releases/download/2.5.1/phpcs.phar"
+  $pkgname-$pkgver-LICENSE::https://github.com/squizlabs/PHP_CodeSniffer/raw/2.5.1/licence.txt)
+sha256sums=('a5c03403ed6093c53991883b63510a54e79a0c7e97d62c91a5f01673e6c17e32'
+            '821c1697ab88bb71a5d1637743024e455d87074b8a5d0732f85205bd40cba6c9')
+
+package() {
+  install -Dm755 phpcs-$pkgver.phar "$pkgdir"/usr/bin/phpcs
+  install -Dm644 $pkgname-$pkgver-LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
+}
