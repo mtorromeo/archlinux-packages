@@ -4,29 +4,28 @@ _cfgdir=/etc/nginx
 _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
-pkgver=1.9.12
+pkgver=1.9.14
 pkgrel=1
 
 _davextver=0.0.3
 _pushstreamver=0.5.1
-_cachepurgever=2.3
-_modsecver=2.9.0
+_cachepurgever=2.3.1
+_modsecver=2.9.1
 # _devkitver=0.2.19
 _devkitver=f119fe8c172d5b103c327fb2b4accd9089e3eb24
 _redisver=0.3.8
-_pagespeedver=1.10.33.5
+_pagespeedver=1.11.33.0
 _brotliver=86998c61fab726d4ee21fdf7e96f80e0cffbc71a
-_njsver=36541f3695b6
+_njsver=24544f647802
 
 _openresty=(
 	'echo v0.58'
-	'lua v0.10.1rc1'
+	'lua v0.10.2'
 	'srcache v0.30'
-	'set-misc 54cb7e762e8609539774e5a22a7859f803c7cad0'
+	'set-misc v0.30'
 	'redis2 v0.12'
 	'memc v0.16'
 	'headers-more v0.29'
-#	'replace-filter 0.01rc5'
 )
 
 pkgdesc="Lightweight HTTP server with some additional modules (no mail modules)"
@@ -55,7 +54,7 @@ source=(
 	https://github.com/simpl/ngx_devel_kit/archive/$_devkitver/ngx_devel_kit-$_devkitver.tar.gz
 	https://github.com/SpiderLabs/ModSecurity/archive/v$_modsecver/modsecurity-$_modsecver.tar.gz
 	https://github.com/arut/nginx-dav-ext-module/archive/v$_davextver/nginx-dav-ext-module-$_davextver.tar.gz
-	https://github.com/FRiCKLE/ngx_cache_purge/archive/$_cachepurgever/nginx_cache_purge-$_cachepurgever.tar.gz
+	https://github.com/mtorromeo/ngx_cache_purge/archive/$_cachepurgever/nginx_cache_purge-$_cachepurgever.tar.gz
 	https://github.com/wandenberg/nginx-push-stream-module/archive/$_pushstreamver/nginx-push-stream-module-$_pushstreamver.tar.gz
 	http://people.freebsd.org/~osa/ngx_http_redis-$_redisver.tar.gz
 	https://github.com/pagespeed/ngx_pagespeed/archive/release-$_pagespeedver-beta/pagespeed-module-$_pagespeedver.tar.gz
@@ -69,14 +68,14 @@ source=(
 
 _modules=(
 	--add-dynamic-module=../ngx_devel_kit-$_devkitver
-	--add-module=../ngx_cache_purge-$_cachepurgever
+	--add-dynamic-module=../ngx_cache_purge-$_cachepurgever
 	--add-module=../nginx-dav-ext-module-$_davextver
 	--add-module=../nginx-push-stream-module-$_pushstreamver
 	--add-module=../ModSecurity-$_modsecver/nginx/modsecurity
 	--add-dynamic-module=../ngx_http_redis-$_redisver
-	--add-module=../ngx_pagespeed-release-$_pagespeedver-beta
+	--add-dynamic-module=../ngx_pagespeed-release-$_pagespeedver-beta
 	--add-dynamic-module=../ngx_brotli-$_brotliver
-	--add-module=../njs-$_njsver/nginx
+	--add-dynamic-module=../njs-$_njsver/nginx
 )
 
 for _module in "${_openresty[@]}"; do
@@ -214,24 +213,24 @@ package() {
 	gzip -9c man/nginx.8 > "$pkgdir"/usr/share/man/man8/nginx.8.gz
 }
 
-sha256sums=('1af2eb956910ed4b11aaf525a81bc37e135907e7127948f9179f5410337da042'
+sha256sums=('2b4893076d28e6b4384bba8c4fdebfca6de6f8f68ec48a1ca94b9b855ff457d2'
             'a4f0035e739b0ebc48f1be3f07f1a2c5d9695d5dcd24240ce9e4d6755abc4b8b'
-            '13d3cdc5350bb5c607659e4223d879674437b2357a77cdd2747d5dbfe9b531b8'
+            'fdb81fefb17c7561328fe8df9ccbb15a7ebcbdd4110b6cb8dcdc0d970c6c3a04'
             'd428a0236c933779cb40ac8c91afb19d5c25a376dc3caab825bfd543e1ee530d'
-            'cb7d5f22919c613f1f03341a1aeb960965269302e9eb23425ccaabd2f5dcbbec'
+            '1ca6347c7c817254594cd6be47d5890dd089f880482cce08971b8a137073de43'
             'a95f31e80120fd7324795b92a0d94c0b43e1265df7fd0f1eba11a337c1e0a626'
             '95d0ed7be40da2efc88883d72e52e5e272d2c34463583b7078e8fd6d55004934'
-            'd48292eb3a7b7f3f1e0b298148477e879b2c6a8ee3cb47dd41de872192feac4d'
-            '5b2ede0f53281a1486b984937eb261c1a9a013b6b161c7663cc8e953e5b6e2ff'
+            '705e80ccadbf4dd33a6f835b419b36c4c41f45deaf1e8ddf1cecf6ab2ecee3f8'
+            '8f44ca80e3a390a0428413453ded41e416d9dbd56cbf5d53cac2e4be28e5ac72'
             '5b0512128e3cf1d69f757757a725753683ba9afb3e25a153ab6188027e7f6e6a'
-            '2bb58d8bbc8e0fd8dc6f587b198bb88f87e079ec265ebf800a2eef3c71dd5084'
+            'ff41093d0eacf8f0c9062925a39840f3f232e0bba9e4ceb9600ce0ac1ffbd2d3'
             '838637cc4f5fd9d3209720db23234d99972e95549d8ac8eb619474f66376e8b1'
             '78631071af6aed03cca9c53778984ab4c010346102634ce3372246f439c76b82'
             '303f1a15a4e9da19ccb99b7742fa69b109276fcd9731a87a05d8793f184ce61b'
             '190fe3977dd1910e82059f30f9baae3da2ee6e6fb50f18c9bc2605a19dbb9626'
-            '7b741a45ba8c66972fc7261cd191bdc89179ad9cebbc5af59c899c56811b8838'
+            '155feeff08a0b2efaf980705b9ef83d0b341e6d011adad8e2679ea4105668134'
             'e34b1ab5f5007661f73819f9c20fd6c2a46ed3e53364e9449b02ef2bd3628633'
-            '41c54980a0af85ce812d5ae512a469e4d3ad4b43ee655231ffd805fa8bdf14f2'
+            '59920dd3f92c2be32627121605751b52eae32b5884be09f2e4c53fb2fae8aabc'
             'baf5274c815a5f27854747df09ff5bcd6d82e0baa2f224a9db6450d2f3a35a4f'
             '24f3c3270831aed2d157c01ef74cb26eab26b832971fe7b9f42a03dbfac10ce4'
             '0a5f3003b5851373b03c542723eb5e7da44a01bf4c4c5f20b4de53f355a28d33')
