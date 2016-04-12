@@ -155,9 +155,9 @@ build() {
 		--with-http_image_filter_module=dynamic \
 		--with-stream=dynamic \
 		--with-mail=dynamic \
+		--with-http_perl_module=dynamic \
 		${_modules[@]} \
 		#--with-http_random_index_module \
-		#--with-http_perl_module \
 
 	make
 }
