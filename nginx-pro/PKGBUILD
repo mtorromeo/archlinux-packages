@@ -4,7 +4,7 @@ _cfgdir=/etc/nginx
 _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
-pkgver=1.9.14
+pkgver=1.10.0
 pkgrel=1
 
 _davextver=0.0.3
@@ -131,8 +131,6 @@ build() {
 		--http-fastcgi-temp-path=$_tmpdir/fastcgi \
 		--http-scgi-temp-path=$_tmpdir/scgi \
 		--http-uwsgi-temp-path=$_tmpdir/uwsgi \
-		--with-imap \
-		--with-imap_ssl_module \
 		--with-ipv6 \
 		--with-pcre-jit \
 		--with-file-aio \
@@ -155,6 +153,7 @@ build() {
 		--with-http_image_filter_module=dynamic \
 		--with-stream=dynamic \
 		--with-mail=dynamic \
+		--with-mail_ssl_module \
 		--with-http_perl_module=dynamic \
 		${_modules[@]} \
 		#--with-http_random_index_module \
@@ -213,7 +212,7 @@ package() {
 	gzip -9c man/nginx.8 > "$pkgdir"/usr/share/man/man8/nginx.8.gz
 }
 
-sha256sums=('2b4893076d28e6b4384bba8c4fdebfca6de6f8f68ec48a1ca94b9b855ff457d2'
+sha256sums=('8ed647c3dd65bc4ced03b0e0f6bf9e633eff6b01bac772bcf97077d58bc2be4d'
             'a4f0035e739b0ebc48f1be3f07f1a2c5d9695d5dcd24240ce9e4d6755abc4b8b'
             'fdb81fefb17c7561328fe8df9ccbb15a7ebcbdd4110b6cb8dcdc0d970c6c3a04'
             'd428a0236c933779cb40ac8c91afb19d5c25a376dc3caab825bfd543e1ee530d'
