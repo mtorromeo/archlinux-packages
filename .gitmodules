@@ -286,3 +286,6 @@
 [submodule "gox"]
 	path = gox
 	url = ssh://aur@aur.archlinux.org/gox.git
+[submodule "python-aiopg"]
+        path = python-aiopg
+        url = ssh://aur@aur.archlinux.org/python-aiopg.git
