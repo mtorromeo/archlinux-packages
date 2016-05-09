@@ -1,10 +1,11 @@
-# Maintainer: Yuval Adam <yuval at y3xz dot com> PGP-Key: 271386AA2EB7672F
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+# Contributor: Yuval Adam <yuval at y3xz dot com> PGP-Key: 271386AA2EB7672F
 # Contributor: Kenny Rasschaert <kenny dot rasschaert at gmail dot com> PGP-Key: 1F70454121E41419
 # Contributor: Adrián Pérez de Castro <adrian at perezdecastro dor org> PGP-Key: 91C559DBE4C9123B
 # Contributor: Carl George <arch at cgtx dot us> PGP-Key: 4BA2F7E101D9F512
 
 pkgname=rkt
-pkgver=1.2.1
+pkgver=1.4.0
 pkgrel=1
 pkgdesc="App container runtime"
 arch=('x86_64')
@@ -18,12 +19,14 @@ replaces=('rocket')
 conflicts=('rocket')
 source=("https://github.com/coreos/rkt/archive/v$pkgver/$pkgname-$pkgver.tar.gz"
         "rkt.sysusers")
-sha256sums=('82cb68f8a2a986d506f5bd1935883f5be83c7e918d3e1614b6db54db4f427fdd'
+sha256sums=('1ce98ff74aef3dc2c43025f2b458e6dbfeb6c7f756a313f4ecc2827fc84ce031'
             '1ad8d343191be731289577d249a2467fbe5a69949117601e760b459f599d311f')
-install="$pkgname.install"
+install="rkt.install"
 
 build() {
   cd $pkgname-$pkgver
+  export GOPATH="$PWD/Godeps/_workspace/src"
+
   ./autogen.sh
   ./configure \
     --prefix=/usr \
@@ -32,9 +35,11 @@ build() {
     --enable-tpm=auto \
     --with-stage1-flavors=coreos,kvm,host,fly \
     --with-stage1-default-flavor=coreos \
-    --with-stage1-default-images-directory=/usr/lib/rkt \
-    --with-stage1-default-location=/usr/lib/rkt/stage1-coreos.aci
-  make all
+  	--with-stage1-default-images-directory=/usr/lib/rkt/stage1-images \
+  	--with-stage1-default-location=/usr/lib/rkt/stage1-images/stage1-coreos.aci
+  make manpages
+  make bash-completion
+  make
 }
 
 package() {
@@ -48,10 +53,16 @@ package() {
   install -Dm644 "$srcdir"/rkt.sysusers "$pkgdir"/usr/lib/sysusers.d/rkt.conf
   install -Dm644 dist/bash_completion/rkt.bash "$pkgdir"/usr/share/bash-completion/completions/rkt
 
+  cd dist/manpages
+  for f in *; do
+    install -Dm644 "$f" "$pkgdir/usr/share/man/man1/$f"
+  done
+  cd ../..
+
   cd build-$pkgname-$pkgver
-  install -dm755 "$pkgdir"/usr/bin "$pkgdir"/usr/lib/rkt
+  install -dm755 "$pkgdir"/usr/bin "$pkgdir"/usr/lib/rkt/stage1-images
   mv bin/{rkt,actool} "$pkgdir"/usr/bin
-  mv bin/stage1-*.aci "$pkgdir"/usr/lib/rkt/
+  mv bin/stage1-*.aci "$pkgdir"/usr/lib/rkt/stage1-images/
 }
 
 # vim:set ts=2 sw=2 et:
