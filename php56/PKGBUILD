@@ -22,7 +22,7 @@ pkgname=('php56'
          'php56-sqlite'
          'php56-tidy'
          'php56-xsl')
-pkgver=5.6.20
+pkgver=5.6.21
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -413,7 +413,7 @@ package_php56-xsl() {
 	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/opt/php56/modules/xsl.so
 }
 
-sha256sums=('2b87d40213361112af49157a435e0d4cdfd334c9b7c731c8b844932b1f444e7a'
+sha256sums=('566ff1a486cb0485ed477a91ea292423f77a58671270ff73b74e67e3ce7084f9'
             '89fb65860168a9b04b312c1762db7f68ce4a2ebee91d83f7a8c24c3432969fb6'
             '6ee6ed48b8416390c56b2e32b75c79f85586431b5c44c48ed22ae6a8dbe68332'
             '59f91e8374da3dc1b9fcf5a737aed245ea769f057a3d3542e08274ece2743479'
