@@ -292,3 +292,6 @@
 [submodule "nomad"]
         path = nomad
         url = ssh://aur@aur.archlinux.org/nomad.git
+[submodule "python-uvloop"]
+	path = python-uvloop
+	url = ssh://aur@aur.archlinux.org/python-uvloop.git
