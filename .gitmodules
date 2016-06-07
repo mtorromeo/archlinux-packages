@@ -70,9 +70,6 @@
 [submodule "logstash"]
 	path = logstash
 	url = ssh+git://aur@aur4.archlinux.org:22/logstash.git/
-[submodule "logstash-forwarder-git"]
-	path = logstash-forwarder-git
-	url = ssh+git://aur@aur4.archlinux.org:22/logstash-forwarder-git.git/
 [submodule "mongrel2"]
 	path = mongrel2
 	url = ssh+git://aur@aur4.archlinux.org:22/mongrel2.git/
