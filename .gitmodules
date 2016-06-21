@@ -13,9 +13,6 @@
 [submodule "chipmunk"]
 	path = chipmunk
 	url = ssh+git://aur@aur4.archlinux.org:22/chipmunk.git/
-[submodule "cpqacuxe"]
-	path = cpqacuxe
-	url = ssh+git://aur@aur4.archlinux.org:22/cpqacuxe.git/
 [submodule "dropbox"]
 	path = dropbox
 	url = ssh+git://aur@aur4.archlinux.org:22/dropbox.git/
