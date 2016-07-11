@@ -4,7 +4,7 @@ _cfgdir=/etc/nginx
 _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
-pkgver=1.10.0
+pkgver=1.10.1
 pkgrel=1
 
 _davextver=0.0.3
@@ -212,7 +212,7 @@ package() {
 	gzip -9c man/nginx.8 > "$pkgdir"/usr/share/man/man8/nginx.8.gz
 }
 
-sha256sums=('8ed647c3dd65bc4ced03b0e0f6bf9e633eff6b01bac772bcf97077d58bc2be4d'
+sha256sums=('1fd35846566485e03c0e318989561c135c598323ff349c503a6c14826487a801'
             'a4f0035e739b0ebc48f1be3f07f1a2c5d9695d5dcd24240ce9e4d6755abc4b8b'
             'fdb81fefb17c7561328fe8df9ccbb15a7ebcbdd4110b6cb8dcdc0d970c6c3a04'
             'd428a0236c933779cb40ac8c91afb19d5c25a376dc3caab825bfd543e1ee530d'
