@@ -289,3 +289,6 @@
 [submodule "python-uvloop"]
 	path = python-uvloop
 	url = ssh://aur@aur.archlinux.org/python-uvloop.git
+[submodule "rt3562sta"]
+        path = rt3562sta
+        url = ssh://aur@aur.archlinux.org/rt3562sta.git
