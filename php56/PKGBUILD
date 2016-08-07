@@ -23,7 +23,7 @@ pkgname=('php56'
          'php56-tidy'
          'php56-xsl')
 pkgver=5.6.24
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
