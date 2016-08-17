@@ -1,0 +1,41 @@
+pkgdesc='App Container Server'
+pkgname=acserver
+pkgver=0.1.0
+pkgrel=1
+url="https://github.com/appc/$pkgname"
+source=("$url/archive/v$pkgver/$pkgname-$pkgver.tar.gz"
+        "$pkgname.service"
+        service.conf
+        user.conf
+        tmpfile.conf
+        )
+sha256sums=('2210603d38a57f46f17612e8f84140c1bc948dbccb1b99b6b9c705e8fc9f2add'
+            '6d1dc3ef48be98099f91fb5e28e62a71edaaddf1736faf1920c4464ebef60fa2'
+            '274a2f1e201bb3490906e6a5402d988456c0b06ad8623fa1839072c17f08ec44'
+            '344915cb853067955bfaa92c75dd62bd78f35cd5da796757038614d21d32211d'
+            '7231d50c852bb474a313ff373ffd8565ca9e416592c86a5e7e386b8ec5942a39')
+install=$pkgname.install
+depends=('bash' 'systemd')
+makedepends=('go')
+options=('!strip')
+arch=('i686' 'x86_64')
+license=('Apache')
+
+build() {
+  cd "$srcdir"/$pkgname-$pkgver
+  ./build
+}
+
+package() {
+  cd "$pkgdir"
+  install -dm700 etc/acserver
+  install -Dm644 "$srcdir"/service.conf etc/acserver/service.conf
+  install -Dm644 "$srcdir"/user.conf usr/lib/sysusers.d/acserver.conf
+  install -Dm644 "$srcdir"/tmpfile.conf usr/lib/tmpfiles.d/acserver.conf
+  install -Dm644 "$srcdir"/$pkgname.service usr/lib/systemd/system/$pkgname.service
+  install -dm755 var/lib/aci/store
+
+  cd "$srcdir"/$pkgname-$pkgver
+  install -Dm755 bin/$pkgname "$pkgdir"/usr/bin/$pkgname
+  install -Dm644 templates/index.html "$pkgdir"/usr/share/acserver/templates/index.html
+}

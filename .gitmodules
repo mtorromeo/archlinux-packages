@@ -292,3 +292,12 @@
 [submodule "rt3562sta"]
         path = rt3562sta
         url = ssh://aur@aur.archlinux.org/rt3562sta.git
+[submodule "python-rollbar"]
+	path = python-rollbar
+	url = ssh://aur@aur.archlinux.org/python-rollbar.git
+[submodule "python-pypng"]
+	path = python-pypng
+	url = ssh://aur@aur.archlinux.org/python-pypng.git
+[submodule "dcos-cli"]
+	path = dcos-cli
+	url = ssh://aur@aur.archlinux.org/dcos-cli.git

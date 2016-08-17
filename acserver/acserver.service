@@ -1,0 +1,21 @@
+[Unit]
+Description=App Container Server
+Documentation=https://github.com/appc/acserver
+ConditionPathExists=/etc/acserver/signkey.pub
+
+[Service]
+User=acserver
+Group=acserver
+
+Environment=SERVER_NAME=default
+Environment=ACI_DIRECTORY=/var/lib/aci/store
+Environment=USERNAME=default
+Environment=PASSWORD=default
+Environment=FLAGS=-https
+EnvironmentFile=-/etc/acserver/service.conf
+
+ExecStart=/usr/bin/acserver -pubkeys /etc/acserver/signkey.pub $FLAGS "$SERVER_NAME" "$ACI_DIRECTORY" /usr/share/acserver/templates "$USERNAME" "$PASSWORD"
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

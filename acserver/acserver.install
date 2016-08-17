@@ -1,0 +1,8 @@
+post_install() {
+  systemd-sysusers acserver.conf
+  systemd-tmpfiles --create acserver.conf
+}
+
+post_upgrade(){
+  systemd-tmpfiles --create acserver.conf
+}
