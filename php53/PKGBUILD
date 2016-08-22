@@ -21,7 +21,7 @@ pkgname=('php53'
          'php53-tidy'
          'php53-xsl')
 pkgver=5.3.29
-pkgrel=3
+pkgrel=4
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -90,7 +90,6 @@ prepare() {
 
 	# workaround for pkg-config 0.28
 	sed -e 's/ && test -n "$OPENSSL_INCS"//g' \
-		-e 's|freetype2/freetype|freetype2|' \
 		-i configure
 }
 
