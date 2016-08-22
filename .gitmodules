@@ -245,7 +245,7 @@
 	path = piler
 	url = ssh+git://aur@aur4.archlinux.org:22/piler.git/
 [submodule "nodejs-htmlhint"]
-	path = nodejs-htmlhint
+	path = htmlhint
 	url = ssh+git://aur@aur4.archlinux.org:22/nodejs-htmlhint.git/
 [submodule "nuclide-server"]
 	path = nuclide-server
