@@ -58,9 +58,6 @@
 [submodule "kregexpeditor-git"]
 	path = kregexpeditor-git
 	url = ssh+git://aur@aur4.archlinux.org:22/kregexpeditor-git.git/
-[submodule "lamson"]
-	path = lamson
-	url = ssh+git://aur@aur4.archlinux.org:22/lamson.git/
 [submodule "libxdiff"]
 	path = libxdiff
 	url = ssh+git://aur@aur4.archlinux.org:22/libxdiff.git/
