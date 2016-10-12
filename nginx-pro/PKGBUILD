@@ -4,7 +4,7 @@ _cfgdir=/etc/nginx
 _tmpdir=/var/lib/nginx
 
 pkgname=nginx-pro
-pkgver=1.11.3
+pkgver=1.11.5
 pkgrel=1
 
 _davextver=0.0.3
@@ -13,19 +13,37 @@ _cachepurgever=2.3.1
 _modsecver=2.9.1
 _devkitver=0.3.0
 _redisver=0.3.8
-_pagespeedver=1.11.33.2
-_brotliver=ada972b2d4492d911d0ab7c9d467df8e819d8247
-_njsver=0.1.0
+_pagespeedver=latest-stable
+_psolver=1.11.33.4
+_brotliver=12529813a9f8475718370a19007c7905601a62ad
+_njsver=0.1.3
 
 _openresty=(
-	'echo v0.59'
-	'lua v0.10.5'
+	'echo v0.60'
+	'lua v0.10.6'
 	'srcache v0.31'
-	'set-misc v0.30'
+	'set-misc v0.31'
 	'redis2 v0.13'
 	'memc v0.17'
-	'headers-more v0.30'
+	'headers-more v0.31'
 )
+
+# https://github.com/arut/nginx-dav-ext-module/releases
+# https://github.com/wandenberg/nginx-push-stream-module/releases
+# https://github.com/SpiderLabs/ModSecurity/releases
+# https://github.com/simpl/ngx_devel_kit/releases
+# https://www.nginx.com/resources/wiki/modules/redis/
+# https://github.com/pagespeed/ngx_pagespeed/releases
+# https://developers.google.com/speed/pagespeed/module/release_notes
+# https://github.com/google/ngx_brotli
+# http://hg.nginx.org/njs/tags
+# https://github.com/openresty/echo-nginx-module/releases
+# https://github.com/openresty/lua-nginx-module/releases
+# https://github.com/openresty/srcache-nginx-module/releases
+# https://github.com/openresty/set-misc-nginx-module/releases
+# https://github.com/openresty/redis2-nginx-module/releases
+# https://github.com/openresty/memc-nginx-module/releases
+# https://github.com/openresty/headers-more-nginx-module/releases
 
 pkgdesc="Lightweight HTTP server with some additional modules (no mail modules)"
 arch=('i686' 'x86_64')
@@ -56,8 +74,8 @@ source=(
 	https://github.com/mtorromeo/ngx_cache_purge/archive/$_cachepurgever/nginx_cache_purge-$_cachepurgever.tar.gz
 	https://github.com/wandenberg/nginx-push-stream-module/archive/$_pushstreamver/nginx-push-stream-module-$_pushstreamver.tar.gz
 	http://people.freebsd.org/~osa/ngx_http_redis-$_redisver.tar.gz
-	https://github.com/pagespeed/ngx_pagespeed/archive/release-$_pagespeedver-beta/pagespeed-module-$_pagespeedver.tar.gz
-	pagespeed-$_pagespeedver.tar.gz::https://dl.google.com/dl/page-speed/psol/$_pagespeedver.tar.gz
+	https://github.com/pagespeed/ngx_pagespeed/archive/$_pagespeedver/pagespeed-module-$_pagespeedver.tar.gz
+	pagespeed-$_psolver.tar.gz::https://dl.google.com/dl/page-speed/psol/$_psolver.tar.gz
 	https://github.com/google/ngx_brotli/archive/$_brotliver/ngx_brotli-$_brotliver.tar.gz
 	njs-$_njsver.tar.gz::http://hg.nginx.org/njs/archive/$_njsver.tar.gz
 	modsec-recommended.conf
@@ -72,7 +90,7 @@ _modules=(
 	--add-dynamic-module=../nginx-push-stream-module-$_pushstreamver
 	--add-module=../ModSecurity-$_modsecver/nginx/modsecurity
 	--add-dynamic-module=../ngx_http_redis-$_redisver
-	--add-dynamic-module=../ngx_pagespeed-release-$_pagespeedver-beta
+	--add-dynamic-module=../ngx_pagespeed-$_pagespeedver
 	--add-dynamic-module=../ngx_brotli-$_brotliver
 	--add-dynamic-module=../njs-$_njsver/nginx
 )
@@ -87,7 +105,7 @@ for _module in "${_openresty[@]}"; do
 done
 
 build() {
-	cd "$srcdir"/ngx_pagespeed-release-$_pagespeedver-beta
+	cd "$srcdir"/ngx_pagespeed-$_pagespeedver
 	ln -s ../psol
 
 	msg "Compiling mod-security"
@@ -130,7 +148,6 @@ build() {
 		--http-fastcgi-temp-path=$_tmpdir/fastcgi \
 		--http-scgi-temp-path=$_tmpdir/scgi \
 		--http-uwsgi-temp-path=$_tmpdir/uwsgi \
-		--with-ipv6 \
 		--with-pcre-jit \
 		--with-file-aio \
 		--with-threads \
@@ -151,11 +168,14 @@ build() {
 		--with-http_xslt_module=dynamic \
 		--with-http_image_filter_module=dynamic \
 		--with-stream=dynamic \
-	  --with-stream_ssl_module \
+		--with-stream_ssl_module \
+		--with-stream_realip_module \
+		--with-stream_ssl_preread_module \
 		--with-stream_geoip_module=dynamic \
 		--with-mail=dynamic \
 		--with-mail_ssl_module \
 		--with-http_perl_module=dynamic \
+		--with-http_auth_request_module \
 		${_modules[@]} \
 		#--with-http_random_index_module \
 
@@ -210,24 +230,24 @@ package() {
   done
 }
 
-sha256sums=('4a667f40f9f3917069db1dea1f2d5baa612f1fa19378aadf71502e846a424610'
+sha256sums=('223f8a2345a75f891098cf26ccdf208b293350388f51ce69083674c9432db6f6'
             '88e05a99a8a7419066f5ae75966fb1efc409bad4522d14986da074554ae61619'
             'fdb81fefb17c7561328fe8df9ccbb15a7ebcbdd4110b6cb8dcdc0d970c6c3a04'
             'd428a0236c933779cb40ac8c91afb19d5c25a376dc3caab825bfd543e1ee530d'
             '1ca6347c7c817254594cd6be47d5890dd089f880482cce08971b8a137073de43'
             '1d07f38acdb8194bd49344b0ba21de101070de9b8731d27a8d22e928850bc199'
             '95d0ed7be40da2efc88883d72e52e5e272d2c34463583b7078e8fd6d55004934'
-            '3e8a006f4b91046e6cede29fb477a81d234a66ffca2301baa8251d7644a70aca'
-            '1ccb59e81a4cdfd2d8e664c9ee1b31fa2f495aace640d4d14f58319688aaff8e'
-            '3f6fb767e2b27677a1adb2e570afc28c3ededd8921d0ddc13da907150ad60c02'
-            '9eb029a30b1658cbf6aa2ed3f75b1faba107ae29f7e51a68bbd9f5d8e053bb86'
+            '5b8bebc3124ba55388fcb97ee8f6009bd5d061c48bf274a04f6c99b7364e1f85'
+            '97408b04bf7395ab34d7b5baed95ae3dc928746213ca02590773b66a7697a7dc'
+            '9389806ce744ffeb9c211af97289235100105abb833d28ea236198ed23cba86a'
+            '2fdc174ee2e4a35c9a1c57db23ea8ce14769a39345c37aa2593f22ff0f8e0437'
             '838637cc4f5fd9d3209720db23234d99972e95549d8ac8eb619474f66376e8b1'
             '78631071af6aed03cca9c53778984ab4c010346102634ce3372246f439c76b82'
             '303f1a15a4e9da19ccb99b7742fa69b109276fcd9731a87a05d8793f184ce61b'
-            '9b319ad7836202883128d2b9c24ed818082541df57ef7f2065b7557085c603cd'
-            '4f0292c37ab3d7cb980c994825040be1bda2c769cbd800e79c43eb37458347d4'
+            '1077da2229ac7d0a0215e9e6817e297c10697e095010d88f1adbd1add1ce9f4e'
+            'b98c4f648589bbf3e2c3d5fd18664e7a7ef89ac083e96c8e984fa919e7a7c073'
             '3f9729e73a8340926fa9d9fc15707c2f287cd27b6a9fe42e83f660ca48a5972d'
-            '59920dd3f92c2be32627121605751b52eae32b5884be09f2e4c53fb2fae8aabc'
+            '97946a68937b50ab8637e1a90a13198fe376d801dc3e7447052e43c28e9ee7de'
             '1d2486e38cf10390961d507e0e1252e898c8cbc89bbef618f7439d6c23708523'
             '25cbe3ff4931283a681260607bc91ae4a922075345d5770b293c6cd7f1e3bdcc'
-            '2aad309a9313c21c7c06ee4e71a39c99d4d829e31c8b3e7d76f8c964ea8047f5')
+            'b2e8162cce2d24861b1ed5bbb30fc51d5215e3f4bb9d01f53fc344904d5911e7')
