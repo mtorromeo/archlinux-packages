@@ -292,3 +292,6 @@
 [submodule "dcos-cli"]
 	path = dcos-cli
 	url = ssh://aur@aur.archlinux.org/dcos-cli.git
+[submodule "odrive"]
+	path = odrive
+	url = ssh://aur@aur.archlinux.org/odrive.git
