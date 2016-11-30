@@ -1,0 +1,40 @@
+# Contributor: Spider.007 <archlinux AT spider007 DOT net>
+
+pkgname=kibana
+pkgver=5.0.2
+pkgrel=1
+pkgdesc="browser based analytics and search dashboard for Elasticsearch. Please note; this package replaces the distributed precompiled binary 'node'"
+arch=('any')
+url="https://www.elastic.co/products/kibana"
+license=('apache')
+depends=('nodejs')
+optdepends=('elasticsearch>=2.4')
+backup=('etc/kibana/kibana.yml')
+options=('!strip')
+install='kibana.install'
+source=(
+	"https://artifacts.elastic.co/downloads/$pkgname/$pkgname-$pkgver-linux-x86_64.tar.gz"
+	kibana.service
+	user.conf
+	tmpfile.conf)
+sha256sums=('90998b3dce006dc0193a9a65ef79e27514bcbdc4909e6215ae75fa5425b24e95'
+            '10294533f64f767c55a85a7096b085a82b65158bb52538dc32061e3a8b0ef9b5'
+            '7df2fc315461da233fc29dc0ee3df7a66e291013bd0d38716d668c69b4ad8f7d'
+            'b5f4bb66b860a0c5553f32fab3f8c76ddf3b7d6f1bd0bccd20dd2586069432d1')
+
+package() {
+	cd "$pkgdir"
+
+	install -dm755 usr/share/kibana
+	install -dm755 var/lib/kibana
+	install -Dm644 "$srcdir/kibana.service" usr/lib/systemd/system/kibana.service
+	install -Dm644 "$srcdir/user.conf" usr/lib/sysusers.d/kibana.conf
+	install -Dm644 "$srcdir/tmpfile.conf" usr/lib/tmpfiles.d/kibana.conf
+
+	cd "$srcdir/$pkgname-$pkgver-linux-x86_64"
+
+	install -Dm644 config/kibana.yml "$pkgdir"/etc/kibana/kibana.yml
+
+	rm -rf node data
+	cp -Rp * "$pkgdir"/usr/share/kibana/
+}
