@@ -5,6 +5,8 @@ After=elasticsearch.service
 [Service]
 User=kibana
 Group=kibana
+PrivateTmp=true
+Environment="BABEL_CACHE_PATH=/tmp/babelcache.json"
 Environment="NODE_ENV=production"
 ExecStart=/usr/bin/node --max-old-space-size=512 /usr/share/kibana/src/cli --quiet --config=/etc/kibana/kibana.yml
 Restart=on-failure

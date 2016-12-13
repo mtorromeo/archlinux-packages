@@ -2,7 +2,7 @@
 
 pkgname=kibana
 pkgver=5.1.1
-pkgrel=1
+pkgrel=2
 pkgdesc="browser based analytics and search dashboard for Elasticsearch. Please note; this package replaces the distributed precompiled binary 'node'"
 arch=('any')
 url="https://www.elastic.co/products/kibana"
@@ -18,9 +18,9 @@ source=(
 	user.conf
 	tmpfile.conf)
 sha256sums=('da0383be8a12936c7d2a0a145e7bf0eb15abf972e585e0115ed8742032c79245'
-            '10294533f64f767c55a85a7096b085a82b65158bb52538dc32061e3a8b0ef9b5'
+            '60a6f7931356d2d64d080e270b513c827e04cd9f25109eb0c1abe31a57a83abe'
             '7df2fc315461da233fc29dc0ee3df7a66e291013bd0d38716d668c69b4ad8f7d'
-            'b5f4bb66b860a0c5553f32fab3f8c76ddf3b7d6f1bd0bccd20dd2586069432d1')
+            '03c35273ad89f4a21eb5466c3f30c0d7b75886bb305996002c1846fb5f7a078b')
 
 package() {
 	cd "$pkgdir"

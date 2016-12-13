@@ -1,7 +1,6 @@
 post_install() {
     systemd-sysusers kibana.conf
     systemd-tmpfiles --create kibana.conf
-    chown -R kibana:kibana usr/share/kibana/optimize
 }
 
 post_upgrade(){
