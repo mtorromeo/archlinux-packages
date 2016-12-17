@@ -22,15 +22,15 @@ pkgname=('php56'
          'php56-sqlite'
          'php56-tidy'
          'php56-xsl')
-pkgver=5.6.24
-pkgrel=2
+pkgver=5.6.29
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
 makedepends=('apache' 'c-client' 'postgresql-libs' 'libldap' 'postfix'
              'sqlite' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'file' 'freetds'
              'libmcrypt' 'tidy' 'aspell' 'libltdl' 'gd' 'icu'
-             'curl' 'libxslt' 'openssl' 'db' 'gmp' 'systemd')
+             'curl' 'libxslt' 'openssl' 'db' 'gmp' 'systemd' 'libvpx')
 source=("http://php.net/distributions/${pkgbase%56}-${pkgver}.tar.xz"
         'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
@@ -217,7 +217,7 @@ build() {
 package_php56() {
 	pkgdesc='An HTML-embedded scripting language'
 	provides=("php=$pkgver")
-	depends=('pcre' 'libxml2' 'bzip2' 'curl')
+	depends=('pcre' 'libxml2' 'bzip2' 'curl' 'libzip')
 	backup=('etc/php56/php.ini')
 	replaces=('php55')
 
@@ -314,7 +314,7 @@ package_php56-enchant() {
 }
 
 package_php56-gd() {
-	depends=('php56' 'libpng' 'libjpeg' 'freetype2')
+	depends=('php56' 'gd' 'libpng' 'libjpeg' 'freetype2' 'libvpx')
 	replaces=('php55-gd')
 	pkgdesc='gd module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/gd.so ${pkgdir}/opt/php56/modules/gd.so
@@ -413,7 +413,7 @@ package_php56-xsl() {
 	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/opt/php56/modules/xsl.so
 }
 
-sha256sums=('ed7c38c6dac539ade62e08118258f4dac0c49beca04d8603bee4e0ea6ca8250b'
+sha256sums=('0ff352a433f73e2c82b0d5b283b600402518569bf72a74e247f356dacbf322a7'
             '89fb65860168a9b04b312c1762db7f68ce4a2ebee91d83f7a8c24c3432969fb6'
             '6ee6ed48b8416390c56b2e32b75c79f85586431b5c44c48ed22ae6a8dbe68332'
             '59f91e8374da3dc1b9fcf5a737aed245ea769f057a3d3542e08274ece2743479'
