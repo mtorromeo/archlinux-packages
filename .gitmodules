@@ -292,3 +292,9 @@
 [submodule "dcos-cli"]
 	path = dcos-cli
 	url = ssh://aur@aur.archlinux.org/dcos-cli.git
+[submodule "msodbcsql"]
+	path = msodbcsql
+	url = ssh://aur@aur.archlinux.org/msodbcsql.git
+[submodule "php-sqlsrv"]
+	path = php-sqlsrv
+	url = ssh://aur@aur.archlinux.org/php-sqlsrv.git
