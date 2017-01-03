@@ -21,7 +21,7 @@ pkgname=('php54'
          'php54-tidy'
          'php54-xsl')
 pkgver=5.4.45
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -218,7 +218,7 @@ build() {
 package_php54() {
 	pkgdesc='An HTML-embedded scripting language'
 	provides=("php=$pkgver")
-	depends=('pcre' 'libxml2' 'bzip2' 'curl')
+	depends=('pcre' 'libxml2' 'bzip2' 'curl' 'c-client')
 	backup=('etc/php54/php.ini')
 
 	cd ${srcdir}/build-php
