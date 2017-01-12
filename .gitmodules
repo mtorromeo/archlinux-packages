@@ -295,3 +295,12 @@
 [submodule "odrive"]
 	path = odrive
 	url = ssh://aur@aur.archlinux.org/odrive.git
+[submodule "msodbcsql"]
+	path = msodbcsql
+	url = ssh://aur@aur.archlinux.org/msodbcsql.git
+[submodule "php-sqlsrv"]
+	path = php-sqlsrv
+	url = ssh://aur@aur.archlinux.org/php-sqlsrv.git
+[submodule "vagga"]
+	path = vagga
+	url = ssh://aur@aur.archlinux.org/vagga.git
