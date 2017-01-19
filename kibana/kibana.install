@@ -1,8 +1,0 @@
-post_install() {
-    systemd-sysusers kibana.conf
-    systemd-tmpfiles --create kibana.conf
-}
-
-post_upgrade(){
-    systemd-tmpfiles --create kibana.conf
-}
