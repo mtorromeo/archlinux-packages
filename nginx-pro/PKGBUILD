@@ -36,7 +36,7 @@ _openresty=(
 
 pkgdesc="Lightweight HTTP server with some additional modules (no mail modules)"
 arch=('i686' 'x86_64')
-depends=('libxslt' 'gd' 'lua51' 'luajit' 'yajl' 'curl' 'apr-util' 'geoip')
+depends=('libxslt' 'gd' 'lua51' 'luajit' 'yajl' 'curl' 'apr-util' 'geoip' 'libbrotli')
 makedepends=('git' 'apache' 'hardening-wrapper')
 url="http://nginx.org"
 license=('custom')
@@ -99,8 +99,6 @@ build() {
 
 	msg "Compiling mod-security"
 	cd "$srcdir"/ModSecurity-$_modsecver
-
-	export NGX_BROTLI_STATIC_MODULE_ONLY=1
 
 	sh autogen.sh
 	CFLAGS="-g -O0" ./configure \
