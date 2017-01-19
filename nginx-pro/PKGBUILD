@@ -21,7 +21,10 @@ _pagespeedver=latest-stable
 _psolver=1.11.33.4
 
 # https://github.com/google/ngx_brotli
-_brotliver=bfd2885b2da4d763fed18f49216bb935223cd34b
+# https://github.com/google/ngx_brotli/tree/master/deps
+_ngxbrotliver=bfd2885b2da4d763fed18f49216bb935223cd34b
+_brotliver=222564a95d9ab58865a096b8d9f7324ea5f2e03e
+
 
 _openresty=(
 	'echo v0.60'         # https://github.com/openresty/echo-nginx-module/releases
@@ -36,7 +39,7 @@ _openresty=(
 
 pkgdesc="Lightweight HTTP server with some additional modules (no mail modules)"
 arch=('i686' 'x86_64')
-depends=('libxslt' 'gd' 'lua51' 'luajit' 'yajl' 'curl' 'apr-util' 'geoip' 'libbrotli')
+depends=('libxslt' 'gd' 'lua51' 'luajit' 'yajl' 'curl' 'apr-util' 'geoip')
 makedepends=('git' 'apache' 'hardening-wrapper')
 url="http://nginx.org"
 license=('custom')
@@ -65,11 +68,14 @@ source=(
 	http://people.freebsd.org/~osa/ngx_http_redis-$_redisver.tar.gz
 	https://github.com/pagespeed/ngx_pagespeed/archive/$_pagespeedver/pagespeed-module-$_pagespeedver.tar.gz
 	pagespeed-$_psolver.tar.gz::https://dl.google.com/dl/page-speed/psol/$_psolver.tar.gz
-	https://github.com/google/ngx_brotli/archive/$_brotliver/ngx_brotli-$_brotliver.tar.gz
+	https://github.com/google/ngx_brotli/archive/$_ngxbrotliver/ngx_brotli-$_ngxbrotliver.tar.gz
+	https://github.com/google/brotli/archive/$_brotliver/brotli-$_brotliver.tar.gz
 	njs-$_njsver.tar.gz::http://hg.nginx.org/njs/archive/$_njsver.tar.gz
 	modsec-recommended.conf
 	service
 	logrotate
+	redis2-0.13.patch::https://github.com/openresty/redis2-nginx-module/commit/8cc7304787ae9542db4feb50d9e27beb485caa0f.patch
+	memc-0.17.patch::https://github.com/openresty/memc-nginx-module/commit/c08cb7043440e427867838caf21cfd1e6cb2127a.patch
 )
 
 _modules=(
@@ -80,7 +86,7 @@ _modules=(
 	--add-module=../ModSecurity-$_modsecver/nginx/modsecurity
 	--add-dynamic-module=../ngx_http_redis-$_redisver
 	--add-dynamic-module=../ngx_pagespeed-$_pagespeedver
-	--add-dynamic-module=../ngx_brotli-$_brotliver
+	--add-dynamic-module=../ngx_brotli-$_ngxbrotliver
 	--add-dynamic-module=../njs-$_njsver/nginx
 )
 
@@ -93,10 +99,23 @@ for _module in "${_openresty[@]}"; do
 	_modules+=(--add-dynamic-module=../$_modname-$_modver)
 done
 
-build() {
+prepare() {
+	cd "$srcdir"/ngx_brotli-$_ngxbrotliver/deps
+	rm -rf brotli
+	ln -s ../../brotli-$_brotliver brotli
+	export NGX_BROTLI_STATIC_MODULE_ONLY=1
+
 	cd "$srcdir"/ngx_pagespeed-$_pagespeedver
 	ln -s ../psol
 
+	cd "$srcdir"/redis2-nginx-module-0.13
+	patch -p1 -i "$srcdir"/redis2-0.13.patch
+
+	cd "$srcdir"/memc-nginx-module-0.17
+	patch -p1 -i "$srcdir"/memc-0.17.patch
+}
+
+build() {
 	msg "Compiling mod-security"
 	cd "$srcdir"/ModSecurity-$_modsecver
 
@@ -214,9 +233,9 @@ package() {
 	gzip -9c man/nginx.8 > "$pkgdir"/usr/share/man/man8/nginx.8.gz
 
 	for i in ftdetect indent syntax; do
-    install -Dm644 contrib/vim/$i/nginx.vim \
-      "$pkgdir"/usr/share/vim/vimfiles/$i/nginx.vim
-  done
+		install -Dm644 contrib/vim/$i/nginx.vim \
+		        "$pkgdir"/usr/share/vim/vimfiles/$i/nginx.vim
+	done
 }
 
 sha256sums=('53aef3715d79015314c2dcb18f2b185a0c64368cc01b30bdf0737a215f666b34'
@@ -229,10 +248,13 @@ sha256sums=('53aef3715d79015314c2dcb18f2b185a0c64368cc01b30bdf0737a215f666b34'
             '5b8bebc3124ba55388fcb97ee8f6009bd5d061c48bf274a04f6c99b7364e1f85'
             '97408b04bf7395ab34d7b5baed95ae3dc928746213ca02590773b66a7697a7dc'
             '3a5348d484554f3d1787d06961fc7886fda44d17264ab7e6cdf1f4a8fa04231e'
+            '4299a2a86f0b931e80dd548be17fcaa5a6c158a0727f497f22cbb365668af0fe'
             'f94384d1668559e7726def8449c664406b53da3684bf8738f3d983a7e2401d34'
             '838637cc4f5fd9d3209720db23234d99972e95549d8ac8eb619474f66376e8b1'
             '78631071af6aed03cca9c53778984ab4c010346102634ce3372246f439c76b82'
             '303f1a15a4e9da19ccb99b7742fa69b109276fcd9731a87a05d8793f184ce61b'
+            'a3d26087eabe17708ab0a9b32026d80eb7004a7539768602a0c4aaa55988217c'
+            'b5f9b83a0d2a08f1efc71ce8099eaa4e1d283afd502a7062ac4f150d569140ff'
             '1077da2229ac7d0a0215e9e6817e297c10697e095010d88f1adbd1add1ce9f4e'
             'c21c8937dcdd6fc2b6a955f929e3f4d1388610f47180e60126e6dcab06786f77'
             '3f9729e73a8340926fa9d9fc15707c2f287cd27b6a9fe42e83f660ca48a5972d'
