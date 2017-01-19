@@ -100,6 +100,8 @@ build() {
 	msg "Compiling mod-security"
 	cd "$srcdir"/ModSecurity-$_modsecver
 
+	export NGX_BROTLI_STATIC_MODULE_ONLY=1
+
 	sh autogen.sh
 	CFLAGS="-g -O0" ./configure \
 		--prefix=/usr \
