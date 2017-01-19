@@ -145,15 +145,9 @@
 [submodule "python-pyuv"]
 	path = python-pyuv
 	url = ssh+git://aur@aur4.archlinux.org:22/python-pyuv.git/
-[submodule "python-sandman"]
-	path = python-sandman
-	url = ssh+git://aur@aur4.archlinux.org:22/python-sandman.git/
 [submodule "python-setproctitle"]
 	path = python-setproctitle
 	url = ssh+git://aur@aur4.archlinux.org:22/python-setproctitle.git/
-[submodule "python-sphinxcontrib-httpdomain"]
-	path = python-sphinxcontrib-httpdomain
-	url = ssh+git://aur@aur4.archlinux.org:22/python-sphinxcontrib-httpdomain.git/
 [submodule "python-stomp.py"]
 	path = python-stomp.py
 	url = ssh+git://aur@aur4.archlinux.org:22/python-stomp.py.git/
