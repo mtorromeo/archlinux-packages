@@ -1,7 +1,7 @@
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 
 pkgname=php54-xcache
-pkgver=3.1.0
+pkgver=3.2.0
 pkgrel=1
 arch=('i686' 'x86_64')
 pkgdesc='A PHP opcode cacher'
@@ -31,5 +31,5 @@ package() {
 	install -Dm644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
 }
 
-sha256sums=('86af3e08a8983648d9755f5e1d0e32ad5b952d3e92a83fcaf3acbac9ffd65ee9'
+sha256sums=('7d12a3cbd5f729b70f9226ac19406d11219f1c5f5e82b3bbb43ea9460cbf6cbd'
             'c8c843335028b1da1965ff71b73b42fc4bc45be08bf9ec3f71aff5744a428176')
