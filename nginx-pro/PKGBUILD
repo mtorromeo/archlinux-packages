@@ -45,6 +45,7 @@ url="http://nginx.org"
 license=('custom')
 conflicts=('nginx')
 provides=('nginx')
+options=('!strip')
 
 backup=(${_cfgdir:1}/modsec-recommended.conf
         ${_cfgdir:1}/fastcgi.conf
@@ -137,10 +138,10 @@ build() {
 	msg "Building nginx"
 	cd "$srcdir"/nginx-$pkgver
 
-	CFLAGS="-I /usr/include/httpd -I /usr/include/apr-1" \
+	CFLAGS="-g -O0 -I /usr/include/httpd -I /usr/include/apr-1" \
 	LUAJIT_LIB=/usr/lib \
 	LUAJIT_INC=$(pkg-config luajit --cflags-only-I | sed 's/^-I//') \
-	./configure \
+	./configure --with-debug \
 		--prefix=$_cfgdir \
 		--conf-path=$_cfgdir/nginx.conf \
 		--sbin-path=/usr/bin/nginx \
