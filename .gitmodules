@@ -298,3 +298,6 @@
 [submodule "vagga"]
 	path = vagga
 	url = ssh://aur@aur.archlinux.org/vagga.git
+[submodule "vagrant-libvirt"]
+	path = vagrant-libvirt
+	url = ssh://aur@aur.archlinux.org/vagrant-libvirt.git
