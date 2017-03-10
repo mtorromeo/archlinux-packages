@@ -331,3 +331,6 @@
 [submodule "nginx-mainline-addon-auth_pam"]
 	path = nginx-mainline-addon-auth_pam
 	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-auth_pam.git/
+[submodule "nginx-mainline-addon-naxsi"]
+	path = nginx-mainline-addon-naxsi
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-naxsi.git/
