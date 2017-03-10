@@ -301,3 +301,27 @@
 [submodule "vagrant-libvirt"]
 	path = vagrant-libvirt
 	url = ssh://aur@aur.archlinux.org/vagrant-libvirt.git
+[submodule "nginx-mainline-addon-echo"]
+	path = nginx-mainline-addon-echo
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-echo.git/
+[submodule "nginx-mainline-addon-memc"]
+	path = nginx-mainline-addon-memc
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-memc.git/
+[submodule "nginx-mainline-addon-redis2"]
+	path = nginx-mainline-addon-redis2
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-redis2.git/
+[submodule "nginx-mainline-addon-srcache"]
+	path = nginx-mainline-addon-srcache
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-srcache.git/
+[submodule "nginx-mainline-addon-cache_purge"]
+	path = nginx-mainline-addon-cache_purge
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-cache_purge.git/
+[submodule "nginx-mainline-addon-dav-ext"]
+	path = nginx-mainline-addon-dav-ext
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-dav-ext.git/
+[submodule "nginx-mainline-addon-redis"]
+	path = nginx-mainline-addon-redis
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-redis.git/
+[submodule "nginx-mainline-addon-ndk-set-misc"]
+	path = nginx-mainline-addon-ndk-set-misc
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-ndk-set-misc.git/
