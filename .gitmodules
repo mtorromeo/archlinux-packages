@@ -328,3 +328,6 @@
 [submodule "nginx-mainline-addon-njs"]
 	path = nginx-mainline-addon-njs
 	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-njs.git/
+[submodule "nginx-mainline-addon-auth_pam"]
+	path = nginx-mainline-addon-auth_pam
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-auth_pam.git/
