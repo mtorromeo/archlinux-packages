@@ -259,9 +259,6 @@
 [submodule "mattersend"]
 	path = mattersend
 	url = ssh://aur@aur.archlinux.org/mattersend.git
-[submodule "nuvola-app-bandcamp-git"]
-	path = nuvola-app-bandcamp-git
-	url = ssh://aur@aur.archlinux.org/nuvola-app-bandcamp-git.git
 [submodule "gox"]
 	path = gox
 	url = ssh://aur@aur.archlinux.org/gox.git
@@ -334,3 +331,6 @@
 [submodule "nginx-mainline-addon-naxsi"]
 	path = nginx-mainline-addon-naxsi
 	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-naxsi.git/
+[submodule "nuvola-app-bandcamp"]
+	path = nuvola-app-bandcamp
+	url = ssh+git://aur@aur.archlinux.org/nuvola-app-bandcamp.git/
