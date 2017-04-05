@@ -334,3 +334,12 @@
 [submodule "nginx-mainline-addon-naxsi"]
 	path = nginx-mainline-addon-naxsi
 	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-naxsi.git/
+[submodule "nginx-mainline-addon-brotli"]
+        path = nginx-mainline-addon-brotli
+        url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-brotli.git/
+[submodule "nginx-mainline-addon-pagespeed"]
+        path = nginx-mainline-addon-pagespeed
+        url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-pagespeed.git/
+[submodule "pngquant"]
+	path = pngquant
+	url = ssh://aur@aur.archlinux.org/pngquant.git
