@@ -298,48 +298,60 @@
 [submodule "vagrant-libvirt"]
 	path = vagrant-libvirt
 	url = ssh://aur@aur.archlinux.org/vagrant-libvirt.git
-[submodule "nginx-mainline-addon-echo"]
-	path = nginx-mainline-addon-echo
-	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-echo.git/
-[submodule "nginx-mainline-addon-memc"]
-	path = nginx-mainline-addon-memc
-	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-memc.git/
-[submodule "nginx-mainline-addon-redis2"]
-	path = nginx-mainline-addon-redis2
-	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-redis2.git/
-[submodule "nginx-mainline-addon-srcache"]
-	path = nginx-mainline-addon-srcache
-	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-srcache.git/
-[submodule "nginx-mainline-addon-cache_purge"]
-	path = nginx-mainline-addon-cache_purge
-	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-cache_purge.git/
-[submodule "nginx-mainline-addon-dav-ext"]
-	path = nginx-mainline-addon-dav-ext
-	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-dav-ext.git/
-[submodule "nginx-mainline-addon-redis"]
-	path = nginx-mainline-addon-redis
-	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-redis.git/
-[submodule "nginx-mainline-addon-ndk-set-misc"]
-	path = nginx-mainline-addon-ndk-set-misc
-	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-ndk-set-misc.git/
-[submodule "nginx-mainline-addon-njs"]
-	path = nginx-mainline-addon-njs
-	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-njs.git/
-[submodule "nginx-mainline-addon-auth_pam"]
-	path = nginx-mainline-addon-auth_pam
-	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-auth_pam.git/
-[submodule "nginx-mainline-addon-naxsi"]
-	path = nginx-mainline-addon-naxsi
-	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-naxsi.git/
-[submodule "nginx-mainline-addon-brotli"]
-        path = nginx-mainline-addon-brotli
-        url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-brotli.git/
-[submodule "nginx-mainline-addon-pagespeed"]
-        path = nginx-mainline-addon-pagespeed
-        url = ssh+git://aur@aur.archlinux.org/nginx-mainline-addon-pagespeed.git/
 [submodule "pngquant"]
 	path = pngquant
 	url = ssh://aur@aur.archlinux.org/pngquant.git
+[submodule "nginx-mainline-mod-echo"]
+	path = nginx-mainline-mod-echo
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-echo.git/
+[submodule "nginx-mainline-mod-memc"]
+	path = nginx-mainline-mod-memc
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-memc.git/
+[submodule "nginx-mainline-mod-redis2"]
+	path = nginx-mainline-mod-redis2
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-redis2.git/
+[submodule "nginx-mainline-mod-srcache"]
+	path = nginx-mainline-mod-srcache
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-srcache.git/
+[submodule "nginx-mainline-mod-cache_purge"]
+	path = nginx-mainline-mod-cache_purge
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-cache_purge.git/
+[submodule "nginx-mainline-mod-dav-ext"]
+	path = nginx-mainline-mod-dav-ext
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-dav-ext.git/
+[submodule "nginx-mainline-mod-redis"]
+	path = nginx-mainline-mod-redis
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-redis.git/
+[submodule "nginx-mainline-mod-ndk-set-misc"]
+	path = nginx-mainline-mod-ndk-set-misc
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-ndk-set-misc.git/
+[submodule "nginx-mainline-mod-njs"]
+	path = nginx-mainline-mod-njs
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-njs.git/
+[submodule "nginx-mainline-mod-auth_pam"]
+	path = nginx-mainline-mod-auth_pam
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-auth_pam.git/
+[submodule "nginx-mainline-mod-naxsi"]
+	path = nginx-mainline-mod-naxsi
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-naxsi.git/
+[submodule "nginx-mainline-mod-pagespeed"]
+	path = nginx-mainline-mod-pagespeed
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-pagespeed.git/
+[submodule "nginx-mainline-mod-brotli"]
+	path = nginx-mainline-mod-brotli
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-brotli.git/
+[submodule "nginx-mainline-mod-ndk"]
+	path = nginx-mainline-mod-ndk
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-ndk.git/
+[submodule "nginx-mainline-mod-headers-more"]
+	path = nginx-mainline-mod-headers-more
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-headers-more.git/
+[submodule "nginx-mainline-mod-lua"]
+	path = nginx-mainline-mod-lua
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-lua.git/
 [submodule "nuvola-app-bandcamp"]
 	path = nuvola-app-bandcamp
 	url = ssh+git://aur@aur.archlinux.org/nuvola-app-bandcamp.git/
+[submodule "nginx-mainline-mod-passenger"]
+	path = nginx-mainline-mod-passenger
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-passenger.git/
