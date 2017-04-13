@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+set -u
+
+nginxver=$(pacman -Sp extra/nginx | grep -Po "/nginx-[^/]*" | cut -d- -f2)
+for mod in nginx-mainline-mod-*; do
+	pushd $mod
+	pkgrel=$(grep -Po "^pkgrel=.*" PKGBUILD | cut -d= -f2)
+	pkgrel=$((pkgrel+1))
+	sed -r -e "s/^_nginxver=.*/_nginxver=$nginxver/" \
+	    -e "s/^pkgrel=.*/pkgrel=$pkgrel/" \
+	    -i PKGBUILD
+	updpkgsums
+	extra-x86_64-build -- -I /var/cache/pacman/pkg/libmaxminddb-1.2.0-1-x86_64.pkg.tar.xz
+	popd
+done

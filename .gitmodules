@@ -292,9 +292,6 @@
 [submodule "php-sqlsrv"]
 	path = php-sqlsrv
 	url = ssh://aur@aur.archlinux.org/php-sqlsrv.git
-[submodule "vagga"]
-	path = vagga
-	url = ssh://aur@aur.archlinux.org/vagga.git
 [submodule "vagrant-libvirt"]
 	path = vagrant-libvirt
 	url = ssh://aur@aur.archlinux.org/vagrant-libvirt.git
@@ -355,3 +352,6 @@
 [submodule "nginx-mainline-mod-passenger"]
 	path = nginx-mainline-mod-passenger
 	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-passenger.git/
+[submodule "nginx-mainline-mod-geoip2"]
+	path = nginx-mainline-mod-geoip2
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-geoip2.git/
