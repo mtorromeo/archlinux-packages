@@ -355,3 +355,6 @@
 [submodule "nginx-mainline-mod-geoip2"]
 	path = nginx-mainline-mod-geoip2
 	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-geoip2.git/
+[submodule "php-pdo_sqlsrv"]
+	path = php-pdo_sqlsrv
+	url = ssh+git://aur@aur.archlinux.org/php-pdo_sqlsrv.git/
