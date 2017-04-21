@@ -1,0 +1,91 @@
+#!/bin/bash
+set -e
+set -u
+
+function fetch_aur() {
+	if [ ! -d $1 ]; then
+		git clone https://aur.archlinux.org/$1.git
+	fi
+}
+
+function pkg_query() {
+	{
+		package-query -f "%r/%n %P" -S "$@"
+		package-query -f "%r/%n %P" -S --qprovides "$@"
+	} | grep -P '^(core|extra|community|multilib)/' | cut -d/ -f2 | tr ' ' '\n' | grep -Po '^[^-][^=]*' | sort | uniq
+}
+
+function get_aur_deps() {
+	cd "$WORKDIR/$1"
+	source PKGBUILD
+	local official=($(pkg_query "${depends[@]}" "${makedepends[@]}"))
+
+	local i
+	local j
+	local skip
+	for i in "${depends[@]}" "${makedepends[@]}"; do
+			skip=
+			for j in "${official[@]}"; do
+					[[ $i == $j ]] && { skip=1; break; }
+			done
+			[[ -n $skip ]] || echo $i
+	done
+}
+
+function get_aur_deps_recurse() {
+	local new_aurdeps=($1)
+	local pkg
+	local aurdeps=()
+
+	while true; do
+		next_aurdeps=()
+		for pkg in "${new_aurdeps[@]}"; do
+			in_array $pkg "${aurdeps[@]}" && continue
+			fetch_aur $pkg
+			aurdeps+=($pkg)
+			# echo $pkg: $(get_aur_deps $pkg)
+			next_aurdeps+=($(get_aur_deps $pkg))
+		done
+		[[ "${#next_aurdeps[@]}" == 0 ]] && break
+		new_aurdeps=("${next_aurdeps[@]}")
+		# echo "array(len ${#next_aurdeps[@]}): ${next_aurdeps[@]}"
+	done
+
+	echo ${aurdeps[@]}
+}
+
+function in_array() {
+	local e
+	for e in "${@:2}"; do
+		[[ "$e" == "$1" ]] && return 0
+	done
+	return 1
+}
+
+function build() {
+	local includes=()
+	local pkg
+	for pkg in "${@:2}"; do
+		[ -z "$pkg" ] && continue
+		includes+=("-I $pkg")
+	done
+	cd "$WORKDIR/$1"
+	extra-x86_64-build -- ${includes[@]}
+}
+
+PKGNAME=$1
+BUILDDIR=~/build/pkg
+CACHEDIR=/var/cache/pacman/pkg
+
+WORKDIR=~/build/aur
+mkdir -p "$WORKDIR"
+cd "$WORKDIR"
+
+aurdeps=($(get_aur_deps_recurse $PKGNAME))
+
+built=()
+for (( idx=${#aurdeps[@]}-1 ; idx>=0 ; idx-- )) ; do
+	pkg="${aurdeps[idx]}"
+	build $pkg "${built[@]}"
+	built+=($(find "$BUILDDIR" "$CACHEDIR" -maxdepth 1 -type f -name "$pkg-*-*.pkg.tar.xz" | sort -rV | head -1))
+done
