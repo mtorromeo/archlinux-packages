@@ -2,15 +2,34 @@
 set -e
 set -u
 
-nginxver=$(pacman -Sp extra/nginx | grep -Po "/nginx-[^/]*" | cut -d- -f2)
+source /etc/makepkg.conf
+PKGDEST=${PKGDEST:-.}
+
+MMDB=/var/cache/pacman/pkg/libmaxminddb-1.2.0-1-x86_64.pkg.tar.xz
+test -f $MMDB
+
+nginxver=$(pacman -Sp community/nginx-mainline | grep -Po "/nginx-mainline-[^/]*" | cut -d- -f3)
 for mod in nginx-mainline-mod-*; do
 	pushd $mod
-	pkgrel=$(grep -Po "^pkgrel=.*" PKGBUILD | cut -d= -f2)
+	git checkout master
+	git pull
+
+	pkgver=$(grep 'pkgver = ' .SRCINFO | grep -Po '\S+$')
+	pkgrel=$(grep 'pkgrel = ' .SRCINFO | grep -Po '\S+$')
 	pkgrel=$((pkgrel+1))
-	sed -r -e "s/^_nginxver=.*/_nginxver=$nginxver/" \
-	    -e "s/^pkgrel=.*/pkgrel=$pkgrel/" \
-	    -i PKGBUILD
-	updpkgsums
-	extra-x86_64-build -- -I /var/cache/pacman/pkg/libmaxminddb-1.2.0-1-x86_64.pkg.tar.xz
+	PKG="$PKGDEST/$mod-$pkgver-$pkgrel-x86_64${PKGEXT:-.pkg.tar.xz}"
+	if [ ! -f "$PKG" ]; then
+		sed -r -e "s/^_nginxver=.*/_nginxver=$nginxver/" \
+		    -e "s/^pkgrel=.*/pkgrel=$pkgrel/" \
+		    -i PKGBUILD
+		updpkgsums
+		if extra-x86_64-build -- -I $MMDB; then
+			echo mksrcinfo
+			echo git commit -m "Updated to $pkgver-$pkgrel"
+			echo git push
+		else
+			git checkout PKGBUILD
+		fi
+	fi
 	popd
 done
