@@ -1,7 +1,7 @@
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 
 pkgname=kibana
-pkgver=5.3.0
+pkgver=5.3.2
 pkgrel=1
 pkgdesc="browser based analytics and search dashboard for Elasticsearch. Please note; this package replaces the distributed precompiled binary 'node'"
 arch=('any')
@@ -15,7 +15,7 @@ source=("https://artifacts.elastic.co/downloads/$pkgname/$pkgname-$pkgver-linux-
         kibana.service
         kibana.tmpfile
         kibana.user)
-sha256sums=('f31369c32d655370f0e51290018004cfbc54e2d648f0f79dba88e36b4d6cce6f'
+sha256sums=('3c0a548dd38bc1a6ba700b161ce059e0144d27f4000856bd5d577a3bd3200518'
             '60a6f7931356d2d64d080e270b513c827e04cd9f25109eb0c1abe31a57a83abe'
             '03c35273ad89f4a21eb5466c3f30c0d7b75886bb305996002c1846fb5f7a078b'
             '7df2fc315461da233fc29dc0ee3df7a66e291013bd0d38716d668c69b4ad8f7d')
