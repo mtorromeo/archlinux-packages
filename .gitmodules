@@ -34,9 +34,9 @@
 [submodule "hp-snmp-agents"]
 	path = hp-snmp-agents
 	url = ssh+git://aur@aur4.archlinux.org:22/hp-snmp-agents.git/
-[submodule "hpssacli"]
-	path = hpssacli
-	url = ssh+git://aur@aur.archlinux.org:22/hpssacli.git/
+[submodule "ssacli"]
+	path = ssacli
+	url = ssh+git://aur@aur.archlinux.org:22/ssacli.git/
 [submodule "hponcfg"]
 	path = hponcfg
 	url = ssh+git://aur@aur4.archlinux.org:22/hponcfg.git/
@@ -235,9 +235,6 @@
 [submodule "otf2bdf"]
 	path = otf2bdf
 	url = ssh+git://aur@aur4.archlinux.org:22/otf2bdf.git/
-[submodule "piler"]
-	path = piler
-	url = ssh+git://aur@aur4.archlinux.org:22/piler.git/
 [submodule "nodejs-htmlhint"]
 	path = htmlhint
 	url = ssh+git://aur@aur4.archlinux.org:22/nodejs-htmlhint.git/
