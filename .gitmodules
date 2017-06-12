@@ -355,3 +355,6 @@
 [submodule "php-pdo_sqlsrv"]
 	path = php-pdo_sqlsrv
 	url = ssh+git://aur@aur.archlinux.org/php-pdo_sqlsrv.git/
+[submodule "nginx-mainline-mod-modsecurity-git"]
+	path = nginx-mainline-mod-modsecurity-git
+	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-modsecurity-git.git/

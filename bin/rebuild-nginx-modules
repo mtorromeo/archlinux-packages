@@ -5,12 +5,10 @@ set -u
 source /etc/makepkg.conf
 PKGDEST=${PKGDEST:-.}
 
-MMDB=/var/cache/pacman/pkg/libmaxminddb-1.2.0-1-x86_64.pkg.tar.xz
-test -f $MMDB
-
 nginxver=$(pacman -Sp community/nginx-mainline | grep -Po "/nginx-mainline-[^/]*" | cut -d- -f3)
 for mod in nginx-mainline-mod-*; do
 	pushd $mod
+	git checkout .
 	git checkout master
 	git pull
 
@@ -23,8 +21,9 @@ for mod in nginx-mainline-mod-*; do
 		    -e "s/^pkgrel=.*/pkgrel=$pkgrel/" \
 		    -i PKGBUILD
 		updpkgsums
-		if extra-x86_64-build -- -I $MMDB; then
+		if extra-x86_64-build; then
 			mksrcinfo
+			git add -u
 			git commit -m "Updated to $pkgver-$pkgrel"
 			# git push
 		else
