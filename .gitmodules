@@ -61,9 +61,6 @@
 [submodule "libxdiff"]
 	path = libxdiff
 	url = ssh+git://aur@aur4.archlinux.org:22/libxdiff.git/
-[submodule "logstash"]
-	path = logstash
-	url = ssh+git://aur@aur4.archlinux.org:22/logstash.git/
 [submodule "mongrel2"]
 	path = mongrel2
 	url = ssh+git://aur@aur4.archlinux.org:22/mongrel2.git/
@@ -358,3 +355,15 @@
 [submodule "nginx-mainline-mod-modsecurity-git"]
 	path = nginx-mainline-mod-modsecurity-git
 	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-modsecurity-git.git/
+[submodule "nuvola-app-soundcloud"]
+	path = nuvola-app-soundcloud
+	url = ssh://aur@aur.archlinux.org/nuvola-app-soundcloud.git
+[submodule "python-jsonpath-ng"]
+	path = python-jsonpath-ng
+	url = ssh://aur@aur.archlinux.org/python-jsonpath-ng.git
+[submodule "nginx-amplify-agent"]
+	path = nginx-amplify-agent
+	url = ssh://aur@aur.archlinux.org/nginx-amplify-agent.git
+[submodule "python2-rstr"]
+	path = python2-rstr
+	url = ssh://aur@aur.archlinux.org/python2-rstr.git
