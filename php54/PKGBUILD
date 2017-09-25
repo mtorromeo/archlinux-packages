@@ -21,14 +21,14 @@ pkgname=('php54'
          'php54-tidy'
          'php54-xsl')
 pkgver=5.4.45
-pkgrel=3
+pkgrel=4
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
 makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix'
              'sqlite' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'file' 'freetds'
              'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
-             'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'freetype2'
+             'curl' 'libxslt' 'openssl-1.0' 'bzip2' 'db' 'gmp' 'freetype2'
              'pkg-config')
 source=("http://php.net/distributions/${pkgbase%54}-${pkgver}.tar.bz2"
         'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
@@ -54,6 +54,10 @@ prepare() {
 }
 
 build() {
+	export PKG_CONFIG_PATH="/usr/lib/openssl-1.0/pkgconfig"
+	export CFLAGS="$CFLAGS -I/usr/include/openssl-1.0"
+	export LDFLAGS="$LDFLAGS -L/usr/lib/openssl-1.0 -lssl"
+
 	local _phpconfig="--srcdir=../${pkgbase%54}-${pkgver} \
 		--config-cache \
 		--prefix=/opt/php54 \
@@ -218,7 +222,7 @@ build() {
 package_php54() {
 	pkgdesc='An HTML-embedded scripting language'
 	provides=("php=$pkgver")
-	depends=('pcre' 'libxml2' 'bzip2' 'curl' 'c-client')
+	depends=('pcre' 'libxml2' 'bzip2' 'curl' 'c-client' 'openssl-1.0')
 	backup=('etc/php54/php.ini')
 
 	cd ${srcdir}/build-php
