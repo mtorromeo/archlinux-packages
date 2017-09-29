@@ -367,3 +367,6 @@
 [submodule "python2-rstr"]
 	path = python2-rstr
 	url = ssh://aur@aur.archlinux.org/python2-rstr.git
+[submodule "trello"]
+	path = trello
+	url = ssh+git://aur@aur.archlinux.org/trello.git/
