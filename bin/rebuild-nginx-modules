@@ -8,7 +8,7 @@ PKGDEST=${PKGDEST:-.}
 nginxver=$(pacman -Sp community/nginx-mainline | grep -Po "/nginx-mainline-[^/]*" | cut -d- -f3)
 for mod in nginx-mainline-mod-*; do
 	pushd $mod
-	git checkout .
+	# git checkout .
 	git checkout master
 	git pull
 
