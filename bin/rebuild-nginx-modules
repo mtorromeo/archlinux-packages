@@ -25,7 +25,7 @@ for mod in nginx-mainline-mod-*; do
 			mksrcinfo
 			git add -u
 			git commit -m "Updated to $pkgver-$pkgrel"
-			# git push
+			git push
 		else
 			git checkout PKGBUILD
 		fi
