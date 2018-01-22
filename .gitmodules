@@ -73,9 +73,6 @@
 [submodule "myremotedump"]
 	path = myremotedump
 	url = ssh+git://aur@aur4.archlinux.org:22/myremotedump.git/
-[submodule "nodejs-yeoman"]
-	path = nodejs-yeoman
-	url = ssh+git://aur@aur4.archlinux.org:22/nodejs-yeoman.git/
 [submodule "nova-xvpvncviewer-git"]
 	path = nova-xvpvncviewer-git
 	url = ssh+git://aur@aur4.archlinux.org:22/nova-xvpvncviewer-git.git/
@@ -235,9 +232,6 @@
 [submodule "nodejs-htmlhint"]
 	path = htmlhint
 	url = ssh+git://aur@aur4.archlinux.org:22/nodejs-htmlhint.git/
-[submodule "mattermost"]
-	path = mattermost
-	url = ssh+git://aur@aur.archlinux.org:22/mattermost.git/
 [submodule "tidb-git"]
 	path = tidb-git
 	url = ssh+git://aur@aur.archlinux.org:22/tidb-git.git
@@ -253,9 +247,6 @@
 [submodule "mattersend"]
 	path = mattersend
 	url = ssh://aur@aur.archlinux.org/mattersend.git
-[submodule "gox"]
-	path = gox
-	url = ssh://aur@aur.archlinux.org/gox.git
 [submodule "python-aiopg"]
         path = python-aiopg
         url = ssh://aur@aur.archlinux.org/python-aiopg.git
