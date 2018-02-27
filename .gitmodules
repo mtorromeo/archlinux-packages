@@ -172,9 +172,6 @@
 [submodule "python2-oursql"]
 	path = python2-oursql
 	url = ssh+git://aur@aur4.archlinux.org:22/python2-oursql.git/
-[submodule "python2-pika"]
-	path = python2-pika
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-pika.git/
 [submodule "python2-pymysql"]
 	path = python2-pymysql
 	url = ssh+git://aur@aur4.archlinux.org:22/python2-pymysql.git/
@@ -355,9 +352,6 @@
 [submodule "nginx-amplify-agent"]
 	path = nginx-amplify-agent
 	url = ssh://aur@aur.archlinux.org/nginx-amplify-agent.git
-[submodule "python2-rstr"]
-	path = python2-rstr
-	url = ssh://aur@aur.archlinux.org/python2-rstr.git
 [submodule "trello"]
 	path = trello
 	url = ssh+git://aur@aur.archlinux.org/trello.git/
