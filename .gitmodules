@@ -46,9 +46,6 @@
 [submodule "icdiff"]
 	path = icdiff
 	url = ssh+git://aur@aur4.archlinux.org:22/icdiff.git/
-[submodule "invoke"]
-	path = invoke
-	url = ssh+git://aur@aur4.archlinux.org:22/invoke.git/
 [submodule "ios-webkit-debug-proxy"]
 	path = ios-webkit-debug-proxy
 	url = ssh+git://aur@aur4.archlinux.org:22/ios-webkit-debug-proxy.git/

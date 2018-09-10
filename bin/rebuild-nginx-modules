@@ -22,7 +22,7 @@ for mod in nginx-mainline-mod-*; do
 		    -i PKGBUILD
 		updpkgsums
 		if extra-x86_64-build; then
-			mksrcinfo
+			makepkg --printsrcinfo > .SRCINFO
 			git add -u
 			git commit -m "Updated to $pkgver-$pkgrel"
 			git push
