@@ -124,9 +124,6 @@
 [submodule "python-mailer"]
 	path = python-mailer
 	url = ssh+git://aur@aur4.archlinux.org:22/python-mailer.git/
-[submodule "python-mysqlclient"]
-	path = python-mysqlclient
-	url = ssh+git://aur@aur4.archlinux.org:22/python-mysqlclient.git/
 [submodule "python-pymunk"]
 	path = python-pymunk
 	url = ssh+git://aur@aur4.archlinux.org:22/python-pymunk.git/
@@ -259,9 +256,6 @@
 [submodule "python-pypng"]
 	path = python-pypng
 	url = ssh://aur@aur.archlinux.org/python-pypng.git
-[submodule "dcos-cli"]
-	path = dcos-cli
-	url = ssh://aur@aur.archlinux.org/dcos-cli.git
 [submodule "odrive"]
 	path = odrive
 	url = ssh://aur@aur.archlinux.org/odrive.git
@@ -271,9 +265,6 @@
 [submodule "php-sqlsrv"]
 	path = php-sqlsrv
 	url = ssh://aur@aur.archlinux.org/php-sqlsrv.git
-[submodule "vagrant-libvirt"]
-	path = vagrant-libvirt
-	url = ssh://aur@aur.archlinux.org/vagrant-libvirt.git
 [submodule "pngquant"]
 	path = pngquant
 	url = ssh://aur@aur.archlinux.org/pngquant.git
