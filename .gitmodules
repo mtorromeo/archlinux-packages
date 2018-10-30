@@ -265,9 +265,6 @@
 [submodule "php-sqlsrv"]
 	path = php-sqlsrv
 	url = ssh://aur@aur.archlinux.org/php-sqlsrv.git
-[submodule "pngquant"]
-	path = pngquant
-	url = ssh://aur@aur.archlinux.org/pngquant.git
 [submodule "nginx-mainline-mod-echo"]
 	path = nginx-mainline-mod-echo
 	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-echo.git/
@@ -337,12 +334,6 @@
 [submodule "python-jsonpath-ng"]
 	path = python-jsonpath-ng
 	url = ssh://aur@aur.archlinux.org/python-jsonpath-ng.git
-[submodule "nginx-amplify-agent"]
-	path = nginx-amplify-agent
-	url = ssh://aur@aur.archlinux.org/nginx-amplify-agent.git
-[submodule "trello"]
-	path = trello
-	url = ssh+git://aur@aur.archlinux.org/trello.git/
 [submodule "nginx-mainline-mod-modsecurity"]
 	path = nginx-mainline-mod-modsecurity
 	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-modsecurity.git/
