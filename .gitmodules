@@ -220,9 +220,6 @@
 [submodule "otf2bdf"]
 	path = otf2bdf
 	url = ssh+git://aur@aur4.archlinux.org:22/otf2bdf.git/
-[submodule "nodejs-htmlhint"]
-	path = htmlhint
-	url = ssh+git://aur@aur4.archlinux.org:22/nodejs-htmlhint.git/
 [submodule "tidb-git"]
 	path = tidb-git
 	url = ssh+git://aur@aur.archlinux.org:22/tidb-git.git
