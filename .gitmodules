@@ -1,6 +1,3 @@
-[submodule "apollo"]
-	path = apollo
-	url = ssh+git://aur@aur4.archlinux.org:22/apollo.git/
 [submodule "applyppf"]
 	path = applyppf
 	url = ssh+git://aur@aur4.archlinux.org:22/applyppf.git/
@@ -16,42 +13,21 @@
 [submodule "dropbox"]
 	path = dropbox
 	url = ssh+git://aur@aur4.archlinux.org:22/dropbox.git/
-[submodule "dropbox-experimental"]
-	path = dropbox-experimental
-	url = ssh+git://aur@aur4.archlinux.org:22/dropbox-experimental.git/
 [submodule "etherwake"]
 	path = etherwake
 	url = ssh+git://aur@aur4.archlinux.org:22/etherwake.git/
-[submodule "expressioneditor-git"]
-	path = expressioneditor-git
-	url = ssh+git://aur@aur4.archlinux.org:22/expressioneditor-git.git/
-[submodule "hp-health"]
-	path = hp-health
-	url = ssh+git://aur@aur4.archlinux.org:22/hp-health.git/
-[submodule "hp-smh-templates"]
-	path = hp-smh-templates
-	url = ssh+git://aur@aur4.archlinux.org:22/hp-smh-templates.git/
-[submodule "hp-snmp-agents"]
-	path = hp-snmp-agents
-	url = ssh+git://aur@aur4.archlinux.org:22/hp-snmp-agents.git/
 [submodule "ssacli"]
 	path = ssacli
 	url = ssh+git://aur@aur.archlinux.org:22/ssacli.git/
 [submodule "hponcfg"]
 	path = hponcfg
 	url = ssh+git://aur@aur4.archlinux.org:22/hponcfg.git/
-[submodule "hpsmh"]
-	path = hpsmh
-	url = ssh+git://aur@aur4.archlinux.org:22/hpsmh.git/
 [submodule "icdiff"]
 	path = icdiff
 	url = ssh+git://aur@aur4.archlinux.org:22/icdiff.git/
 [submodule "ios-webkit-debug-proxy"]
 	path = ios-webkit-debug-proxy
 	url = ssh+git://aur@aur4.archlinux.org:22/ios-webkit-debug-proxy.git/
-[submodule "iosshy"]
-	path = iosshy
-	url = ssh+git://aur@aur4.archlinux.org:22/iosshy.git/
 [submodule "kregexpeditor-git"]
 	path = kregexpeditor-git
 	url = ssh+git://aur@aur4.archlinux.org:22/kregexpeditor-git.git/
@@ -61,9 +37,6 @@
 [submodule "mongrel2"]
 	path = mongrel2
 	url = ssh+git://aur@aur4.archlinux.org:22/mongrel2.git/
-[submodule "morbid"]
-	path = morbid
-	url = ssh+git://aur@aur4.archlinux.org:22/morbid.git/
 [submodule "mydumper"]
 	path = mydumper
 	url = ssh+git://aur@aur4.archlinux.org:22/mydumper.git/
@@ -73,9 +46,6 @@
 [submodule "nova-xvpvncviewer-git"]
 	path = nova-xvpvncviewer-git
 	url = ssh+git://aur@aur4.archlinux.org:22/nova-xvpvncviewer-git.git/
-[submodule "orbited"]
-	path = orbited
-	url = ssh+git://aur@aur4.archlinux.org:22/orbited.git/
 [submodule "pam_csync"]
 	path = pam_csync
 	url = ssh+git://aur@aur4.archlinux.org:22/pam_csync.git/
@@ -199,9 +169,6 @@
 [submodule "ruby-compass"]
 	path = ruby-compass
 	url = ssh+git://aur@aur4.archlinux.org:22/ruby-compass.git/
-[submodule "sqlantaresia-git"]
-	path = sqlantaresia-git
-	url = ssh+git://aur@aur4.archlinux.org:22/sqlantaresia-git.git/
 [submodule "trojita-git"]
 	path = trojita-git
 	url = ssh+git://aur@aur4.archlinux.org:22/trojita-git.git/
@@ -244,18 +211,12 @@
 [submodule "python-uvloop"]
 	path = python-uvloop
 	url = ssh://aur@aur.archlinux.org/python-uvloop.git
-[submodule "rt3562sta"]
-        path = rt3562sta
-        url = ssh://aur@aur.archlinux.org/rt3562sta.git
 [submodule "python-rollbar"]
 	path = python-rollbar
 	url = ssh://aur@aur.archlinux.org/python-rollbar.git
 [submodule "python-pypng"]
 	path = python-pypng
 	url = ssh://aur@aur.archlinux.org/python-pypng.git
-[submodule "odrive"]
-	path = odrive
-	url = ssh://aur@aur.archlinux.org/odrive.git
 [submodule "msodbcsql"]
 	path = msodbcsql
 	url = ssh://aur@aur.archlinux.org/msodbcsql.git
