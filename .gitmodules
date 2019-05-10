@@ -76,9 +76,6 @@
 [submodule "plasma-workspace-agent-ssh"]
 	path = plasma-workspace-agent-ssh
 	url = ssh+git://aur@aur4.archlinux.org:22/plasma-workspace-agent-ssh.git/
-[submodule "polly"]
-	path = polly
-	url = ssh+git://aur@aur4.archlinux.org:22/polly.git/
 [submodule "python-bitarray"]
 	path = python-bitarray
 	url = ssh+git://aur@aur4.archlinux.org:22/python-bitarray.git/
@@ -172,9 +169,6 @@
 [submodule "trojita-git"]
 	path = trojita-git
 	url = ssh+git://aur@aur4.archlinux.org:22/trojita-git.git/
-[submodule "unyaffs"]
-	path = unyaffs
-	url = ssh+git://aur@aur4.archlinux.org:22/unyaffs.git/
 [submodule "xmppcat"]
 	path = xmppcat
 	url = ssh+git://aur@aur4.archlinux.org:22/xmppcat.git/
