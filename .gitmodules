@@ -7,9 +7,6 @@
 [submodule "asix-module"]
 	path = asix-module
 	url = ssh+git://aur@aur4.archlinux.org:22/asix-module.git/
-[submodule "chipmunk"]
-	path = chipmunk
-	url = ssh+git://aur@aur4.archlinux.org:22/chipmunk.git/
 [submodule "dropbox"]
 	path = dropbox
 	url = ssh+git://aur@aur4.archlinux.org:22/dropbox.git/
