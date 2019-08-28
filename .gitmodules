@@ -31,9 +31,6 @@
 [submodule "libxdiff"]
 	path = libxdiff
 	url = ssh+git://aur@aur4.archlinux.org:22/libxdiff.git/
-[submodule "mongrel2"]
-	path = mongrel2
-	url = ssh+git://aur@aur4.archlinux.org:22/mongrel2.git/
 [submodule "mydumper"]
 	path = mydumper
 	url = ssh+git://aur@aur4.archlinux.org:22/mydumper.git/
