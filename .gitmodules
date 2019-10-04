@@ -283,3 +283,6 @@
 [submodule "nginx-mainline-mod-modsecurity"]
 	path = nginx-mainline-mod-modsecurity
 	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-modsecurity.git/
+[submodule "rkt"]
+	path = rkt
+	url = ssh+git://aur@aur.archlinux.org/rkt.git/
