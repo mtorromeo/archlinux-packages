@@ -193,9 +193,6 @@
 [submodule "python-aiopg"]
         path = python-aiopg
         url = ssh://aur@aur.archlinux.org/python-aiopg.git
-[submodule "nomad"]
-        path = nomad
-        url = ssh://aur@aur.archlinux.org/nomad.git
 [submodule "python-uvloop"]
 	path = python-uvloop
 	url = ssh://aur@aur.archlinux.org/python-uvloop.git
