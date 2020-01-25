@@ -205,9 +205,6 @@
 [submodule "msodbcsql"]
 	path = msodbcsql
 	url = ssh://aur@aur.archlinux.org/msodbcsql.git
-[submodule "php-sqlsrv"]
-	path = php-sqlsrv
-	url = ssh://aur@aur.archlinux.org/php-sqlsrv.git
 [submodule "nginx-mainline-mod-echo"]
 	path = nginx-mainline-mod-echo
 	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-echo.git/
@@ -265,9 +262,6 @@
 [submodule "nginx-mainline-mod-geoip2"]
 	path = nginx-mainline-mod-geoip2
 	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-geoip2.git/
-[submodule "php-pdo_sqlsrv"]
-	path = php-pdo_sqlsrv
-	url = ssh+git://aur@aur.archlinux.org/php-pdo_sqlsrv.git/
 [submodule "nginx-mainline-mod-modsecurity-git"]
 	path = nginx-mainline-mod-modsecurity-git
 	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-modsecurity-git.git/
