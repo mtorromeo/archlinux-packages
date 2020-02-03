@@ -88,9 +88,6 @@
 [submodule "python-pymunk"]
 	path = python-pymunk
 	url = ssh+git://aur@aur4.archlinux.org:22/python-pymunk.git/
-[submodule "python-pymysql"]
-	path = python-pymysql
-	url = ssh+git://aur@aur4.archlinux.org:22/python-pymysql.git/
 [submodule "python-pyuv"]
 	path = python-pyuv
 	url = ssh+git://aur@aur4.archlinux.org:22/python-pyuv.git/
