@@ -22,9 +22,6 @@
 [submodule "icdiff"]
 	path = icdiff
 	url = ssh+git://aur@aur4.archlinux.org:22/icdiff.git/
-[submodule "ios-webkit-debug-proxy"]
-	path = ios-webkit-debug-proxy
-	url = ssh+git://aur@aur4.archlinux.org:22/ios-webkit-debug-proxy.git/
 [submodule "kregexpeditor-git"]
 	path = kregexpeditor-git
 	url = ssh+git://aur@aur4.archlinux.org:22/kregexpeditor-git.git/
@@ -40,18 +37,12 @@
 [submodule "nova-xvpvncviewer-git"]
 	path = nova-xvpvncviewer-git
 	url = ssh+git://aur@aur4.archlinux.org:22/nova-xvpvncviewer-git.git/
-[submodule "pam_csync"]
-	path = pam_csync
-	url = ssh+git://aur@aur4.archlinux.org:22/pam_csync.git/
 [submodule "percona-nagios-plugins"]
 	path = percona-nagios-plugins
 	url = ssh+git://aur@aur4.archlinux.org:22/percona-nagios-plugins.git/
 [submodule "php-ioncube_loader"]
 	path = php-ioncube_loader
 	url = ssh+git://aur@aur4.archlinux.org:22/php-ioncube_loader.git/
-[submodule "php-markdown"]
-	path = php-markdown
-	url = ssh+git://aur@aur4.archlinux.org:22/php-markdown.git/
 [submodule "php-oauth"]
 	path = php-oauth
 	url = ssh+git://aur@aur4.archlinux.org:22/php-oauth.git/
@@ -274,3 +265,6 @@
 [submodule "rkt"]
 	path = rkt
 	url = ssh+git://aur@aur.archlinux.org/rkt.git/
+[submodule "inputlirc"]
+	path = inputlirc
+	url = ssh://aur@aur.archlinux.org/inputlirc.git
