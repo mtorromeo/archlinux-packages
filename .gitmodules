@@ -91,63 +91,12 @@
 [submodule "python-ujson"]
 	path = python-ujson
 	url = ssh+git://aur@aur4.archlinux.org:22/python-ujson.git/
-[submodule "python2-brubeck"]
-	path = python2-brubeck
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-brubeck.git/
-[submodule "python2-couleur"]
-	path = python2-couleur
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-couleur.git/
-[submodule "python2-dbutils"]
-	path = python2-dbutils
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-dbutils.git/
-[submodule "python2-dictshield"]
-	path = python2-dictshield
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-dictshield.git/
-[submodule "python2-encutils"]
-	path = python2-encutils
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-encutils.git/
-[submodule "python2-mailer"]
-	path = python2-mailer
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-mailer.git/
-[submodule "python2-oauth2"]
-	path = python2-oauth2
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-oauth2.git/
-[submodule "python2-oursql"]
-	path = python2-oursql
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-oursql.git/
-[submodule "python2-pymysql"]
-	path = python2-pymysql
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-pymysql.git/
-[submodule "python2-pyuv"]
-	path = python2-pyuv
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-pyuv.git/
-[submodule "python2-schematics"]
-	path = python2-schematics
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-schematics.git/
-[submodule "python2-simpledaemon"]
-	path = python2-simpledaemon
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-simpledaemon.git/
-[submodule "python2-stomp.py"]
-	path = python2-stomp.py
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-stomp.py.git/
-[submodule "python2-stomper"]
-	path = python2-stomper
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-stomper.git/
-[submodule "python2-stompy"]
-	path = python2-stompy
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-stompy.git/
 [submodule "python2-ujson"]
 	path = python2-ujson
 	url = ssh+git://aur@aur4.archlinux.org:22/python2-ujson.git/
-[submodule "python2-wokkel"]
-	path = python2-wokkel
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-wokkel.git/
 [submodule "redis-munin-git"]
 	path = redis-munin-git
 	url = ssh+git://aur@aur4.archlinux.org:22/redis-munin-git.git/
-[submodule "ruby-compass"]
-	path = ruby-compass
-	url = ssh+git://aur@aur4.archlinux.org:22/ruby-compass.git/
 [submodule "trojita-git"]
 	path = trojita-git
 	url = ssh+git://aur@aur4.archlinux.org:22/trojita-git.git/
@@ -262,9 +211,6 @@
 [submodule "nginx-mainline-mod-modsecurity"]
 	path = nginx-mainline-mod-modsecurity
 	url = ssh+git://aur@aur.archlinux.org/nginx-mainline-mod-modsecurity.git/
-[submodule "rkt"]
-	path = rkt
-	url = ssh+git://aur@aur.archlinux.org/rkt.git/
 [submodule "inputlirc"]
 	path = inputlirc
 	url = ssh://aur@aur.archlinux.org/inputlirc.git
