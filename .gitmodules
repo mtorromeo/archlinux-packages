@@ -1,117 +1,117 @@
 [submodule "applyppf"]
 	path = applyppf
-	url = ssh+git://aur@aur4.archlinux.org:22/applyppf.git/
+	url = ssh+git://aur@aur.archlinux.org:22/applyppf.git/
 [submodule "arcctl"]
 	path = arcctl
-	url = ssh+git://aur@aur4.archlinux.org:22/arcctl.git/
+	url = ssh+git://aur@aur.archlinux.org:22/arcctl.git/
 [submodule "asix-module"]
 	path = asix-module
-	url = ssh+git://aur@aur4.archlinux.org:22/asix-module.git/
+	url = ssh+git://aur@aur.archlinux.org:22/asix-module.git/
 [submodule "dropbox"]
 	path = dropbox
-	url = ssh+git://aur@aur4.archlinux.org:22/dropbox.git/
+	url = ssh+git://aur@aur.archlinux.org:22/dropbox.git/
 [submodule "etherwake"]
 	path = etherwake
-	url = ssh+git://aur@aur4.archlinux.org:22/etherwake.git/
+	url = ssh+git://aur@aur.archlinux.org:22/etherwake.git/
 [submodule "ssacli"]
 	path = ssacli
 	url = ssh+git://aur@aur.archlinux.org:22/ssacli.git/
 [submodule "hponcfg"]
 	path = hponcfg
-	url = ssh+git://aur@aur4.archlinux.org:22/hponcfg.git/
+	url = ssh+git://aur@aur.archlinux.org:22/hponcfg.git/
 [submodule "icdiff"]
 	path = icdiff
-	url = ssh+git://aur@aur4.archlinux.org:22/icdiff.git/
+	url = ssh+git://aur@aur.archlinux.org:22/icdiff.git/
 [submodule "kregexpeditor-git"]
 	path = kregexpeditor-git
-	url = ssh+git://aur@aur4.archlinux.org:22/kregexpeditor-git.git/
+	url = ssh+git://aur@aur.archlinux.org:22/kregexpeditor-git.git/
 [submodule "libxdiff"]
 	path = libxdiff
-	url = ssh+git://aur@aur4.archlinux.org:22/libxdiff.git/
+	url = ssh+git://aur@aur.archlinux.org:22/libxdiff.git/
 [submodule "mydumper"]
 	path = mydumper
-	url = ssh+git://aur@aur4.archlinux.org:22/mydumper.git/
+	url = ssh+git://aur@aur.archlinux.org:22/mydumper.git/
 [submodule "myremotedump"]
 	path = myremotedump
-	url = ssh+git://aur@aur4.archlinux.org:22/myremotedump.git/
+	url = ssh+git://aur@aur.archlinux.org:22/myremotedump.git/
 [submodule "nova-xvpvncviewer-git"]
 	path = nova-xvpvncviewer-git
-	url = ssh+git://aur@aur4.archlinux.org:22/nova-xvpvncviewer-git.git/
+	url = ssh+git://aur@aur.archlinux.org:22/nova-xvpvncviewer-git.git/
 [submodule "percona-nagios-plugins"]
 	path = percona-nagios-plugins
-	url = ssh+git://aur@aur4.archlinux.org:22/percona-nagios-plugins.git/
+	url = ssh+git://aur@aur.archlinux.org:22/percona-nagios-plugins.git/
 [submodule "php-ioncube_loader"]
 	path = php-ioncube_loader
-	url = ssh+git://aur@aur4.archlinux.org:22/php-ioncube_loader.git/
+	url = ssh+git://aur@aur.archlinux.org:22/php-ioncube_loader.git/
 [submodule "php-oauth"]
 	path = php-oauth
-	url = ssh+git://aur@aur4.archlinux.org:22/php-oauth.git/
+	url = ssh+git://aur@aur.archlinux.org:22/php-oauth.git/
 [submodule "php-proctitle"]
 	path = php-proctitle
-	url = ssh+git://aur@aur4.archlinux.org:22/php-proctitle.git/
+	url = ssh+git://aur@aur.archlinux.org:22/php-proctitle.git/
 [submodule "php-stomp"]
 	path = php-stomp
-	url = ssh+git://aur@aur4.archlinux.org:22/php-stomp.git/
+	url = ssh+git://aur@aur.archlinux.org:22/php-stomp.git/
 [submodule "php-txforward"]
 	path = php-txforward
-	url = ssh+git://aur@aur4.archlinux.org:22/php-txforward.git/
+	url = ssh+git://aur@aur.archlinux.org:22/php-txforward.git/
 [submodule "php-yaml"]
 	path = php-yaml
-	url = ssh+git://aur@aur4.archlinux.org:22/php-yaml.git/
+	url = ssh+git://aur@aur.archlinux.org:22/php-yaml.git/
 [submodule "plasma-workspace-agent-ssh"]
 	path = plasma-workspace-agent-ssh
-	url = ssh+git://aur@aur4.archlinux.org:22/plasma-workspace-agent-ssh.git/
+	url = ssh+git://aur@aur.archlinux.org:22/plasma-workspace-agent-ssh.git/
 [submodule "python-bitarray"]
 	path = python-bitarray
-	url = ssh+git://aur@aur4.archlinux.org:22/python-bitarray.git/
+	url = ssh+git://aur@aur.archlinux.org:22/python-bitarray.git/
 [submodule "python-couleur"]
 	path = python-couleur
-	url = ssh+git://aur@aur4.archlinux.org:22/python-couleur.git/
+	url = ssh+git://aur@aur.archlinux.org:22/python-couleur.git/
 [submodule "python-dbutils"]
 	path = python-dbutils
-	url = ssh+git://aur@aur4.archlinux.org:22/python-dbutils.git/
+	url = ssh+git://aur@aur.archlinux.org:22/python-dbutils.git/
 [submodule "python-evdev"]
 	path = python-evdev
-	url = ssh+git://aur@aur4.archlinux.org:22/python-evdev.git/
+	url = ssh+git://aur@aur.archlinux.org:22/python-evdev.git/
 [submodule "python-mailer"]
 	path = python-mailer
-	url = ssh+git://aur@aur4.archlinux.org:22/python-mailer.git/
+	url = ssh+git://aur@aur.archlinux.org:22/python-mailer.git/
 [submodule "python-pymunk"]
 	path = python-pymunk
-	url = ssh+git://aur@aur4.archlinux.org:22/python-pymunk.git/
+	url = ssh+git://aur@aur.archlinux.org:22/python-pymunk.git/
 [submodule "python-pyuv"]
 	path = python-pyuv
-	url = ssh+git://aur@aur4.archlinux.org:22/python-pyuv.git/
+	url = ssh+git://aur@aur.archlinux.org:22/python-pyuv.git/
 [submodule "python-setproctitle"]
 	path = python-setproctitle
-	url = ssh+git://aur@aur4.archlinux.org:22/python-setproctitle.git/
+	url = ssh+git://aur@aur.archlinux.org:22/python-setproctitle.git/
 [submodule "python-stomp.py"]
 	path = python-stomp.py
-	url = ssh+git://aur@aur4.archlinux.org:22/python-stomp.py.git/
+	url = ssh+git://aur@aur.archlinux.org:22/python-stomp.py.git/
 [submodule "python-ujson"]
 	path = python-ujson
-	url = ssh+git://aur@aur4.archlinux.org:22/python-ujson.git/
+	url = ssh+git://aur@aur.archlinux.org:22/python-ujson.git/
 [submodule "python2-ujson"]
 	path = python2-ujson
-	url = ssh+git://aur@aur4.archlinux.org:22/python2-ujson.git/
+	url = ssh+git://aur@aur.archlinux.org:22/python2-ujson.git/
 [submodule "redis-munin-git"]
 	path = redis-munin-git
-	url = ssh+git://aur@aur4.archlinux.org:22/redis-munin-git.git/
+	url = ssh+git://aur@aur.archlinux.org:22/redis-munin-git.git/
 [submodule "trojita-git"]
 	path = trojita-git
-	url = ssh+git://aur@aur4.archlinux.org:22/trojita-git.git/
+	url = ssh+git://aur@aur.archlinux.org:22/trojita-git.git/
 [submodule "xmppcat"]
 	path = xmppcat
-	url = ssh+git://aur@aur4.archlinux.org:22/xmppcat.git/
+	url = ssh+git://aur@aur.archlinux.org:22/xmppcat.git/
 [submodule "zsh-completions-git"]
 	path = zsh-completions-git
-	url = ssh+git://aur@aur4.archlinux.org:22/zsh-completions-git.git/
+	url = ssh+git://aur@aur.archlinux.org:22/zsh-completions-git.git/
 [submodule "netpipe"]
 	path = netpipe
-	url = ssh+git://aur@aur4.archlinux.org:22/netpipe.git/
+	url = ssh+git://aur@aur.archlinux.org:22/netpipe.git/
 [submodule "otf2bdf"]
 	path = otf2bdf
-	url = ssh+git://aur@aur4.archlinux.org:22/otf2bdf.git/
+	url = ssh+git://aur@aur.archlinux.org:22/otf2bdf.git/
 [submodule "tidb-git"]
 	path = tidb-git
 	url = ssh+git://aur@aur.archlinux.org:22/tidb-git.git
